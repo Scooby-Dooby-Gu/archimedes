@@ -158,9 +158,8 @@ export default function Settings ({section, success, userId}) {
         <legend>Settings</legend>
         {canManage && <FormField type="select" label="App environment" autocomplete="off" >
           <select onChange={(e) => location.href = e.target.value}>
-            <option selected={import.meta.env.NODE_ENV==='production'} value={`https://app.getmedes.com/${wrapper}`}>Production</option>
-            <option selected={import.meta.env.NODE_ENV==='staging'} value={`https://staging.getmedes.com/${wrapper}`}>Staging</option>
-            <option selected={import.meta.env.NODE_ENV==='development' || import.meta.env.NODE_ENV==='qa'} value={`http://192.168.1.100:8080/${wrapper}`}>Development</option>
+            <option selected={import.meta.env.NODE_ENV==='production'} value={`${import.meta.env.APP_URL}/${wrapper}`}>Production</option>
+            <option selected={import.meta.env.NODE_ENV==='development' || import.meta.env.NODE_ENV==='qa'} value={`http://localhost:8080/${wrapper}`}>Development</option>
           </select>
         </FormField>}
       </fieldset>}

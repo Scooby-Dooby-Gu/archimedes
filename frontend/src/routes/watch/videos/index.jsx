@@ -25,12 +25,12 @@ export default function Videos({ success, page = 1, videoId }) {
     //title: 'Videos',
     headerTheme: 'blue',
     manageLink: canManage && `/videos/new`,
-    //titleNode: <a href="https://getmedes.com"><Icon.LogosArchimedes  class={style.logo} /></a>,
+    //titleNode: <a href={import.meta.env.SITE_URL || "/"}><Icon.LogosArchimedes  class={style.logo} /></a>,
     headerHidden: false,//!canManage,
     actionTitle: canManage && <Icon.Add />,
     actionLink: canManage && `/videos/new`,
     requests: [videosRequest],
-    titleNode: <a class={style.logo} href="https://getmedes.com"><Icon.LogosArchimedes /></a>,
+    titleNode: <a class={style.logo} href={import.meta.env.SITE_URL || "/"}><Icon.LogosArchimedes /></a>,
   }), [videosRequest.error, videoId, page, maxWidth]);
 
   const onVideoClick = useCallback((e) => {
@@ -50,7 +50,7 @@ export default function Videos({ success, page = 1, videoId }) {
 
   const content = useMemo(() => <>
     <header class={`${style.header} cover theme-blue`}>
-      {false && <a href="https://getmedes.com"  class={style.logo}><Icon.LogosArchimedes  class={style.logo} /></a>}
+      {false && <a href={import.meta.env.SITE_URL || "/"}  class={style.logo}><Icon.LogosArchimedes  class={style.logo} /></a>}
       Learn by watching videos from your favorite experts. Ask questions and suggest topics that interest you for each episode!
     </header>
     <ul class={style.videos}>
@@ -74,7 +74,7 @@ export default function Videos({ success, page = 1, videoId }) {
       <p>See what else we have to offer at Archimedes, the investment learning hub.</p>
       <div class={style.buttons}>
         {maxWidth > 784 && <Button.Link href="/signup" class="primary round">Sign up</Button.Link>}
-        {maxWidth > 784 && <Button.Link href="https://getmedes.com" class="round">About Archimedes</Button.Link>}
+        {maxWidth > 784 && <Button.Link href={import.meta.env.SITE_URL || "/"} class="round">About Archimedes</Button.Link>}
       </div>
     </div>}
   </>, [videos, videoId, submissions])

@@ -11,6 +11,7 @@ import '/lib/scroll';
 import { clearLocalStorage } from '/lib/data';
 import '/lib/hacks';
 import { route } from '/lib/router';
+import { isOwnHost, isAppHost } from '/lib/hosts';
 
 
 //import swURL from 'sw:./sw.jsx';
@@ -81,11 +82,11 @@ if (!window.attachedListeners) {
     if (link && !link.getAttribute('href')) {
       e.preventDefault()
       e.stopPropagation()
-    } else if (link && link.getAttribute('href').match(/app.getmedes.com/) && link.pathname.indexOf('lesson') > -1) {
+    } else if (link && isAppHost(link.hostname) && /^https?:/.test(link.getAttribute('href')) && link.pathname.indexOf('lesson') > -1) {
       route(link.pathname + '?from=' + encodeURIComponent(location.pathname))
       e.preventDefault()
       e.stopPropagation()
-    } else if (link && link.hostname && !link.hostname.match(/getmedes.com|192|heroku/) && !link.getAttribute('bypass')) {
+    } else if (link && link.hostname && !isOwnHost(link.hostname) && !link.getAttribute('bypass')) {
       link.classList.add('loading');
       track('send', 'event', 'Outgoing', link.hostname.toLowerCase().replace('www.', ''), link.pathname).then(() => {
         const a = document.createElement('a');

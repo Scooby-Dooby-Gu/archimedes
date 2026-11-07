@@ -85,7 +85,7 @@ export default function Footer({children, ...props}) {
 }
 Footer.Guest = (props) => {
   return <menu class={`${props.class} ${style.bar}`}>
-    <a href="https://getmedes.com">About Archimedes</a>
+    <a href={import.meta.env.SITE_URL || "/"}>About Archimedes</a>
     <Button.Link href={`/signup?from=${encodeURIComponent(location.pathname)}`} class="primary icon-right" icon="ChevronRight">Sign up</Button.Link>
   </menu>
 

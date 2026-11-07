@@ -16,6 +16,7 @@ import '/lib/hacks'
 import { createContext } from 'preact'
 import { getLessonById } from "./lib/data";
 import { Placeholder } from "./lib/request";
+import { isOwnHost } from "./lib/hosts";
 
 track('create', import.meta.env.GOOGLE_MARKETING_TRACKING_CODE, 'auto');
 
@@ -325,7 +326,7 @@ requestAnimationFrame(() => {
 
 document.addEventListener('mousedown', (e) => {
   const link = e.target.closest('a');
-  if (link && link.hostname && !link.hostname.match(/getmedes.com|192|heroku/) && !link.getAttribute('bypass')) {
+  if (link && link.hostname && !isOwnHost(link.hostname) && !link.getAttribute('bypass')) {
     if (link.closest('#app-buttons')) {
       const href = link.getAttribute('href');
       const type = href.match('google') ? 'Android' : 'IOS';

@@ -87,7 +87,7 @@ export default function Video({ success, videoId, goalId, ambitionId  }) {
         </p>}
         <div class={style.buttons}>
           {maxWidth > 784 && <Button.Link href="/signup" class="primary round">Sign up</Button.Link>}
-          {maxWidth > 784 && <Button.Link href="https://getmedes.com" class="round">About Archimedes</Button.Link>}
+          {maxWidth > 784 && <Button.Link href={import.meta.env.SITE_URL || "/"} class="round">About Archimedes</Button.Link>}
         </div>
       </div>}
 

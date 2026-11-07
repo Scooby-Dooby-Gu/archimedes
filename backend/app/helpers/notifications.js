@@ -7,7 +7,7 @@ import apnModule from 'apn';
 const webPushEnabled = Boolean(process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY);
 if (webPushEnabled) {
   webpush.setVapidDetails(
-    process.env.VAPID_SUBJECT || 'mailto:help@getmedes.com',
+    process.env.VAPID_SUBJECT || ('mailto:' + (process.env.CONTACT_EMAIL || process.env.EMAIL_FROM || 'admin@example.com')),
     process.env.VAPID_PUBLIC_KEY,
     process.env.VAPID_PRIVATE_KEY
   );

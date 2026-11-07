@@ -4,9 +4,10 @@ import Img from "../img";
 import { useFetchedData, useState } from "../../lib/hooks";
 import Icon from "../icon";
 import { Placeholder } from "../../lib/request";
+import { ownLessonSlug } from "../../lib/hosts";
 
 export default function Embed({ url }) {
-  const lessonLink = url.match(/getmedes.*?\/lessons\/([^\/#?]+)/);
+  const lessonLink = ownLessonSlug(url);
   if (lessonLink) {
     return <Embed.Lesson url={url} />  
   } else {
@@ -17,7 +18,7 @@ export default function Embed({ url }) {
 
 Embed.Lesson = ({url}) => {
   const courses = useStore('data.courses');
-  const lessonId = url.match(/getmedes.*?\/lessons\/([^\/#?]+)/)[1];
+  const lessonId = ownLessonSlug(url);
   const lesson = filterLessons((lesson) => lesson.id == lessonId || (lesson.slugs || []).includes(lessonId), courses)[0]
   if (!lesson) return;
   return <div class="lesson-embed">

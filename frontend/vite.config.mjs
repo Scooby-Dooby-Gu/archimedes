@@ -42,6 +42,8 @@ export default {
 		"import.meta.env.NODE_ENV": `"${process.env.NODE_ENV}"`,
 		"import.meta.env.API_URL": `"${process.env.API_URL}"`,
 		"import.meta.env.APP_URL": `"${process.env.APP_URL}"`,
+		"import.meta.env.SITE_URL": `"${process.env.SITE_URL || process.env.APP_URL || ''}"`,
+		"import.meta.env.CONTACT_EMAIL": `"${process.env.CONTACT_EMAIL || ''}"`,
 		"import.meta.env.BASE_URL": `${process.env.BASE_URL}`,
 		"import.meta.env.SOURCE_VERSION": `"${process.env.SOURCE_VERSION}"`,
 		"import.meta.env.SENTRY_DSN": `"${process.env.SENTRY_DSN}"`,

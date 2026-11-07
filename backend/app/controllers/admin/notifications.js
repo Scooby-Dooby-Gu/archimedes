@@ -316,10 +316,7 @@ export default (app) => {
       )
     }))
       
-    await app.locals.sendEmailsFromTemplate('d-f269e7da030442368f21e9ff289fe0b5', emails, {
-      email: 'simon@getmedes.com',
-      name: 'Simon Gu'
-    })
+    await app.locals.sendEmailsFromTemplate('d-f269e7da030442368f21e9ff289fe0b5', emails, app.locals.emailFrom())
 
     process.env.SLACK_WEBHOOK_URL && request({
       url: process.env.SLACK_WEBHOOK_URL,
@@ -359,10 +356,7 @@ export default (app) => {
       )
     }))
     
-    await app.locals.sendEmailsFromTemplate('d-325d976039f5408c87f947ab9f52a997', emails, {
-      email: 'simon@getmedes.com',
-      name: 'Simon Gu'
-    })
+    await app.locals.sendEmailsFromTemplate('d-325d976039f5408c87f947ab9f52a997', emails, app.locals.emailFrom())
 
     process.env.SLACK_WEBHOOK_URL && request({
       url: process.env.SLACK_WEBHOOK_URL,

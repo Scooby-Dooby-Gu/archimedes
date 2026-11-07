@@ -41,11 +41,11 @@ export default (app, req) => {
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
             xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
     <url>
-      <loc>https://getmedes.com/videos/</loc>
+      <loc>${app.locals.siteUrl()}/videos/</loc>
     </url>
     ${lessons.map((lesson) => 
       !String(lesson.slugs[0]).startsWith('for-') && lesson.slugs.map((slug) => `<url>
-        <loc>https://www.getmedes.com/lessons/${slug}</loc>
+        <loc>${app.locals.siteUrl()}/lessons/${slug}</loc>
         <lastmod>${new Date(Math.max(forceRecrawl, new Date(lesson.updatedAt))).toISOString().split('T')[0]}</lastmod>
           ${lesson.imageSizes && lesson.imageSizes.default ? `<image:image>
             <image:loc>${lesson.imageSizes.default}</image:loc>
@@ -54,7 +54,7 @@ export default (app, req) => {
       `)).flat().filter(Boolean).join('')}
     ${'' && videos.map((video) => 
       video.slugs.map((slug) => `<url>
-        <loc>https://app.getmedes.com/videos/${slug}</loc>
+        <loc>${app.locals.appUrl()}/videos/${slug}</loc>
         <lastmod>${new Date(Math.max(forceRecrawl, new Date(video.updatedAt || video.scheduledAt || video.publishedAt || new Date))).toISOString().split('T')[0]}</lastmod>
           ${video.imageSizes && video.imageSizes.default ? `<image:image>
             <image:loc>${video.imageSizes.default}</image:loc>
@@ -85,7 +85,7 @@ export default (app, req) => {
     <h2>Sitemap</h2>
     <ul>
     <li>
-      <a href="https://app.getmedes.com/">Sign in</a>
+      <a href="${app.locals.appUrl()}/">Sign in</a>
     </li>
     <li>
       <a href="/">Learn more about Archimedes</a>
@@ -141,8 +141,12 @@ export default (app, req) => {
     html = html.replace(/<figure([^>]+?)expandable([^>]+?)>/g, '<figure$1open expandable$2>')
     html = enrichDefinitionMicrodata(html);
 
+    // Links to lessons on our own site (old getmedes.com links, or the
+    // configured site/app hosts) become relative; other sites stay as they are.
+    const ownHosts = [app.locals.siteUrl(), app.locals.appUrl()]
+      .map((u) => u.replace(/^https?:\/\//, '')).filter(Boolean);
     html = html.replace(/"([^"]*?)\/lessons\/([^"]*?)"/g, (m, before, after) => {
-      if (before.match('//') && !before.match('getmedes')) return m;
+      if (before.match('//') && !before.match('getmedes') && !ownHosts.some((h) => before.includes(h))) return m;
       return `${prefix}${after}`
     })
 

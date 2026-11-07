@@ -27,7 +27,7 @@ export default (app, req) => {
       },
       json: true,
     })
-    res.redirect('https://getmedes.com/success');
+    res.redirect(app.locals.siteUrl() + '/success');
   })
   app.postAsync('/sales/demo-request', async (req, res) => {
     const { firstName, lastName, company, phoneNumber, email } = req.body;
@@ -56,6 +56,6 @@ export default (app, req) => {
       },
       json: true,
     });
-    res.redirect('https://getmedes.com/salessuccess');
+    res.redirect(app.locals.siteUrl() + '/salessuccess');
   })
 }

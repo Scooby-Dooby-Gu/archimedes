@@ -1,5 +1,6 @@
 
 import request from 'request';
+import { emailFrom } from './urls.js';
 
 export const sendEmailFromTemplate = (templateId, subject, data, email, name = email) => {
   if (!templateId) {
@@ -15,10 +16,7 @@ export const sendEmailFromTemplate = (templateId, subject, data, email, name = e
 }
 
 
-export const sendEmailsFromTemplate = (templateId, recipients, from = {
-  email: 'simon@getmedes.com',
-  name: 'Simon at Archimedes'
-}) => {
+export const sendEmailsFromTemplate = (templateId, recipients, from = emailFrom()) => {
   if (!templateId) {
     throw new Error('Please provide SendGrid template id to send email');
   }

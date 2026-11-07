@@ -37,9 +37,9 @@ export default function({inviteId}) {
 
   const content = <div class={style.wrapper}>
     <div class={style.top}>
-      <a  href="http://getmedes.com"><Icon.LogosArchimedes style="width: auto; height: auto;" /></a>
+      <a  href={import.meta.env.SITE_URL || "/"}><Icon.LogosArchimedes style="width: auto; height: auto;" /></a>
       <p>Actionable investment steps <br /> made simple for you</p>
-      <a href="http://getmedes.com">Learn more about Archimedes</a>
+      <a href={import.meta.env.SITE_URL || "/"}>Learn more about Archimedes</a>
     </div>
     <div class={style.intro}>
       {!hasCompany && [

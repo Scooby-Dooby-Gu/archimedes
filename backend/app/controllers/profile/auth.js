@@ -262,7 +262,7 @@ export default (app) => {
       url: process.env.SLACK_WEBHOOK_URL,
       method: 'POST',
       body: {
-        text: `# New signup\n*Name:* <https://app.getmedes.com/users/${user.id}|${user.name}>\n*Email:* ${user.email}`
+        text: `# New signup\n*Name:* <${process.env.APP_URL}/users/${user.id}|${user.name}>\n*Email:* ${user.email}`
       },
       json: true,
     });

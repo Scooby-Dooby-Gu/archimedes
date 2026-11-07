@@ -43,7 +43,7 @@ export default function Verification({token}) {
       <h1 class="largest">We sent an email {user && <>to <strong>{user.email}</strong></>} with a link to verify your account.</h1>
       <br />
       <p>If you haven't received the email, check all of your mail folders and request to get it sent again.</p>
-      {repeatedVerificationRequest.success && <p class="success">A second email was sent. Having troubles? Email <a href="mailto:help@getmedes.com">help@getmedes.com</a>.</p>}
+      {repeatedVerificationRequest.success && <p class="success">A second email was sent.{import.meta.env.CONTACT_EMAIL && <> Having troubles? Email <a href={`mailto:${import.meta.env.CONTACT_EMAIL}`}>{import.meta.env.CONTACT_EMAIL}</a>.</>}</p>}
       <br />
       <Button.Link class="primary" href="/verifications/repeat" method="post" onClick={onRepeatVerification}>Resend verification email</Button.Link>
       <br />

@@ -13,9 +13,13 @@
 //   profiles only: name, photo and bio. They get placeholder emails and no
 //   password or API key, so nobody can sign in as them.
 //
-// Images: set UPLOADS_BASE_URL (e.g. https://app.getmedes.com/uploads) to
-// rewrite every link to the old company's S3 bucket to that location. The
-// images themselves live in frontend/public/uploads/, mirroring the bucket.
+// Links: set APP_URL and SITE_URL to where this deployment lives (e.g.
+// https://app.archimedes.gufamily.org and https://archimedes.gufamily.org).
+// The import then rewrites
+//   - old S3 bucket images      -> UPLOADS_BASE_URL (default: APP_URL/uploads),
+//     served from frontend/public/uploads/, which mirrors the bucket
+//   - https://app.getmedes.com  -> APP_URL
+//   - https://(www.)getmedes.com -> SITE_URL
 //
 // The target must have the schema (`npm run db:setup`) and no content yet.
 import 'dotenv/config';
@@ -24,11 +28,19 @@ import pg from 'pg';
 // Every form the old bucket's URLs take in the data, including keys that
 // start with an extra "/" (…production//tasks/…).
 const OLD_BUCKET_URL = /https?:\/\/(?:s3[.-]us-west-1\.amazonaws\.com\/archimedes-user-uploads-production|archimedes-user-uploads-production\.s3(?:[.-]us-west-1)?\.amazonaws\.com)\/+/g;
-let rewrittenLinks = 0;
+const OLD_APP_URL = /https?:\/\/app\.getmedes\.com(?=[\/"'?#\s<)]|$)/g;
+const OLD_SITE_URL = /https?:\/\/(?:www\.)?getmedes\.com(?=[\/"'?#\s<)]|$)/g;
+const trimSlash = (u) => (u || '').replace(/\/+$/, '');
+const APP_URL = trimSlash(process.env.APP_URL);
+const SITE_URL = trimSlash(process.env.SITE_URL) || APP_URL;
+const UPLOADS_BASE_URL = trimSlash(process.env.UPLOADS_BASE_URL) || (APP_URL && APP_URL + '/uploads');
+const rewritten = { images: 0, app: 0, site: 0 };
 function rewriteUploads(text) {
-  const base = process.env.UPLOADS_BASE_URL;
-  if (!base || typeof text !== 'string') return text;
-  return text.replace(OLD_BUCKET_URL, () => { rewrittenLinks++; return base.replace(/\/+$/, '') + '/'; });
+  if (typeof text !== 'string') return text;
+  if (UPLOADS_BASE_URL) text = text.replace(OLD_BUCKET_URL, () => { rewritten.images++; return UPLOADS_BASE_URL + '/'; });
+  if (APP_URL) text = text.replace(OLD_APP_URL, () => { rewritten.app++; return APP_URL; });
+  if (SITE_URL) text = text.replace(OLD_SITE_URL, () => { rewritten.site++; return SITE_URL; });
+  return text;
 }
 
 // Copied in this order so every reference points at a row that exists.
@@ -185,9 +197,11 @@ async function main() {
     console.log('Imported content:');
     for (const [table, n] of summary) console.log(`  ${table.padEnd(16)} ${n}`);
     console.log(`  placeholder author: 1, video expert profiles: ${expertIds.size}`);
-    console.log(process.env.UPLOADS_BASE_URL
-      ? `Rewrote ${rewrittenLinks} image links to ${process.env.UPLOADS_BASE_URL}/`
-      : 'Image links still point at the old S3 bucket (set UPLOADS_BASE_URL to rewrite them).');
+    if (UPLOADS_BASE_URL) console.log(`Rewrote ${rewritten.images} image links to ${UPLOADS_BASE_URL}/`);
+    else console.log('Image links still point at the old S3 bucket (set APP_URL or UPLOADS_BASE_URL).');
+    if (APP_URL) console.log(`Rewrote ${rewritten.app} app.getmedes.com links to ${APP_URL}`);
+    if (SITE_URL) console.log(`Rewrote ${rewritten.site} getmedes.com links to ${SITE_URL}`);
+    if (!APP_URL) console.log('getmedes.com links were left as they are (set APP_URL and SITE_URL to rewrite them).');
     console.log('No user accounts, posts, activity, devices or companies were copied.');
   } catch (e) {
     await target.query('ROLLBACK').catch(() => {});

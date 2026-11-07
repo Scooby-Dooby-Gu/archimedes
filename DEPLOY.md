@@ -1,15 +1,29 @@
-# Deploying Archimedes to Vercel + getmedes.com
+# Deploying Archimedes to Vercel on gufamily.org
 
 The repo deploys as **two Vercel projects** from the same GitHub repo, plus a
-hosted Postgres database:
+hosted Postgres database, on two subdomains of gufamily.org:
 
-| Vercel project | Root directory | Domains | What it serves |
+| Vercel project | Root directory | Domain | What it serves |
 |---|---|---|---|
-| `archimedes-frontend` | `frontend` | `app.getmedes.com` | The app, plus the marketing page's HTML/CSS/images |
-| `archimedes-backend` | `backend` | `getmedes.com`, `www.getmedes.com`, `api.getmedes.com` | The API, and the marketing pages (rendered from the frontend's `marketing.html`) |
+| `archimedes-backend` | `backend` | `archimedes.gufamily.org` | The marketing site (home page, public lessons, sitemap) **and** the API |
+| `archimedes-frontend` | `frontend` | `app.archimedes.gufamily.org` | The web app, the marketing page's HTML/CSS, and the lesson images (`/uploads`) |
 
-Both fit on Vercel's free Hobby plan as long as the site stays non-commercial
-(no charging, ads, or paid referral deals).
+The app lives on its own subdomain rather than a path like
+`gufamily.org/archimedes`: it keeps users' login keys in browser storage,
+which a subdomain keeps separate from the personal site.
+
+No domain is hardcoded. Everything comes from these settings:
+
+| Setting | Value here | Used for |
+|---|---|---|
+| `SITE_URL` | `https://archimedes.gufamily.org` | Marketing links, share links, sitemap |
+| `APP_URL` | `https://app.archimedes.gufamily.org` | Sign-up links, app links, images |
+| `API_URL` (frontend) | `https://archimedes.gufamily.org` | Where the app sends API requests |
+| `CONTACT_EMAIL` | e.g. `simon@gufamily.org` | "Having trouble? Email …" |
+| `EMAIL_FROM`, `EMAIL_FROM_NAME` (backend) | a sender verified in SendGrid | Outgoing email |
+
+Both projects fit on Vercel's free Hobby plan as long as the site stays
+non-commercial (no charging, ads, or paid referral deals).
 
 Do the steps in order: the backend needs the database, and the marketing
 pages need the frontend to be live.
@@ -32,8 +46,7 @@ pages need the frontend to be live.
    ```
 
    This creates the tables without any sample data. (`--seed` loads the test
-   accounts and is refused when `NODE_ENV=production`.) The old public
-   `POST /install` route no longer exists.
+   accounts and is refused when `NODE_ENV=production`.)
 
 3. **Import the course content** from the January 2023 production backup.
    Restore the backup into a local database first, then copy only the
@@ -47,7 +60,8 @@ pages need the frontend to be live.
    cd backend
    SOURCE_DATABASE_URL=postgresql://localhost/archimedes_backup \
    DATABASE_URL_UNPOOLED='postgres://…neon.tech/neondb?sslmode=require' \
-   UPLOADS_BASE_URL=https://app.getmedes.com/uploads \
+   APP_URL=https://app.archimedes.gufamily.org \
+   SITE_URL=https://archimedes.gufamily.org \
    npm run import:content
    ```
 
@@ -59,19 +73,20 @@ pages need the frontend to be live.
    target already has courses. (The `pg_restore` step reports one error about
    `array_cat`, which the `CREATE AGGREGATE` line fixes.)
 
-   **Images:** the 4,068 lesson, course, video and task images from the old
-   company's S3 bucket are copied into `frontend/public/uploads/` (same folder
-   layout as the bucket) and served by the frontend project at
-   `https://app.getmedes.com/uploads/…`. `UPLOADS_BASE_URL` rewrites every old
-   bucket link to that address during the import, so nothing depends on the
-   old bucket. `frontend/vercel.json` serves `/uploads` with long caching,
-   cross-origin access for the marketing site, and a policy that stops SVGs
-   from running scripts.
+   **Links:** the import rewrites old `app.getmedes.com` links to `APP_URL`,
+   `getmedes.com`/`www.getmedes.com` links to `SITE_URL`, and links to the
+   old company's S3 bucket to `APP_URL/uploads`. A few old email addresses
+   written into lesson text (e.g. `legal@getmedes.com`) are left as they are.
+
+   **Images:** the 4,068 lesson, course, video and task images are in
+   `frontend/public/uploads/` (same layout as the old bucket), served by the
+   frontend project with long caching, cross-origin access for the marketing
+   site, and a policy that stops SVGs from running scripts.
 
    Keep the backup file out of the repo and off shared drives: it contains
    2,897 real users' emails and password hashes.
 
-## 2. Deploy the frontend (`app.getmedes.com`)
+## 2. Deploy the frontend (`app.archimedes.gufamily.org`)
 
 1. Vercel → **Add New… → Project** → import `Scooby-Dooby-Gu/archimedes`.
 2. **Root Directory:** `frontend`. **Framework preset:** Other. Build command
@@ -82,18 +97,20 @@ pages need the frontend to be live.
    | Name | Value |
    |---|---|
    | `NODE_ENV` | `production` |
-   | `APP_URL` | `https://app.getmedes.com` |
-   | `API_URL` | `https://api.getmedes.com` |
+   | `APP_URL` | `https://app.archimedes.gufamily.org` |
+   | `SITE_URL` | `https://archimedes.gufamily.org` |
+   | `API_URL` | `https://archimedes.gufamily.org` |
+   | `CONTACT_EMAIL` | optional, shown when verification email trouble comes up |
    | `GOOGLE_CLIENT_ID` | optional, enables "Sign in with Google" |
    | `APPLE_CLIENT_ID` | optional, enables "Sign in with Apple" |
    | `SENTRY_DSN` | optional |
    | `VAPID_PUBLIC_KEY` | optional, same as the backend's |
 
    These are baked in at build time, so redeploy after changing them.
-5. Deploy, then **Settings → Domains → Add** `app.getmedes.com`. Vercel shows
-   the DNS record to create (step 5).
+5. Deploy, then **Settings → Domains → Add** `app.archimedes.gufamily.org`.
+   Vercel shows the DNS record to create (step 5).
 
-## 3. Deploy the backend (`getmedes.com`, `www`, `api`)
+## 3. Deploy the backend (`archimedes.gufamily.org`)
 
 1. **Add New… → Project** → the same repo again.
 2. **Root Directory:** `backend`. **Framework preset:** Other.
@@ -103,12 +120,14 @@ pages need the frontend to be live.
    | Name | Value |
    |---|---|
    | `NODE_ENV` | `production` |
-   | `APP_URL` | `https://app.getmedes.com` |
+   | `APP_URL` | `https://app.archimedes.gufamily.org` |
+   | `SITE_URL` | `https://archimedes.gufamily.org` |
    | `DATABASE_URL` / `DATABASE_URL_UNPOOLED` | set by the Neon integration |
-   | `SENDGRID_API_KEY` | **needed for sign-ups**: new accounts must click a verification email |
+   | `SENDGRID_API_KEY`, `EMAIL_FROM`, `EMAIL_FROM_NAME` | email (see "Email" below) |
+   | `CONTACT_EMAIL` | optional |
    | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | optional, Google sign-in |
    | `APPLE_CLIENT_ID` | optional, Apple sign-in |
-   | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_S3_USER_UPLOADS_BUCKET`, `AWS_S3_USER_UPLOADS_BUCKET_REGION` | optional, image uploads |
+   | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_S3_USER_UPLOADS_BUCKET`, `AWS_S3_USER_UPLOADS_BUCKET_REGION` | optional, new image uploads from the lesson editor |
    | `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | optional, web push |
    | `APN_KEY`, `APN_KEY_ID`, `APN_TEAM_ID` | optional, iOS push |
    | `SENTRY_DSN` | optional |
@@ -117,16 +136,30 @@ pages need the frontend to be live.
 5. Deploy. On **production** deploys the build runs `npm run db:migrate`
    (under a lock, so two deploys never migrate at once). Preview deploys skip
    migrations, because they may share the production database.
-6. **Settings → Domains → Add** `getmedes.com`, `www.getmedes.com` and
-   `api.getmedes.com`. Pick `getmedes.com` as the primary and let `www`
-   redirect to it (or the other way round).
+6. **Settings → Domains → Add** `archimedes.gufamily.org`.
+
+### Email
+
+New accounts must confirm their email before most of the app unlocks. The
+backend sends email through **SendGrid dynamic templates by ID**
+(`d-c524e6…` for verification, and others in `app/controllers`). Those
+templates lived in the old company's SendGrid account, so a new SendGrid
+account doesn't have them: until they are recreated (and the IDs in the code
+updated) or replaced with built-in emails, verification emails won't send.
+In the meantime, verify accounts by hand in the Neon SQL editor:
+
+```sql
+UPDATE private.users SET verified_at = NOW() WHERE email = 'someone@example.com';
+```
+
+`EMAIL_FROM` must be a sender address you've verified in SendGrid.
 
 ### Before switching DNS: test on the vercel.app URLs
 
 Each project gets a `*.vercel.app` URL. To test end-to-end before touching
 DNS, temporarily set the frontend's `API_URL` to the backend's `vercel.app`
-URL and the backend's `APP_URL` to the frontend's, redeploy both, and try
-signing up. Switch them back to the `getmedes.com` URLs before step 5.
+URL and both projects' `APP_URL` to the frontend's, redeploy both, and try
+signing up. Switch them back before step 5.
 
 ### Make yourself an admin
 
@@ -141,53 +174,50 @@ WHERE email = 'you@example.com';
 ## 4. Google / Apple sign-in (optional)
 
 - **Google:** in Google Cloud Console, edit the OAuth client and add
-  `https://app.getmedes.com` under **Authorized JavaScript origins**.
-- **Apple:** in the Services ID configuration, add `app.getmedes.com` as a
-  domain and `https://app.getmedes.com/signin/apple` as a return URL.
+  `https://app.archimedes.gufamily.org` under **Authorized JavaScript origins**.
+- **Apple:** in the Services ID configuration, add
+  `app.archimedes.gufamily.org` as a domain and
+  `https://app.archimedes.gufamily.org/signin/apple` as a return URL.
 
 ---
 
-## 5. Point getmedes.com at Vercel (Squarespace DNS)
+## 5. DNS: add the two subdomains to gufamily.org
 
-getmedes.com is registered at **Squarespace Domains** (it moved there from
-Google Domains). Right now the bare domain points at a Squarespace site, and
-`www` and `app` point at Heroku, which no longer works.
+gufamily.org's bare domain already points at Vercel for the personal site, so
+nothing existing changes: you only **add** two records. The domain uses the
+Google/Squarespace nameservers (`ns-cloud-d*.googledomains.com`), so edit DNS
+wherever gufamily.org is registered (most likely **Squarespace Domains**,
+where Google Domains moved).
 
 > **Use the exact values Vercel shows** on each project's **Settings → Domains**
-> page. Vercel has used `76.76.21.21` (A) and `cname.vercel-dns.com` (CNAME)
-> for years, but newer projects can get project-specific values.
+> page. Vercel has used `cname.vercel-dns.com` for years, but newer projects
+> can get project-specific values.
 
-1. Sign in at **https://account.squarespace.com** with the account that owns
-   getmedes.com.
-2. Open **Domains** and click **getmedes.com**.
-3. Open **DNS** (in some accounts: **DNS → DNS Settings**).
-4. **Remove the old records** for the names you're moving:
-   - If there's a **Squarespace Defaults** section (A records `198.185.159.x`
-     and a `www` CNAME to `ext-sq.squarespace.com`), delete it with its trash
-     icon. Only do this if you don't need the Squarespace site any more.
-   - Under **Custom records**, delete the `www` and `app` CNAMEs pointing at
-     `…herokudns.com`.
-   - **Leave MX, TXT and other records alone**: they handle email and domain
-     verification.
-5. **Add the Vercel records** under **Custom records → Add record**:
+1. Sign in at **https://account.squarespace.com** → **Domains** → **gufamily.org**
+   → **DNS**.
+2. Under **Custom records → Add record**, add:
 
    | Type | Host | Data (use Vercel's value) |
    |---|---|---|
-   | A | `@` | `76.76.21.21` |
-   | CNAME | `www` | `cname.vercel-dns.com` |
-   | CNAME | `app` | `cname.vercel-dns.com` |
-   | CNAME | `api` | `cname.vercel-dns.com` |
+   | CNAME | `archimedes` | `cname.vercel-dns.com` |
+   | CNAME | `app.archimedes` | `cname.vercel-dns.com` |
 
-   Keep the default TTL and save each record.
-6. Back in Vercel, each domain should turn **Valid Configuration** within a
+3. **Don't touch** the existing `@`/`www` records (the personal site) or any
+   MX/TXT records (email).
+4. Back in Vercel, both domains should turn **Valid Configuration** within a
    few minutes to a few hours, and Vercel issues the HTTPS certificates
    automatically.
 
-If Squarespace says the domain uses **custom nameservers**, the records
-must be edited wherever those nameservers are hosted instead. Squarespace's
-own nameservers for domains moved from Google Domains look like
-`ns-cloud-b1.googledomains.com`, and that's what getmedes.com uses today, so
-editing in Squarespace should work.
+Then link to `https://archimedes.gufamily.org` from the Archimedes entry in the
+Work section of the personal site.
+
+### Optional: keep getmedes.com working
+
+getmedes.com is still registered (through Aug 2027). To keep old links alive,
+add `getmedes.com`, `www.getmedes.com` and `app.getmedes.com` to the projects
+in Vercel as **redirects** to the gufamily.org addresses, and point their DNS at
+Vercel in getmedes.com's Squarespace DNS (remove the old Heroku `www`/`app`
+CNAMEs and, if you no longer need it, the Squarespace site records).
 
 ---
 

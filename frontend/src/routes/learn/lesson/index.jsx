@@ -117,7 +117,7 @@ export default function Lesson ({lessonId, courseId, goalId, ambitionId, from, h
       parentLink: null,
       actionTitle: !user && <Icon.Login />,
       actionLink: `/signup?from=${encodeURIComponent(location.pathname)}`,
-      titleNode: <a class={style.logo} href="https://getmedes.com"><Icon.LogosArchimedes /></a>,
+      titleNode: <a class={style.logo} href={import.meta.env.SITE_URL || "/"}><Icon.LogosArchimedes /></a>,
     })
   }), [ parentLocation, course, lesson, submission, hasQuiz, isLessonComplete, coursesError, discussionRequest.error, lessonRequest.error, hint, from]);
 
@@ -132,13 +132,13 @@ Please let us know! We're here to help.`
       <Icon.Checkmark class={`icon checkmark ${submission.isComplete ? 'checked' : ''}`} onClick={(e) => !submission.isComplete && callbacks.onNextQuizStep(e)}  />
     </div>}
     <div class={style.header}>
-      {!user && <a class={style.logo} href="https://getmedes.com"><Icon.LogosArchimedes /></a>}
+      {!user && <a class={style.logo} href={import.meta.env.SITE_URL || "/"}><Icon.LogosArchimedes /></a>}
       {lesson.image && <div class={style.cover}>
         <Img crossorigin={(lesson.image || '').match(/archimedes.*s3/) && 'anonymous'} src={lesson.image} srcset={lesson.imageSizes}/>
       </div>}
       <h1>
         {lesson.slugs && lesson.slugs.length > 0 && <Icon.Share class={style.share} onClick={(e) => {
-          const url = `https://getmedes.com/lessons/${lesson.slugs[0]}`;
+          const url = `${import.meta.env.SITE_URL}/lessons/${lesson.slugs[0]}`;
           track('send', 'event', 'Lesson/Share', lesson.name)
           copyToClipboard(url);
           alert('The link to this lesson was copied to the clipboard and is ready for you to share');

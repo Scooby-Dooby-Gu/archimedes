@@ -56,6 +56,10 @@ export async function renderedStaticPage(app, options) {
   var html = await app.locals.getFrontendEntryHTML(app);
 
   html = html.replace(/(src|href)="\.\//g, `$1="${process.env.APP_URL}/`)
+  // marketing.html uses __APP_URL__ / __SITE_URL__ instead of a fixed domain
+  // (normally filled in at build time; this covers the dev server).
+  html = html.replace(/__APP_URL__/g, app.locals.appUrl())
+             .replace(/__SITE_URL__/g, app.locals.siteUrl())
 
   if (options.type)
     html = html.replace('id="page"', 'id="page" type="' + options.type + '"')

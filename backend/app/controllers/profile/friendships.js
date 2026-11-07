@@ -71,7 +71,7 @@ export default (app, req) => {
       url: process.env.SLACK_WEBHOOK_URL,
       method: 'POST',
       body: {
-        text: `# New invite\n*From:* <https://app.getmedes.com/users/${req.locals.user.id}|${req.locals.user.name}>\n*To:* ${email}\n`
+        text: `# New invite\n*From:* <${process.env.APP_URL}/users/${req.locals.user.id}|${req.locals.user.name}>\n*To:* ${email}\n`
       },
       json: true,
     });
