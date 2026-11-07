@@ -253,7 +253,26 @@
 			})
 		}
 	</script>
-		<script type="module" onerror="reloadApp()" src="/index.jsx"></script>
+		<script>
+			// Desktop phone frame: on a wide screen, show the app inside a
+			// phone-sized frame (shell/index.js) instead of stretching it. Not
+			// inside the frame itself, not for installed home-screen apps, and
+			// not with ?noframe.
+			window.ARCHIMEDES_SHELL = window.self === window.top
+				&& window.matchMedia('(min-width: 900px) and (min-height: 560px)').matches
+				&& !window.matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches
+				&& !window.navigator.standalone
+				&& !/[?&]noframe(=|&|$)/.test(location.search);
+			if (window.ARCHIMEDES_SHELL) {
+				var shellLoader = document.getElementById('loader');
+				if (shellLoader) shellLoader.parentNode.removeChild(shellLoader);
+				document.body.style.overflow = '';
+			}
+		</script>
+		<script type="module" onerror="reloadApp()">
+			if (window.ARCHIMEDES_SHELL) import('/shell/index.js');
+			else import('/index.jsx');
+		</script>
 		<script
 			src="https://browser.sentry-cdn.com/6.4.1/bundle.min.js"
 			integrity="sha384-THoc7rflwZFKTdZNgv6jLFFDn299Uv3t1SW5B4yGLvLiCRTYP9ys6vXZcMl95TQF"

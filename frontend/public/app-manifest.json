@@ -1,22 +1,17 @@
 {
-  "name": "Medes",
-  "AVOID_INSTALLATION: short_name": "Archimedes",
+  "id": "/",
+  "name": "Archimedes",
+  "short_name": "Archimedes",
+  "description": "Your investment coach: short lessons, games and expert videos.",
   "start_url": "/",
   "scope": "/",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#fff",
+  "background_color": "#ffffff",
   "theme_color": "#1a2132",
-  "AVOID_INSTALLATION: icons": [
-    {
-      "src": "/assets/icons/pwa-192x192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/assets/icons/pwa-512x512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
+  "icons": [
+    { "src": "/assets/icons/pwa-192x192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
+    { "src": "/assets/icons/pwa-512x512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
+    { "src": "/assets/icons/pwa-maskable-512x512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
   ]
 }

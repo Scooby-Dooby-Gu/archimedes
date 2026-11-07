@@ -35,30 +35,10 @@ Sitemap: /sitemap.xml
 `)
 })
 
-app.getAsync('/app-manifest.json', (req, res) => {
-  return {
-    "name": "Medes",
-    "AVOID_INSTALLATION: short_name": "Archimedes",
-    "start_url": "/",
-    "scope": "/",
-    "display": "fullscreen",
-    "orientation": "portrait",
-    "background_color": "#fff",
-    "theme_color": "#3542BA",
-    "AVOID_INSTALLATION: icons": [
-      {
-        "src": "/assets/icons/pwa-192x192.png",
-        "type": "image/png",
-        "sizes": "192x192"
-      },
-      {
-        "src": "/assets/icons/pwa-512x512.png",
-        "type": "image/png",
-        "sizes": "512x512"
-      }
-    ]
-  }
-  
+// The installable web app lives on the app domain; its manifest is
+// frontend/public/app-manifest.json.
+app.get('/app-manifest.json', (req, res) => {
+  res.redirect(301, `${app.locals.appUrl()}/app-manifest.json`);
 })
 
 afterMiddleware(app)
