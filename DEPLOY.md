@@ -35,6 +35,36 @@ pages need the frontend to be live.
    accounts and is refused when `NODE_ENV=production`.) The old public
    `POST /install` route no longer exists.
 
+3. **Import the course content** from the January 2023 production backup.
+   Restore the backup into a local database first, then copy only the
+   content across:
+
+   ```bash
+   createdb archimedes_backup
+   pg_restore --no-owner --no-privileges -d archimedes_backup /path/to/backup.dump
+   psql -d archimedes_backup -c "CREATE AGGREGATE array_cat_agg(anycompatiblearray) (SFUNC=array_cat, STYPE=anycompatiblearray);"
+
+   cd backend
+   SOURCE_DATABASE_URL=postgresql://localhost/archimedes_backup \
+   DATABASE_URL_UNPOOLED='postgres://…neon.tech/neondb?sslmode=require' \
+   npm run import:content
+   ```
+
+   This copies courses, lessons, quizzes, videos, topics, goals, tasks,
+   achievements and games. It copies **no** user accounts, posts, activity,
+   devices or companies. Lesson authors become one "Archimedes" placeholder;
+   the 5 video presenters are copied as public profiles only (name, photo,
+   bio) with no login. Run it before anyone signs up; it refuses to run if the
+   target already has courses. (The `pg_restore` step reports one error about
+   `array_cat`, which the `CREATE AGGREGATE` line fixes.)
+
+   Lesson images still load from the old company's S3 bucket
+   (`archimedes-user-uploads-production`). Copy them to storage you control
+   before that bucket goes away.
+
+   Keep the backup file out of the repo and off shared drives: it contains
+   2,897 real users' emails and password hashes.
+
 ## 2. Deploy the frontend (`app.getmedes.com`)
 
 1. Vercel → **Add New… → Project** → import `Scooby-Dooby-Gu/archimedes`.

@@ -13,7 +13,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "db:setup": "node scripts/db.js setup",
     "db:migrate": "node scripts/db.js migrate",
-    "vercel-build": "node scripts/db.js vercel-build"
+    "vercel-build": "node scripts/db.js vercel-build",
+    "import:content": "node scripts/import-content.js"
   },
   "repository": {
     "type": "git",
