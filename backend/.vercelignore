@@ -1,0 +1,9 @@
+# Never upload local settings or credentials with `vercel deploy`.
+.env
+.env.*
+!.env.example
+app/secret/
+node_modules
+.vercel
+*.log
+.DS_Store

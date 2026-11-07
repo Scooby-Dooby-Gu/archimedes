@@ -94,8 +94,15 @@ const run = {
     // Preview deploys may share the production database: only migrate on
     // production deploys (or when explicitly asked).
     if (process.env.VERCEL_ENV === 'production' || process.env.MIGRATE_ON_BUILD === 'true') {
-      if (!databaseUrl()) throw new Error('DATABASE_URL is not set for this deploy.');
-      await migrate();
+      if (!databaseUrl()) {
+        // Lets the very first deploy go through before a database exists;
+        // the API can't serve data until DATABASE_URL is set.
+        console.log('WARNING: DATABASE_URL is not set, skipping migrations. Connect a database (see DEPLOY.md) and redeploy.');
+        return;
+      }
+      // Empty database (first deploy): create the schema, with no sample data.
+      // Otherwise: apply pending migrations. Both run under the advisory lock.
+      await setup({ seed: false });
     } else {
       console.log(`Skipping migrations (VERCEL_ENV=${process.env.VERCEL_ENV || 'unset'}).`);
     }

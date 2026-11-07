@@ -37,16 +37,20 @@ pages need the frontend to be live.
    project once that project exists (you can also do this after step 3).
    The integration sets `DATABASE_URL` (pooled) and `DATABASE_URL_UNPOOLED`
    (direct) on the project.
-2. Create the schema once, from your machine, using the **direct** URL
-   (Neon dashboard → Connection details → untick "Connection pooling"):
+2. The schema is created automatically: the backend's first production
+   deploy finds an empty database and creates the tables (no sample data);
+   later deploys only apply migrations. You can also do it by hand with the
+   **direct** URL (Neon → Connect → turn off "Connection pooling"):
 
    ```bash
    cd backend
    DATABASE_URL_UNPOOLED='postgres://…neon.tech/neondb?sslmode=require' npm run db:setup
    ```
 
-   This creates the tables without any sample data. (`--seed` loads the test
-   accounts and is refused when `NODE_ENV=production`.)
+   (`--seed` loads the test accounts and is refused when
+   `NODE_ENV=production`.) Note that the Neon integration stores its variables
+   as *sensitive* in Vercel, so `vercel env pull` returns them empty: copy the
+   connection string from the Neon dashboard when a local command needs it.
 
 3. **Import the course content** from the January 2023 production backup.
    Restore the backup into a local database first, then copy only the
@@ -218,17 +222,19 @@ wherever gufamily.org is registered (most likely **Squarespace Domains**,
 where Google Domains moved).
 
 > **Use the exact values Vercel shows** on each project's **Settings → Domains**
-> page. Vercel has used `cname.vercel-dns.com` for years, but newer projects
-> can get project-specific values.
+> page (or `vercel domains inspect <domain>`). For these subdomains it asked
+> for A records to `76.76.21.21`.
 
 1. Sign in at **https://account.squarespace.com** → **Domains** → **gufamily.org**
    → **DNS**.
-2. Under **Custom records → Add record**, add:
+2. Under **Custom records** (not Presets) → **Add record**, add:
 
    | Type | Host | Data (use Vercel's value) |
    |---|---|---|
-   | CNAME | `archimedes` | `cname.vercel-dns.com` |
-   | CNAME | `app.archimedes` | `cname.vercel-dns.com` |
+   | A | `archimedes` | `76.76.21.21` |
+   | A | `app.archimedes` | `76.76.21.21` |
+
+   Host is only the part before `gufamily.org`.
 
 3. **Don't touch** the existing `@`/`www` records (the personal site) or any
    MX/TXT records (email).

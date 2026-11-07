@@ -1,0 +1,10 @@
+# Never upload local settings with `vercel deploy`; Vercel builds dist itself.
+.env
+.env.*
+!.env.example
+node_modules
+dist
+.vercel
+*.html-E
+*.log
+.DS_Store

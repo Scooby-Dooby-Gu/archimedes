@@ -7,3 +7,4 @@ wmr/
 **/.DS_Store
 size-plugin.json
 .env
+.vercel

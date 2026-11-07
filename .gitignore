@@ -1,2 +1,5 @@
 .DS_Store
 frontend/src/assets/atlas/material-icons/
+
+# Vercel CLI project links
+.vercel

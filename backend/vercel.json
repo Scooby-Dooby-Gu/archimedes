@@ -1,9 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run vercel-build && mkdir -p public",
+  "buildCommand": "npm run vercel-build && mkdir -p public && echo \"Archimedes API: every route is served by api/index.js\" > public/_archimedes-build.txt",
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/(.*)", "destination": "/api" }
+    {
+      "source": "/(.*)",
+      "destination": "/api"
+    }
   ],
   "functions": {
     "api/index.js": {
