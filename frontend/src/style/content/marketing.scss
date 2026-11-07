@@ -1133,7 +1133,8 @@ section.dark {
     background-repeat: no-repeat;
     background-position: 20% center;
     p, h3 {
-      text-shadow: 0 1px 0px #000;
+      // Soft dark halo keeps white text readable over the pale clouds in the photo.
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7), 0 0 14px rgba(26, 33, 50, 0.85), 0 0 28px rgba(26, 33, 50, 0.6);
       margin-left: 0;
     }
     &:before {
@@ -1776,3 +1777,169 @@ section.dark {
 	
 }
 
+
+
+/* ------------------------------------------------------------------
+   Buttons & contrast (mobile-first)
+   One button system for the whole marketing site, appended last so it
+   wins over the older per-section rules above.
+   - Light/pastel surfaces: navy fill, white text.
+   - Dark surfaces (header, partners, game card): pale cyan, navy text.
+   - Phones: full-width, at least 52px tall.
+   ------------------------------------------------------------------ */
+$navy: #1a2132;
+$navy-hover: #2c3752;
+$cyan: #D0FCFF;
+$cyan-hover: #ffffff;
+
+/* Never rely on the browser's canvas colour: in dark mode or some in-app
+   browsers it is dark, which made the dark body text unreadable. */
+html {
+	background: #fff;
+	color-scheme: light;
+}
+
+#page a.button,
+#page .button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	min-height: 52px;
+	padding: 12px 28px;
+	border: 0;
+	border-radius: 999px;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.2;
+	letter-spacing: 0.01em;
+	text-decoration: none;
+	white-space: normal;
+	text-align: center;
+	background: $navy;
+	color: #fff;
+	box-shadow: 0 2px 6px rgba(26, 33, 50, 0.18);
+	transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+	cursor: pointer;
+
+	svg {
+		width: 22px;
+		height: 22px;
+		margin: 0 -6px 0 0;
+		flex-shrink: 0;
+		path, * {
+			fill: currentColor;
+		}
+	}
+
+	&:hover {
+		background: $navy-hover;
+		box-shadow: 0 4px 12px rgba(26, 33, 50, 0.24);
+	}
+	&:active {
+		transform: translateY(1px);
+		box-shadow: 0 1px 3px rgba(26, 33, 50, 0.2);
+	}
+	&:focus-visible {
+		outline: 3px solid #F7BB52;
+		outline-offset: 3px;
+	}
+
+	&.large {
+		min-height: 56px;
+		padding: 14px 32px;
+		font-size: 19px;
+	}
+}
+
+/* Dark surfaces: pale cyan button with navy text. */
+#page #header a.button,
+#page #deals a.button,
+#page #starter-packs #gamers a.button {
+	background: $cyan;
+	color: $navy;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+
+	&:hover {
+		background: $cyan-hover;
+	}
+}
+
+/* The final call to action sits on pale cyan: drop the old outline style. */
+#page #footer .actions a.button {
+	border: 0;
+	background: $navy;
+	color: #fff;
+}
+
+/* Phones: full-width, thumb-friendly buttons, consistently aligned. */
+@media (max-width: 600px) {
+	#page a.button,
+	#page .button {
+		display: flex;
+		width: 100%;
+		max-width: 420px;
+		margin-left: auto;
+		margin-right: auto;
+		font-size: 18px;
+	}
+	#page #header a.button {
+		width: calc(100% - 40px);
+	}
+	// Starter-pack cards keep a narrow text column beside the illustration;
+	// stretching there wraps labels onto two lines. Keep them one line and
+	// follow the card's own left/right alignment instead.
+	#page #starter-packs li:not(#gamers) a.button {
+		display: inline-flex;
+		width: auto;
+		max-width: 100%;
+		white-space: nowrap;
+		padding-left: 20px;
+		padding-right: 20px;
+		margin-left: 0;
+		margin-right: 0;
+	}
+}
+
+/* App store badges: real tap targets. */
+#page #app-buttons {
+	justify-content: center;
+	align-items: center;
+	> a {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 48px;
+		img {
+			display: block;
+			height: 44px;
+			width: auto;
+			max-width: 100%;
+		}
+	}
+}
+
+/* Footer links: 44px tall tap targets, underlined so they read as links. */
+#page #footer ul li a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	padding: 0 8px;
+	color: #e6e9f0;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	&:hover {
+		color: #fff;
+	}
+	&:focus-visible {
+		outline: 2px solid #F7BB52;
+		outline-offset: 2px;
+	}
+}
+
+/* Nav links: visible keyboard focus. */
+#page #menu a:focus-visible {
+	outline: 2px solid $navy;
+	outline-offset: -4px;
+	border-radius: 6px;
+}
