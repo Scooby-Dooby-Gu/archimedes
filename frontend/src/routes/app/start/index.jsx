@@ -9,10 +9,10 @@ export default function Start() {
   if (ref.redirected) return;
   ref.redirected = true;
 
+  // Everyone uses the web app now. (It used to send people who weren't
+  // staff to /get_app to download the iOS/Android apps, which no longer exist.)
   if (user && location.pathname === "/invite") {
     route(`/users/${user.id}/friends/new`)
-  } else if ((!user || (user.role != 'admin' && user.role != 'manager' && user.role != 'writer')) && !localStorage.wrapper && (import.meta.env.NODE_ENV === 'staging' || import.meta.env.NODE_ENV === 'production')) {
-    route('/get_app')
   } else {
     route('/ambitions')
   }
