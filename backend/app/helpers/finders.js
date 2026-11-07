@@ -160,3 +160,14 @@ export async function writerOnly (req, res, next) {
     next();
   }
 }
+// Scheduled jobs (daily notifications, reminder emails): allowed for admins,
+// or for a scheduler that sends "Authorization: Bearer <CRON_SECRET>".
+// Vercel Cron sends that header automatically when CRON_SECRET is set.
+export async function cronOrAdmin (req, res, next) {
+  const secret = process.env.CRON_SECRET;
+  const header = req.headers.authorization || '';
+  if (secret && secret.length >= 16 && header === `Bearer ${secret}`) {
+    return next();
+  }
+  return adminOnly(req, res, next);
+}

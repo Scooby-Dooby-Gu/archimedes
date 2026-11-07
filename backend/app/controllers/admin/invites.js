@@ -87,13 +87,6 @@ export default function(app) {
       })],
       'upsert-company-invite'
     );
-    if (user) {
-      var templateId = 'd-ce915eb550ab41cfb6f165bb5ec2174d';
-      var subject = `${req.locals.user.name} invited you to join ${req.locals.company.name} workspace on Archimedes`
-    } else {
-      var templateId = 'd-72902755f34a4a42bc011e63ab075e20';
-      var subject = `${req.locals.user.name} invited you to the ${req.locals.company.name} workspace on Archimedes`
-    }
     if (!user) {
       if (process.env.NODE_ENV == 'production') process.env.SLACK_WEBHOOK_URL && request({
         url: process.env.SLACK_WEBHOOK_URL,
@@ -104,19 +97,11 @@ export default function(app) {
         json: true,
       });
     }
-    app.locals.sendEmailFromTemplate(templateId, subject, {
+    app.locals.sendEmail(user ? 'companyInviteExisting' : 'companyInviteNew', {
       url: `${process.env.APP_URL}/invites/${token}?campaign=Email&action=Invite`,
-      user: user ? {
-        ...user,
-        firstName: user.name.split(' ')[0]
-      } : null,
-      inviter: {
-        name: req.locals.user.name,
-        firstName: req.locals.user.name.split(' ')[0],
-        id: req.locals.user.id,
-        avatar: req.locals.user.avatar
-      },
-      company: req.locals.company
+      user: user ? { name: user.name } : null,
+      inviter: { name: req.locals.user.name },
+      company: { name: req.locals.company.name }
     }, email)
   }
 

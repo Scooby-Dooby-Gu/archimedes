@@ -18,14 +18,9 @@ export default (app, req) => {
         'upsert_password_reset_request'
       );
 
-      const templateId = 'd-b7b0585b77d9429485f6a7d99a0bd78f';
-      const subject = 'Reset your password for Archimedes';
-      app.locals.sendEmailFromTemplate(templateId, subject, {
+      app.locals.sendEmail('passwordReset', {
         url: `${process.env.APP_URL}/users/${user.id}/password/edit?token=${token}&campaign=Email&action=Reset%20Password&uid=${user.id}`,
-        user: {
-          ...user,
-          firstName: user.name.split(' ')[0]
-        },
+        user: { name: user.name },
       }, user.email);
     }
 

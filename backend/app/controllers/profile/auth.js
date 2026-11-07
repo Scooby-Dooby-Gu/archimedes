@@ -8,9 +8,7 @@ var upload = multer()
 
 
 export async function sendWaitlistApprovalEmail(req, user, company) {
-  var templateId = 'd-81bf6429fec84682804cc6e7784a808c';
-  var subject = `Welcome to Archimedes!`
-  return req.locals.app.locals.sendEmailFromTemplate(templateId, subject, {
+  return req.locals.app.locals.sendEmail('waitlistApproval', {
     url: `${process.env.APP_URL}?campaign=Email&action=Appoved&uid=${user.id}`,
     company
   }, user.email)
@@ -239,22 +237,14 @@ export default (app) => {
   })  
 
   const sendVerificationEmail = (app, user, company) => {
-    var templateId = 'd-c524e6064ec14fad8073334558f4a6a7';
-    var subject = `Complete your signup for Archimedes`
-    return app.locals.sendEmailFromTemplate(templateId, subject, {
+    return app.locals.sendEmail('verification', {
       url: `${process.env.APP_URL}/verify?token=${user.verificationToken}&campaign=Email&action=Verified&uid=${user.id}`,
       company
     }, user.email)
   }
 
   const sendWaitlistEmail = (app, user, company) => {
-    var templateId = 'd-875b55f2ad714d4ca833c74a6018783f';
-    var subject = `You've been added to the Archimedes waitlist`;
-
-    return app.locals.sendEmailFromTemplate(templateId, subject, {
-      //url: `${process.env.APP_URL}/verify?token=${user.verificationToken}`,
-      company
-    }, user.email)
+    return app.locals.sendEmail('waitlist', { company }, user.email)
   }
 
   const notifyAboutSignup = (app, user) => {

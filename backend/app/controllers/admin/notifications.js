@@ -53,7 +53,7 @@ export default (app) => {
   });
 
   // NOT USED ANYMORE. HERE FOR FUTURE GENERATIONS
-  app.getAsync('/notifications/daily', async(req, res) => {
+  app.getAsync('/notifications/daily', app.locals.cronOrAdmin, async(req, res) => {
     const subscribers = await req.locals.select(
       'SELECT DISTINCT user_id FROM private.devices', 
       //'SELECT id as user_id FROM private.users', 
@@ -260,7 +260,7 @@ export default (app) => {
     })
   })
 
-  app.postAsync('/reminders/invites', async(req, res) => {
+  app.postAsync('/reminders/invites', app.locals.cronOrAdmin, async(req, res) => {
     const invites = await req.locals.select(`
       SELECT invites.id, jsonb_build_object(
         'id', invites.id,
@@ -316,7 +316,7 @@ export default (app) => {
       )
     }))
       
-    await app.locals.sendEmailsFromTemplate('d-f269e7da030442368f21e9ff289fe0b5', emails, app.locals.emailFrom())
+    await app.locals.sendEmails('inviteReminder', emails)
 
     process.env.SLACK_WEBHOOK_URL && request({
       url: process.env.SLACK_WEBHOOK_URL,
@@ -329,7 +329,7 @@ export default (app) => {
     return;
     
   })
-  app.postAsync('/reminders/limbo', async (req, res) => {
+  app.postAsync('/reminders/limbo', app.locals.cronOrAdmin, async (req, res) => {
     //const users = await findUsersInLimbo(req);
 
     const users = process.env.NODE_ENV != 'production' 
@@ -356,7 +356,7 @@ export default (app) => {
       )
     }))
     
-    await app.locals.sendEmailsFromTemplate('d-325d976039f5408c87f947ab9f52a997', emails, app.locals.emailFrom())
+    await app.locals.sendEmails('limboReminder', emails)
 
     process.env.SLACK_WEBHOOK_URL && request({
       url: process.env.SLACK_WEBHOOK_URL,

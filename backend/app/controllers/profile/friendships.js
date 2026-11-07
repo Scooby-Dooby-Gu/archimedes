@@ -64,9 +64,6 @@ export default (app, req) => {
       })],
       'upsert-invite'
     );
-    const templateId = 'd-ec788bd86a2743fe9fb04d56030da5fc';
-    const subject = `${req.locals.user.name} invited you to join Archimedes`
-  
     if (process.env.NODE_ENV == 'production') process.env.SLACK_WEBHOOK_URL && request({
       url: process.env.SLACK_WEBHOOK_URL,
       method: 'POST',
@@ -76,11 +73,10 @@ export default (app, req) => {
       json: true,
     });
 
-    app.locals.sendEmailFromTemplate(templateId, subject, {
-      inviter: {
-        ...req.locals.user,
-        firstName: req.locals.user.name.split(' ')[0]
-      },
+    // Only the inviter's name goes into the email (the old code sent the whole
+    // user record, API key included, to the email provider).
+    app.locals.sendEmail('friendInvite', {
+      inviter: { name: req.locals.user.name },
       url: `${process.env.APP_URL}/invites/${token}?campaign=Email&action=Invite&uid=${req.locals.user.id}`,
     }, email)
   }

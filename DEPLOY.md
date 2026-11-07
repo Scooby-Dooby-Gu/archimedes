@@ -20,7 +20,7 @@ No domain is hardcoded. Everything comes from these settings:
 | `APP_URL` | `https://app.archimedes.gufamily.org` | Sign-up links, app links, images |
 | `API_URL` (frontend) | `https://archimedes.gufamily.org` | Where the app sends API requests |
 | `CONTACT_EMAIL` | e.g. `simon@gufamily.org` | "Having trouble? Email …" |
-| `EMAIL_FROM`, `EMAIL_FROM_NAME` (backend) | a sender verified in SendGrid | Outgoing email |
+| `EMAIL_FROM`, `EMAIL_FROM_NAME` (backend) | an address on the domain verified in Resend | Outgoing email |
 
 Both projects fit on Vercel's free Hobby plan as long as the site stays
 non-commercial (no charging, ads, or paid referral deals).
@@ -123,8 +123,9 @@ pages need the frontend to be live.
    | `APP_URL` | `https://app.archimedes.gufamily.org` |
    | `SITE_URL` | `https://archimedes.gufamily.org` |
    | `DATABASE_URL` / `DATABASE_URL_UNPOOLED` | set by the Neon integration |
-   | `SENDGRID_API_KEY`, `EMAIL_FROM`, `EMAIL_FROM_NAME` | email (see "Email" below) |
-   | `CONTACT_EMAIL` | optional |
+   | `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_FROM_NAME` | email (see "Email" below) |
+   | `CONTACT_EMAIL` | where waitlist and demo-request form submissions are emailed |
+   | `CRON_SECRET` | optional, 16+ random characters; lets scheduled jobs call the reminder/notification routes |
    | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | optional, Google sign-in |
    | `APPLE_CLIENT_ID` | optional, Apple sign-in |
    | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_S3_USER_UPLOADS_BUCKET`, `AWS_S3_USER_UPLOADS_BUCKET_REGION` | optional, new image uploads from the lesson editor |
@@ -140,19 +141,46 @@ pages need the frontend to be live.
 
 ### Email
 
-New accounts must confirm their email before most of the app unlocks. The
-backend sends email through **SendGrid dynamic templates by ID**
-(`d-c524e6…` for verification, and others in `app/controllers`). Those
-templates lived in the old company's SendGrid account, so a new SendGrid
-account doesn't have them: until they are recreated (and the IDs in the code
-updated) or replaced with built-in emails, verification emails won't send.
-In the meantime, verify accounts by hand in the Neon SQL editor:
+New accounts must confirm their email before most of the app unlocks. Email
+goes through **[Resend](https://resend.com)** (free plan: about 3,000 emails a
+month, 100 a day). The emails themselves (verification, password reset,
+invites, reminders, …) are written in `backend/app/helpers/email-templates.js`,
+so there's nothing to set up inside Resend besides the domain.
+
+1. Create a Resend account and **Domains → Add Domain**. Use a sending
+   subdomain such as `archimedes.gufamily.org`, which keeps any delivery
+   problems away from your main gufamily.org mail.
+2. Resend shows a few DNS records (a TXT record for DKIM, plus MX and TXT
+   records for SPF on a `send` sub-subdomain). Add them **exactly as shown**
+   in gufamily.org's DNS (Squarespace → Domains → gufamily.org → DNS →
+   Custom records), then click **Verify** in Resend. They don't affect the
+   existing records for the personal site or your email.
+3. **API Keys → Create API key** with "Sending access", and set it as
+   `RESEND_API_KEY` on the backend project.
+4. Set `EMAIL_FROM` to an address on the verified domain, e.g.
+   `hello@archimedes.gufamily.org`, and `EMAIL_FROM_NAME` to `Archimedes`.
+   Replies go to the same address, so either set up forwarding for it or use
+   an address you read.
+
+Without `RESEND_API_KEY` nothing is sent: each email, including its link, is
+printed to the backend log instead. That's how local development works. On
+the live site, you can still verify someone by hand in the Neon SQL editor:
 
 ```sql
 UPDATE private.users SET verified_at = NOW() WHERE email = 'someone@example.com';
 ```
 
-`EMAIL_FROM` must be a sender address you've verified in SendGrid.
+The free plan's 100-a-day limit only matters for the reminder emails, which
+go out in bulk.
+
+### Scheduled jobs (optional)
+
+`GET /notifications/daily` (push notifications), `POST /reminders/invites` and
+`POST /reminders/limbo` (reminder emails) used to be public; they now need an
+admin or `Authorization: Bearer <CRON_SECRET>`. To run them on a schedule,
+set `CRON_SECRET` on the backend project and add a `crons` entry to
+`backend/vercel.json` (Vercel Cron sends the header for you). Vercel's Hobby
+plan runs each cron job at most once a day. Nothing is scheduled by default.
 
 ### Before switching DNS: test on the vercel.app URLs
 
