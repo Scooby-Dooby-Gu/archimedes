@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="118px" height="118px" viewBox="0 0 118 118" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop" transform="translate(-251.000000, -68.000000)">
+            <g id="Group" transform="translate(251.000000, 68.000000)">
+                <rect id="Rectangle" fill="#BDD3FF" fill-rule="nonzero" x="62.797" y="56.122" width="17.799" height="58.926"></rect>
+                <polyline id="Path" stroke="#0055FF" stroke-width="5.538" stroke-linejoin="round" points="16.787 -8.8817842e-15 16.787 115.219 117.338 115.219"></polyline>
+                <rect id="Rectangle" stroke="#0055FF" stroke-width="3" stroke-linejoin="round" x="27.199" y="88.121" width="17.799" height="26.926"></rect>
+                <rect id="Rectangle" stroke="#0055FF" stroke-width="3" stroke-linejoin="round" x="62.797" y="56.122" width="17.799" height="58.926"></rect>
+                <rect id="Rectangle" stroke="#0055FF" stroke-width="3" stroke-linejoin="round" x="98.396" y="24.123" width="17.799" height="90.925"></rect>
+                <line x1="16.708" y1="76.471" x2="72.543" y2="20.636" id="Path" stroke="#0055FF" stroke-width="3" stroke-linejoin="round"></line>
+                <polygon id="Path" stroke="#0055FF" stroke-width="3" fill="#0055FF" fill-rule="nonzero" stroke-linejoin="round" points="81.003 12.176 67.125 15.895 77.284 26.054 81.003 12.176 67.125 15.895 77.284 26.054"></polygon>
+                <line x1="16.708" y1="103.062" x2="-2.27373675e-13" y2="103.062" id="Path" stroke="#0055FF" stroke-width="3" stroke-linejoin="round"></line>
+                <line x1="16.708" y1="76.083" x2="-2.27373675e-13" y2="76.083" id="Path" stroke="#0055FF" stroke-width="3" stroke-linejoin="round"></line>
+                <line x1="16.708" y1="49.103" x2="-2.27373675e-13" y2="49.103" id="Path" stroke="#0055FF" stroke-width="3" stroke-linejoin="round"></line>
+                <line x1="16.708" y1="22.124" x2="-2.27373675e-13" y2="22.124" id="Path" stroke="#0055FF" stroke-width="3" stroke-linejoin="round"></line>
+            </g>
+        </g>
+    </g>
+</svg>

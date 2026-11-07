@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g>
+<g xmlns="http://www.w3.org/2000/svg">
+	<circle style="" cx="256" cy="256" r="256" fill="#30cbef" data-original="#30cbef" class=""/>
+	<path style="" d="M512,256c0-10.833-0.68-21.507-1.986-31.986L399,113l-117.305,33.516h-18.391l-33-33.516   L113,196.789l22.593,22l-3.042,17.102l30.723,30v10.219L113,359.898l22.593,22L132.551,399l112.761,112.761   C248.858,511.907,252.418,512,256,512C397.385,512,512,397.385,512,256z" fill="#30cbef" data-original="#00aabc" class=""/>
+	<g>
+		<path style="" d="M210.754,399h-78.203v-16.758c7.7,0,13.965-6.265,13.965-13.965v-25.137h50.273v25.137    c0,7.7,6.265,13.965,13.965,13.965V399z" fill="#266cb2" data-original="#266cb2" class=""/>
+		<path style="" d="M196.789,368.277v-25.137h-25.137V399h39.102v-16.758    C203.054,382.242,196.789,375.978,196.789,368.277z" fill="#114378" data-original="#114378"/>
+		<path style="" d="M379.449,235.891h-78.203v-16.758c7.7,0,13.965-6.265,13.965-13.965v-25.137h50.273v25.137    c0,7.7,6.265,13.965,13.965,13.965V235.891z" fill="#266cb2" data-original="#266cb2" class=""/>
+		<path style="" d="M365.484,205.168v-25.137h-25.137v55.859h39.102v-16.758    C371.749,219.133,365.484,212.868,365.484,205.168z" fill="#114378" data-original="#114378"/>
+		<rect x="163.273" y="227.512" style="" width="16.758" height="56.977" fill="#ff6e84" data-original="#ff6e84"/>
+		<path style="" d="M210.754,235.891h-78.203v-16.758c7.7,0,13.965-6.265,13.965-13.965v-25.137h50.273v25.137    c0,7.7,6.265,13.965,13.965,13.965V235.891z" fill="#ffb742" data-original="#ffb742"/>
+		<path style="" d="M196.789,205.168v-25.137h-25.137v55.859h39.102v-16.758    C203.054,219.133,196.789,212.868,196.789,205.168z" fill="#fe8100" data-original="#fe8100"/>
+		<path style="" d="M230.305,196.789H113V113h117.305V196.789z" fill="#ffe2ba" data-original="#ffe2ba" class=""/>
+		<path style="" d="M230.305,359.898H113v-83.789h117.305V359.898z" fill="#ccf0ff" data-original="#ccf0ff" class=""/>
+		<rect x="221.926" y="146.516" style="" width="68.148" height="16.758" fill="#ff6e84" data-original="#ff6e84"/>
+		<circle style="" cx="256" cy="361.574" r="8.379" fill="#fe3b7f" data-original="#fe3b7f" class=""/>
+		<circle style="" cx="289.516" cy="361.574" r="8.379" fill="#fe3b7f" data-original="#fe3b7f" class=""/>
+		<circle style="" cx="356.547" cy="361.574" r="8.379" fill="#fe3b7f" data-original="#fe3b7f" class=""/>
+		<circle style="" cx="356.547" cy="294.543" r="8.379" fill="#fe3b7f" data-original="#fe3b7f" class=""/>
+		<circle style="" cx="356.547" cy="261.027" r="8.379" fill="#fe3b7f" data-original="#fe3b7f" class=""/>
+		<circle style="" cx="323.031" cy="361.574" r="8.379" fill="#fe3b7f" data-original="#fe3b7f" class=""/>
+		<circle style="" cx="356.547" cy="328.059" r="8.379" fill="#fe3b7f" data-original="#fe3b7f" class=""/>
+		<rect x="171.652" y="276.109" style="" width="58.652" height="83.789" fill="#80c9ff" data-original="#80c9ff" class=""/>
+		<rect x="171.652" y="113" style="" width="58.652" height="83.789" fill="#ffc474" data-original="#ffc474" class=""/>
+		<path style="" d="M399,196.789H281.695V113H399V196.789z" fill="#4db2ff" data-original="#4db2ff" class=""/>
+		<rect x="340.348" y="113" style="" width="58.652" height="83.789" fill="#266cb2" data-original="#266cb2" class=""/>
+	</g>
+</g>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</g></svg>

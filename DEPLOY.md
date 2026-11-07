@@ -47,6 +47,7 @@ pages need the frontend to be live.
    cd backend
    SOURCE_DATABASE_URL=postgresql://localhost/archimedes_backup \
    DATABASE_URL_UNPOOLED='postgres://…neon.tech/neondb?sslmode=require' \
+   UPLOADS_BASE_URL=https://app.getmedes.com/uploads \
    npm run import:content
    ```
 
@@ -58,9 +59,14 @@ pages need the frontend to be live.
    target already has courses. (The `pg_restore` step reports one error about
    `array_cat`, which the `CREATE AGGREGATE` line fixes.)
 
-   Lesson images still load from the old company's S3 bucket
-   (`archimedes-user-uploads-production`). Copy them to storage you control
-   before that bucket goes away.
+   **Images:** the 4,068 lesson, course, video and task images from the old
+   company's S3 bucket are copied into `frontend/public/uploads/` (same folder
+   layout as the bucket) and served by the frontend project at
+   `https://app.getmedes.com/uploads/…`. `UPLOADS_BASE_URL` rewrites every old
+   bucket link to that address during the import, so nothing depends on the
+   old bucket. `frontend/vercel.json` serves `/uploads` with long caching,
+   cross-origin access for the marketing site, and a policy that stops SVGs
+   from running scripts.
 
    Keep the backup file out of the repo and off shared drives: it contains
    2,897 real users' emails and password hashes.

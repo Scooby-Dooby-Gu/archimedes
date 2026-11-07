@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="181px" height="118px" viewBox="0 0 181 118" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop" transform="translate(-221.000000, -796.000000)">
+            <g id="Group" transform="translate(225.000000, 800.000000)">
+                <path d="M159.314,22.956 L13.499,22.956 L13.499,4.953 C13.499,2.218 15.716,0 18.452,0 L154.363,0 C157.098,0 159.316,2.217 159.316,4.953 L159.316,22.956 L159.314,22.956 Z" id="Path" fill="#BDD3FF" fill-rule="nonzero"></path>
+                <line x1="159.314" y1="22.956" x2="13.499" y2="22.956" id="Path" stroke="#0055FF" stroke-width="3" stroke-linejoin="round"></line>
+                <path d="M13.499,22.956 L13.499,4.953 C13.499,2.218 15.716,0 18.452,0 L154.363,0 C157.098,0 159.316,2.217 159.316,4.953 L159.316,22.956" id="Path" stroke="#0055FF" stroke-width="6.6958" stroke-linejoin="round"></path>
+                <path d="M159.314,22.956 L159.314,91.185 C159.314,93.827 157.172,95.968 154.531,95.968 L18.282,95.968 C15.64,95.968 13.499,93.826 13.499,91.185 L13.499,22.956" id="Path" stroke="#0055FF" stroke-width="6.6958" stroke-linejoin="round"></path>
+                <polygon id="Path" fill="#0055FF" fill-rule="nonzero" points="147.299 70.161 125.718 62.005 133.873 83.586 136.132 76.371 142.327 82.566 146.279 78.615 140.084 72.42"></polygon>
+                <path d="M65.961,67.073 L65.961,50.236 L85.163,30.863 L106.852,52.469 L104.987,54.341 L85.175,34.605 L68.605,51.323 L68.605,65.979 L85.164,82.577 L99.113,68.416 L96.175,65.487 L85.17,76.492 L72.308,63.63 L85.17,50.767 L90.303,55.9 L94.842,60.426 L94.842,54.345 L85.17,44.673 L75.443,54.4 L73.574,52.531 L85.17,40.935 L97.485,53.25 L97.485,63.061 L102.839,68.4 L85.176,86.331 L65.961,67.073 Z M76.044,63.631 L85.168,72.755 L94.293,63.631 L85.168,54.507 L76.044,63.631 Z" id="Shape" stroke="#0055FF" stroke-width="0.828" fill="#0055FF" fill-rule="nonzero"></path>
+                <circle id="Oval" fill="#0055FF" fill-rule="nonzero" cx="26.03" cy="12.191" r="3.26"></circle>
+                <circle id="Oval" fill="#0055FF" fill-rule="nonzero" cx="36.814" cy="12.191" r="3.26"></circle>
+                <circle id="Oval" fill="#0055FF" fill-rule="nonzero" cx="47.597" cy="12.191" r="3.26"></circle>
+                <path d="M167.57,109.73 L5.243,109.73 C2.347,109.73 0,107.382 0,104.487 L0,97.528 C0,96.667 0.698,95.968 1.56,95.968 L171.254,95.968 C172.115,95.968 172.814,96.666 172.814,97.528 L172.814,104.487 C172.814,107.383 170.466,109.73 167.57,109.73 Z" id="Path" stroke="#0055FF" stroke-width="6.6958" fill="#BDD3FF" fill-rule="nonzero" stroke-linejoin="round"></path>
+            </g>
+        </g>
+    </g>
+</svg>

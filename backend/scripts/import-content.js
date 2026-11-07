@@ -13,9 +13,23 @@
 //   profiles only: name, photo and bio. They get placeholder emails and no
 //   password or API key, so nobody can sign in as them.
 //
+// Images: set UPLOADS_BASE_URL (e.g. https://app.getmedes.com/uploads) to
+// rewrite every link to the old company's S3 bucket to that location. The
+// images themselves live in frontend/public/uploads/, mirroring the bucket.
+//
 // The target must have the schema (`npm run db:setup`) and no content yet.
 import 'dotenv/config';
 import pg from 'pg';
+
+// Every form the old bucket's URLs take in the data, including keys that
+// start with an extra "/" (…production//tasks/…).
+const OLD_BUCKET_URL = /https?:\/\/(?:s3[.-]us-west-1\.amazonaws\.com\/archimedes-user-uploads-production|archimedes-user-uploads-production\.s3(?:[.-]us-west-1)?\.amazonaws\.com)\/+/g;
+let rewrittenLinks = 0;
+function rewriteUploads(text) {
+  const base = process.env.UPLOADS_BASE_URL;
+  if (!base || typeof text !== 'string') return text;
+  return text.replace(OLD_BUCKET_URL, () => { rewrittenLinks++; return base.replace(/\/+$/, '') + '/'; });
+}
 
 // Copied in this order so every reference points at a row that exists.
 const TABLES = [
@@ -110,7 +124,8 @@ async function main() {
       const { rows: [row] } = await target.query(
         `INSERT INTO private.users(name, email, avatar, avatar_sizes, bio_html, role)
          VALUES ($1, $2, $3, $4, $5, 'writer') RETURNING id`,
-        [e.name, `expert-${e.id}@getmedes.invalid`, e.avatar, e.avatar_sizes ? JSON.stringify(e.avatar_sizes) : null, e.bio_html]
+        [e.name, `expert-${e.id}@getmedes.invalid`, rewriteUploads(e.avatar),
+         e.avatar_sizes ? rewriteUploads(JSON.stringify(e.avatar_sizes)) : null, rewriteUploads(e.bio_html)]
       );
       expertIds.set(e.id, row.id);
     }
@@ -146,7 +161,7 @@ async function main() {
         await target.query(
           `INSERT INTO public.${table} (${list})
            SELECT ${list} FROM json_populate_recordset(NULL::public.${table}, $1::json)`,
-          [JSON.stringify(rows.slice(i, i + chunk))]
+          [rewriteUploads(JSON.stringify(rows.slice(i, i + chunk)))]
         );
       }
       // Move the id sequence past the copied ids (tables with text ids, like
@@ -170,6 +185,9 @@ async function main() {
     console.log('Imported content:');
     for (const [table, n] of summary) console.log(`  ${table.padEnd(16)} ${n}`);
     console.log(`  placeholder author: 1, video expert profiles: ${expertIds.size}`);
+    console.log(process.env.UPLOADS_BASE_URL
+      ? `Rewrote ${rewrittenLinks} image links to ${process.env.UPLOADS_BASE_URL}/`
+      : 'Image links still point at the old S3 bucket (set UPLOADS_BASE_URL to rewrite them).');
     console.log('No user accounts, posts, activity, devices or companies were copied.');
   } catch (e) {
     await target.query('ROLLBACK').catch(() => {});

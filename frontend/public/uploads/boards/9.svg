@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 56.2 (81672) - https://sketch.com -->
+    <title>book (1)</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="book-(1)" fill-rule="nonzero">
+            <circle id="Oval" fill="#B5F1F4" cx="256" cy="256" r="256"></circle>
+            <rect id="Rectangle" fill="#F1543F" x="211.782" y="113.778" width="85.333" height="256"></rect>
+            <rect id="Rectangle" fill="#C1321F" x="253.121" y="113.778" width="43.994" height="256"></rect>
+            <g id="Group" transform="translate(211.000000, 142.000000)" fill="#FFD15D">
+                <rect id="Rectangle" x="0.782" y="0.222" width="85.333" height="56.889"></rect>
+                <rect id="Rectangle" x="0.782" y="67.024" width="85.333" height="28.444"></rect>
+            </g>
+            <g id="Group" transform="translate(253.000000, 142.000000)" fill="#F9B54C">
+                <rect id="Rectangle" x="0.121" y="0.222" width="43.994" height="56.889"></rect>
+                <rect id="Rectangle" x="0.121" y="67.024" width="43.994" height="28.444"></rect>
+            </g>
+            <rect id="Rectangle" fill="#324A5E" x="120.846" y="113.778" width="85.333" height="256"></rect>
+            <rect id="Rectangle" fill="#2B3B4E" x="163.478" y="113.778" width="42.701" height="256"></rect>
+            <g id="Group" transform="translate(120.000000, 142.000000)" fill="#4CDBC4">
+                <rect id="Rectangle" x="0.846" y="0.222" width="85.333" height="56.889"></rect>
+                <rect id="Rectangle" x="0.846" y="67.024" width="85.333" height="28.444"></rect>
+            </g>
+            <g id="Group" transform="translate(163.000000, 142.000000)" fill="#1EA8A4">
+                <rect id="Rectangle" x="0.478" y="0.222" width="42.701" height="56.889"></rect>
+                <rect id="Rectangle" x="0.478" y="67.024" width="42.701" height="28.444"></rect>
+            </g>
+            <rect id="Rectangle" fill="#F1543F" transform="translate(353.997275, 241.796021) rotate(169.676704) translate(-353.997275, -241.796021) " x="325.55363" y="113.799116" width="56.8872912" height="255.99381"></rect>
+            <g id="Group" transform="translate(308.000000, 110.000000)" fill="#C1321F">
+                <polygon id="Path" points="51.052 0.752 21.147 6.202 70.239 257.471 96.939 252.606"></polygon>
+                <rect id="Rectangle" transform="translate(33.259919, 61.842383) rotate(169.676704) translate(-33.259919, -61.842383) " x="4.81627361" y="33.3987376" width="56.8872912" height="56.8872912"></rect>
+                <rect id="Rectangle" transform="translate(42.687988, 113.552624) rotate(169.676704) translate(-42.687988, -113.552624) " x="14.2443428" y="99.3308016" width="56.8872912" height="28.4436456"></rect>
+            </g>
+            <g id="Group" transform="translate(334.000000, 138.000000)" fill="#A82116">
+                <polygon id="Path" points="40.348 56.703 30.151 0.736 0.601 6.12 11.51 61.958"></polygon>
+                <polygon id="Path" points="47.223 94.439 42.123 66.455 13.412 71.687 18.866 99.606"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
