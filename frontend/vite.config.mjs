@@ -21,7 +21,7 @@ export default {
   },
 
   server: {
-    host: process.env.NODE_ENV == 'development' ? '192.168.1.100' : undefined,
+    host: process.env.HOST || undefined,
     port: 8080
   },
 
@@ -31,7 +31,7 @@ export default {
     sourcemap: true,
     rollupOptions: {
       input: {
-        'index': resolve(__dirname, 'src/index.html'),
+        'index': resolve(process.cwd(), 'src/index.html'),
       },
     }
   },

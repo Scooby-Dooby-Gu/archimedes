@@ -9,7 +9,7 @@ import * as exceptions from './exceptions.js';
 import { findUserByApiKey } from './helpers/index.js';
 
 Sentry.init({
-  dsn: process.env.SENTRY_DSN || 'https://c568a5b1aeba41f980597c0537edb43d@sentry.io/1851173',
+  dsn: process.env.SENTRY_DSN || undefined,
   environment: process.env.NODE_ENV || 'development',
   //integrations: [
 //    new Tracing(),

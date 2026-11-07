@@ -8,8 +8,8 @@
     "start:qa": "NODE_ENV=qa  node_modules/.bin/pm2 start --no-daemon  --wait-ready --listen-timeout 3000 --env=qa --node-args=\"-r dotenv-safe/config --expose-gc \" app/index.js -i 2 -f --name=\"Archimedes\"",
     "start:production": "NODE_ENV=production  node_modules/.bin/pm2 start --no-daemon  --wait-ready --listen-timeout 3000 --env=production --node-args=\"-r dotenv-safe/config --expose-gc\" app/index.js -i 4 -f --name=\"Archimedes\"",
     "start:staging": "NODE_ENV=staging  node_modules/.bin/pm2 start --no-daemon  --wait-ready --listen-timeout 3000 --env=staging --node-args=\"-r dotenv-safe/config --expose-gc\" app/index.js -i 4 -f --name=\"Archimedes\"",
-    "start:development": "nodemon --expose-gc --experimental-modules -r dotenv-safe/config app/index.js",
-    "start:once": "node --expose-gc --experimental-modules -r dotenv-safe/config app/index.js",
+    "start:development": "nodemon --expose-gc -r dotenv-safe/config app/index.js dotenv_config_allowEmptyValues=true",
+    "start:once": "node --expose-gc -r dotenv-safe/config app/index.js dotenv_config_allowEmptyValues=true",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -43,11 +43,10 @@
     "open-graph-scraper": "^4.9.1",
     "per-env": "^1.0.2",
     "pg": "^8.0.3",
-    "pg-native": "^3.0.0",
     "pm2": "^4.5.5",
     "request": "^2.88.0",
     "run-middleware": "^0.9.10",
-    "sharp": "^0.26.3",
+    "sharp": "^0.34.0",
     "web-push": "^3.4.4"
   },
   "type": "module"

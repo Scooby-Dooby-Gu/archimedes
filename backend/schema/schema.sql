@@ -941,10 +941,10 @@ FOR EACH ROW EXECUTE PROCEDURE update_related_users();
 
 
 
-DROP AGGREGATE IF EXISTS array_cat_agg(anyarray);
-CREATE AGGREGATE array_cat_agg(anyarray) (
+DROP AGGREGATE IF EXISTS array_cat_agg(anycompatiblearray);
+CREATE AGGREGATE array_cat_agg(anycompatiblearray) (
   SFUNC=array_cat,
-  STYPE=anyarray
+  STYPE=anycompatiblearray
 );
 
 

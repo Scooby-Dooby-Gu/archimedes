@@ -3,7 +3,7 @@ import util from 'util';
 import fs from 'fs';
 import stream from 'stream'
 import fetch from 'node-fetch';
-import entities from 'html-entities';
+import * as entities from 'html-entities';
 const streamPipeline = util.promisify(stream.pipeline)
 
 export function parseYoutubeVideoID(url){
