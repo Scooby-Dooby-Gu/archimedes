@@ -68,7 +68,7 @@ export default function({email, companyId, token, header, navigation}) {
         {googleSigninRequest.loading ? <Icon.Spinner /> : <Icon.LogosGoogle />}
         Sign up with Google
       </Button.Link>
-      <Button.Link class="secondary" href="/signin/apple" onClick={onAppleSignin}>
+      <Button.Link class="secondary" href="/signin/apple" disabled={!appleSigninRequest.ready || appleSigninRequest.loading} onClick={onAppleSignin}>
         {appleSigninRequest.loading ? <Icon.Spinner /> : <Icon.LogosApple style="width: 24px; height: 24px; margin-top: -10px;" />}
         Sign up with Apple
       </Button.Link>

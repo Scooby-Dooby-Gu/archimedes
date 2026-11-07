@@ -24,7 +24,7 @@ export default function Welcome() {
         {googleSigninRequest.loading ? <Icon.Spinner /> : <Icon.LogosGoogle />}
         Sign in with Google
       </Button.Link>
-      <Button.Link class="secondary" href="/signin/apple" onClick={onAppleSignin}>
+      <Button.Link class="secondary" href="/signin/apple" disabled={!appleSigninRequest.ready || appleSigninRequest.loading} onClick={onAppleSignin}>
         {appleSigninRequest.loading ? <Icon.Spinner /> : <Icon.LogosApple style="width: 24px; height: 24px; margin-top: -10px;" />}
         Sign in with Apple
       </Button.Link>
@@ -61,7 +61,7 @@ export default function Welcome() {
           <animated.div class={style.item} index={item.props.index}>{item}</animated.div>)
         : transition((values, item) => 
           <animated.div class={style.item} index={item.props.index} style={values}>{item}</animated.div>)}
-  </>, [googleSigninRequest.loading, googleSigninRequest.ready, appleSigninRequest.loading])
+  </>, [googleSigninRequest.loading, googleSigninRequest.ready, appleSigninRequest.loading, appleSigninRequest.ready])
   
   return useMemo(() => <Page class={`centered ${style.page}`} id="dashboard" navigation={navigation}>
     {content}

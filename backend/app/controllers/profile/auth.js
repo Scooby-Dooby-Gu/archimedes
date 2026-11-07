@@ -80,6 +80,20 @@ export async function acceptInvitation(req, user, token, role) {
   return user;
 }
 
+// Check a password against a user row; upgrades legacy/weak hashes in place.
+async function passwordMatches(req, user, password) {
+  const app = req.locals.app;
+  const { ok, needsRehash } = await app.locals.verifyPassword(password, user.hashedPassword, user.salt);
+  if (ok && needsRehash) {
+    const { hashedPassword, salt } = await app.locals.hashPassword(password);
+    await req.locals.query(
+      'UPDATE private.users SET hashed_password=$1, salt=$2 WHERE id=$3',
+      [hashedPassword, salt, user.id]
+    );
+  }
+  return ok;
+}
+
 export default (app) => {
 
 
@@ -101,7 +115,7 @@ export default (app) => {
           throw new app.locals.Unauthorized('The user does not have password and needs to log in with Google.')
         }
       }
-      if (user.hashedPassword == app.locals.sha512(req.body.user.password, user.salt)) {
+      if (await passwordMatches(req, user, req.body.user.password)) {
         return { user };
       }
     }
@@ -113,19 +127,37 @@ export default (app) => {
     // Identity must come from a verified provider credential, never from the
     // request body: otherwise anyone could sign in as any email address.
     const source = req.body.user?.external?.source;
-    if (source !== 'google') {
-      // Apple tokens are not verified server-side yet, so Apple sign-in stays
-      // off until that is implemented.
+
+    let profile;
+    if (source === 'google') {
+      try {
+        profile = await app.locals.verifyGoogleAuthCode(req.body.user.external.code);
+      } catch(e) {
+        // Log only the reason: the full error includes the request, client secret and all.
+        console.log("Google sign-in failed:", e.code || "", e.message)
+        throw new app.locals.Unauthorized('Could not validate Google sign-in. Please try again.');
+      }
+    } else if (source === 'apple' && app.locals.appleSigninEnabled()) {
+      try {
+        profile = await app.locals.verifyAppleToken(req.body.user.external.idToken);
+      } catch(e) {
+        console.log("Apple sign-in failed:", e.code || "", e.message)
+        throw new app.locals.Unauthorized('Could not validate Apple sign-in. Please try again.');
+      }
+    } else {
       throw new app.locals.Unauthorized('This sign-in method is not available.');
     }
 
-    let profile;
-    try {
-      profile = await app.locals.verifyGoogleAuthCode(req.body.user.external.code);
-    } catch(e) {
-      console.log(e)
-      throw new app.locals.Unauthorized('Could not validate Google sign-in. Please try again.');
-    }
+    // Display details that are not part of the identity: keep what we have
+    // rather than overwrite it with blanks (Apple only sends a name once, and
+    // that name is not covered by its token).
+    const existing = await req.locals.selectOne(
+      'SELECT name, avatar FROM private.users WHERE email=$1',
+      [profile.email]
+    );
+    const suppliedName = typeof req.body.user.name === 'string' ? req.body.user.name.trim().slice(0, 200) : '';
+    profile.name = profile.name || existing?.name || suppliedName || (source === 'apple' ? 'Apple User' : profile.email);
+    profile.avatar = profile.avatar || existing?.avatar || null;
 
     const apiKey = app.locals.genRandomString(32);
     var user = await req.locals.selectOne(
@@ -139,7 +171,7 @@ export default (app) => {
         name: profile.name,
         avatar: profile.avatar,
         external: {
-          source: 'google',
+          source,
           id: profile.id,
           email: profile.email,
           name: profile.name,
@@ -254,7 +286,7 @@ export default (app) => {
         // Accounts created through Google/Apple have no password. Never hand
         // them out to someone who merely knows the email address.
         throw new app.locals.BadRequest('This email is already registered through Google or Apple. Please sign in that way.');
-      } else if (user.hashedPassword == app.locals.sha512(req.body.user.password, user.salt)) {
+      } else if (await passwordMatches(req, user, req.body.user.password)) {
         return { user };
       } else {
         throw new app.locals.BadRequest('This email is already registered with a different password. Maybe you would to reset password?');
@@ -271,10 +303,12 @@ export default (app) => {
       [emailDomain]
     )
 
-    const salt = app.locals.genRandomString(32);
+    if (typeof req.body.user.password !== 'string' || req.body.user.password.length < 8) {
+      throw new app.locals.BadRequest('Password must be at least 8 characters.');
+    }
+    const { hashedPassword, salt } = await app.locals.hashPassword(req.body.user.password);
     const apiKey = app.locals.genRandomString(32);
-    const hashedPassword = app.locals.sha512(req.body.user.password, salt)
-    const verificationToken = app.locals.sha512(app.locals.genRandomString(32), salt);
+    const verificationToken = app.locals.genRandomString(64);
 
     user = await req.locals.selectOne(`
       INSERT INTO private.users(name, email, company_id, born_at, phone_number, salt, hashed_password, api_key, verification_token) 
@@ -345,6 +379,9 @@ export default (app) => {
       if (!passwordResetRequest) {
         throw new app.locals.BadRequest('Password request was not found')
       }
+      if (passwordResetRequest.usedAt) {
+        throw new app.locals.BadRequest('This password reset link was already used. Please submit another.')
+      }
       if (passwordResetRequest.createdAt < ((new Date) - 1000 * 60 * 60 * 24 * 1)) {
         throw new app.locals.BadRequest('Password reset request is expired. Please submit another.')
       }
@@ -352,12 +389,18 @@ export default (app) => {
         throw new app.locals.BadRequest('Password reset request was made for another user')
       }
     }
-    const salt = app.locals.genRandomString(32);
-    const hashedPassword = app.locals.sha512(req.body.user.password, salt);
+    if (typeof req.body.user?.password !== 'string' || req.body.user.password.length < 8) {
+      throw new app.locals.BadRequest('Password must be at least 8 characters.');
+    }
+    const { hashedPassword, salt } = await app.locals.hashPassword(req.body.user.password);
     const user = await req.locals.selectOne(
       'UPDATE private.users SET hashed_password = $1, salt = $2, verified_at=coalesce(users.verified_at, NOW()) where id = $3 RETURNING *',
       [hashedPassword, salt, req.params.userId]
     );
+    if (req.query.token) {
+      // Reset links are single-use.
+      await req.locals.query('UPDATE password_reset_requests SET used_at=NOW() WHERE token=$1', [req.query.token]);
+    }
     return { user }
   })
 

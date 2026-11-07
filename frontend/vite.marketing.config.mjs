@@ -48,6 +48,7 @@ export default {
 		"import.meta.env.SOURCE_VERSION": `"${process.env.SOURCE_VERSION}"`,
 		"import.meta.env.SENTRY_DSN": `"${process.env.SENTRY_DSN}"`,
 		"import.meta.env.GOOGLE_CLIENT_ID": `"${process.env.GOOGLE_CLIENT_ID}"`,
+		"import.meta.env.APPLE_CLIENT_ID": `"${process.env.APPLE_CLIENT_ID}"`,
 		"import.meta.env.GOOGLE_CLIENT_SECRET": `"${process.env.GOOGLE_CLIENT_SECRET}"`,
 		"import.meta.env.VAPID_PUBLIC_KEY": `"${process.env.VAPID_PUBLIC_KEY}"`,
     "import.meta.env.GOOGLE_TRACKING_CODE": `"${process.env.GOOGLE_TRACKING_CODE}"`,

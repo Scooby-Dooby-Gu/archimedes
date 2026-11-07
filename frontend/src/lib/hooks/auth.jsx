@@ -21,89 +21,85 @@ export function useSignin(data) {
   return [setUser, onGoogleSignin, googleSigninRequest, onAppleSignin, appleSigninRequest];
 }
 
-export function useAppleSignin({onSuccess, onFailure, data}) {
+// Sign in with Apple JS. The raw ID token goes to the backend, which verifies
+// Apple's signature, issuer and audience before trusting the email in it.
+const appleErrorMessage = (e) =>
+  !e ? 'Could not sign in with Apple' :
+  e.error === 'popup_closed_by_user' ? 'Apple sign-in was canceled' :
+  e.error === 'popup_blocked_by_browser' ? 'Apple sign-in popup was blocked by the browser' :
+  `Could not sign in with Apple: ${e.error || e.message || e}`;
+
+export function useAppleSignin({onSuccess, data}) {
   const [appleSigninRequest, setAppleSigninRequest] = useState(initialGoogleSignin);
+  const dataRef = useRef(data);
+  dataRef.current = data;
+
+  const onAppleError = useCallback((e) => {
+    setAppleSigninRequest((r) => ({...r, loading: false, success: false, error: appleErrorMessage(e)}));
+  }, [])
 
   const [externalSigninData, externalSigninRequest, externalSignin] = useFetchedData(`/signin/external`, {
     method: 'post',
     observeRequest: true,
-    onSuccess: (data) => {
-      setAppleSigninRequest({loaded: true, success: true, error: null});
-      onSuccess(data.user);
+    onSuccess: (response) => {
+      setAppleSigninRequest((r) => ({...r, loading: false, loaded: true, success: true, error: null}));
+      onSuccess(response.user);
     },
-    onFailure: (e) => {
-      setAppleSigninRequest({loading: false, success: false, error: (e && e.message) || 'Could not sign in with Apple'});
-    },
+    onFailure: onAppleError,
     immediate: false
   })
 
+  // Load and configure the library up front so the popup can open straight
+  // from the click (browsers block popups opened after an await).
+  useEffect(() => {
+    const clientId = import.meta.env.APPLE_CLIENT_ID;
+    if (!clientId || clientId === 'undefined') {
+      return; // not configured: the button stays disabled
+    }
+    let cancelled = false;
+    loadScript("https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js").then(() => {
+      if (cancelled) return;
+      if (!window.AppleID || !AppleID.auth) {
+        return onAppleError(new Error('Could not load Sign in with Apple'));
+      }
+      if (!window.appleConfigured) {
+        window.appleConfigured = 1;
+        AppleID.auth.init({
+          clientId,
+          scope: 'name email',
+          redirectURI: location.origin + '/signin/apple',
+          usePopup: true
+        });
+      }
+      setAppleSigninRequest((r) => ({...r, ready: true}));
+    });
+    return () => { cancelled = true; };
+  }, [])
 
-  function parseJwt (token) {
-      var base64Url = token.split('.')[1];
-      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-
-      return JSON.parse(jsonPayload);
-  };
   const onAppleSignin = useCallback(async (e) => {
     if (e) {
       e.preventDefault()
       e.stopPropagation()
     }
-
-    setAppleSigninRequest({loading: true, success: false, error: null});
-
-    await loadScript("https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js");
-
-    await new Promise((a) => setTimeout(a, 100))
-
-    if (!window.appleConfigured) {
-      window.appleConfigured = 1;
-      AppleID.auth.init({
-          clientId : /*import.meta.env.APPLE_CLIENT_ID || */'com.production.archimedes',
-          scope : 'name email',
-          redirectURI : location.origin + '/signin/apple',
-          //state : '[STATE]',
-          //nonce : '[NONCE]',
-          usePopup : true //or false defaults to false
-      });
-    }
+    if (!window.appleConfigured) return;
+    setAppleSigninRequest((r) => ({...r, loading: true, success: false, error: null}));
     try {
       const response = await AppleID.auth.signIn()
-      const parsed = parseJwt(response.authorization.id_token)
       const user = {
         external: {
           source: 'apple',
-          token: parsed.sub,
-          ...parsed
+          idToken: response.authorization.id_token
         }
       }
-      if (response.user) {
-        user.name = response.user.name.firstName + ' ' + response.user.name.lastName
-        user.email = response.user.email || parsed.email;
-      } else if (parsed.email) {
-        user.email = parsed.email
-        user.name = 'Unknown Apple User'
-      }/* else {
-        while (!user.email || !user.email.match(/@/))  {
-          user.email = prompt('You have email hidden. Please enter your email address');
-          if (!user.name)
-            user.name = 'Unknown Apple User'
-        }
-      } */
-      externalSignin({ user, ...data });
+      // Apple only shares the name on the very first sign-in.
+      const name = response.user && response.user.name;
+      if (name && (name.firstName || name.lastName)) {
+        user.name = [name.firstName, name.lastName].filter(Boolean).join(' ');
+      }
+      externalSignin({ user, ...dataRef.current });
     } catch(e) {
-      setAppleSigninRequest({
-        loading: false,
-        success: false,
-        error: e.error === 'popup_closed_by_user' ? 'Apple signin was canceled' : 
-        e.error === 'popup_blocked_by_browser' ? 'Apple signin popup was blocked by the browser' : 
-        `Could not sign in with apple: ${e.error || e.message || e}`
-      });
+      onAppleError(e);
     }
-    
   }, [])
 
   return [onAppleSignin, appleSigninRequest];
