@@ -1,10 +1,6 @@
 import { useFetchedData } from './request';
-import { useEffect, useCallback, useState  } from './preact';
+import { useEffect, useCallback, useState, useRef } from './preact';
 import { loadScript } from "./request"
-window.LoadOauthResponse = (json) => {
-  console.log('Not ready??', json)
-  return 123;
-}
 export function useSignin(data) {
   const setUser = useCallback((user) => {
     
@@ -34,6 +30,9 @@ export function useAppleSignin({onSuccess, onFailure, data}) {
     onSuccess: (data) => {
       setAppleSigninRequest({loaded: true, success: true, error: null});
       onSuccess(data.user);
+    },
+    onFailure: (e) => {
+      setAppleSigninRequest({loading: false, success: false, error: (e && e.message) || 'Could not sign in with Apple'});
     },
     immediate: false
   })
@@ -111,143 +110,80 @@ export function useAppleSignin({onSuccess, onFailure, data}) {
 }
 
 const initialGoogleSignin = {loading: false, success: false, error: null, ready: false}
-export function useGoogleAuth({onSuccess, data}) {
-  const [googleAuthObject, setGoogleAuthObject] = useState()
-  const [googleSigninRequest, setGoogleSigninRequest] = useState(initialGoogleSignin);
 
+// Google sign-in via Google Identity Services (accounts.google.com/gsi/client),
+// which replaced the shut-down gapi.auth2 library. We use the authorization
+// code popup flow: Google hands the browser a one-time code, and the backend
+// exchanges it with Google for a verified ID token. The browser never gets to
+// decide which account it is.
+const googleErrorMessage = (e) =>
+  !e ? 'Could not sign in with Google' :
+  e.type === 'popup_closed' || e.error === 'access_denied' ? 'Google sign-in was canceled' :
+  e.type === 'popup_failed_to_open' ? 'Google sign-in popup was blocked by the browser' :
+  `Could not sign in with Google: ${e.error_description || e.error || e.message || e.type || e}`;
+
+export function useGoogleAuth({onSuccess, data}) {
+  const [googleSigninRequest, setGoogleSigninRequest] = useState(initialGoogleSignin);
+  const codeClient = useRef(null);
+  const dataRef = useRef(data);
+  dataRef.current = data;
+
+  const onGoogleError = useCallback((e) => {
+    setGoogleSigninRequest((r) => ({...r, loading: false, success: false, error: googleErrorMessage(e)}))
+  }, [])
 
   const [externalSigninData, externalSigninRequest, externalSignin] = useFetchedData(`/signin/external`, {
     method: 'post',
     observeRequest: true,
-    onSuccess: (data) => {
-      setGoogleSigninRequest((r) => ({...r, loaded: true, success: true, error: null}));
-      onSuccess(data.user);
+    onSuccess: (response) => {
+      setGoogleSigninRequest((r) => ({...r, loading: false, loaded: true, success: true, error: null}));
+      onSuccess(response.user);
     },
+    onFailure: onGoogleError,
     immediate: false
   })
-  
-  // 1. load the library. We have to do it right away, 
-  // so that popup may be open when user actually uses it
+
+  // Load the library right away so the popup can open synchronously on click
+  // (browsers block popups that open after an await).
   useEffect(() => {
-    window.onGoogleAuthLoad = () => {
-      setGoogleAuthObject(window.gapiAuth2);
-      setGoogleSigninRequest((r) => ({...r, ready: true}))
+    const clientId = import.meta.env.GOOGLE_CLIENT_ID;
+    if (!clientId || clientId === 'undefined' || clientId === 'local-placeholder') {
+      return; // not configured: the button stays disabled
     }
-    window.onGoogleAuthCancel = () => {
-      setGoogleAuthObject(null)
-      setGoogleSigninRequest((r) => ({...initialGoogleSignin, ready: r.ready}))
-    }
-    if (!document.querySelector('#google-platform-code')) {
-      const script = document.createElement('script');
-      script.id = 'google-platform-code';
-      script.onload = () => {
-        window.gapiAuth2 = true;
-        // 2. Initialize auth2 constructor
-        gapi.load('auth2', function(){
-          gapi.client.init({
-            client_id: import.meta.env.GOOGLE_CLIENT_ID,
-            cookiepolicy: 'single_host_origin',
-            scope: 'profile email',
-            immediate: false
-          }).then(function () {    
-            window.onGoogleAuthLoad()
-          }).catch(onGoogleError);
-        });
+    let cancelled = false;
+    loadScript('https://accounts.google.com/gsi/client').then(() => {
+      if (cancelled) return;
+      if (!window.google || !google.accounts || !google.accounts.oauth2) {
+        return onGoogleError(new Error('Could not load Google sign-in'));
       }
-      script.onerror = () => {
-        onGoogleError(new Error('Could not load Google auth library'));
-      }
-      script.src = 'https://apis.google.com/js/api:client.js';
-      document.head.appendChild(script);
-    } else {
-      if (window.gapiAuth2) {
-        window.onGoogleAuthLoad();
-      }
-    }
+      codeClient.current = google.accounts.oauth2.initCodeClient({
+        client_id: clientId,
+        scope: 'openid email profile',
+        ux_mode: 'popup',
+        callback: (response) => {
+          if (response.error || !response.code) {
+            return onGoogleError(response);
+          }
+          externalSignin({
+            user: { external: { source: 'google', code: response.code } },
+            ...dataRef.current
+          });
+        },
+        error_callback: onGoogleError,
+      });
+      setGoogleSigninRequest((r) => ({...r, ready: true}));
+    });
+    return () => { cancelled = true; };
   }, [])
 
-  const onGoogleError = useCallback((e) => {
-    setGoogleAuthObject(null)
-    setGoogleSigninRequest((r) => ({
-      ...r,
-      loading: false,
-      success: false,
-      error: 
-        e.error === 'idpiframe_initialization_failed' ? 'Google requires third-party cookies to be enabled' :
-        e.error === 'popup_closed_by_user' ? 'Google signin was canceled' : 
-        e.error === 'popup_blocked_by_browser' ? 'Google signin popup was blocked by the browser' : 
-        `Could not sign in with google: ${e.error || e.message || e}`
-    }))
-  }, [])
-  
-  const onGoogleAuthRequest = useCallback(async (e) => {
+  const onGoogleAuthRequest = useCallback((e) => {
     if (e) {
       e.preventDefault()
       e.stopPropagation()
     }
+    if (!codeClient.current) return;
     setGoogleSigninRequest((r) => ({...r, loading: true, success: false, error: null}));
-
-    try {
-      // NOT IOS: 3. Open popup/auth the user
-      if (localStorage.wrapper !== 'ios') {
-        const googleUser = await gapi.auth2.getAuthInstance().signIn()
-        var profile = googleUser.getBasicProfile();
-        var id_token = googleUser.getAuthResponse().id_token;
-        const user = {
-          email: profile.getEmail(),
-          avatar: profile.getImageUrl(),
-          name: profile.getName(),
-    
-          external: {
-            source: 'google',
-            id: profile.getId(),
-            token: googleUser.getAuthResponse().id_token,
-            name: profile.getName(),
-            avatar: profile.getImageUrl() && profile.getImageUrl().replace('s96-c', 's512-c'),
-            email: profile.getEmail()
-          }
-        }
-        return externalSignin({ user, ...data });
-      } else {
-        // IOS: 4. make ios retrieve the token, wait for it
-        if (!window.LoadedOauthResponse)  {
-          await new Promise((resolve) => {
-            window.LoadOauthResponse = resolve;
-            webkit.messageHandlers.authorizeUserWithGoogle.postMessage("");
-          })
-        }
-        // IOS: 5. Retrieve user info by token
-        if (window.LoadedOauthResponse) {
-          gapi.client.setToken({
-            access_token: window.LoadedOauthResponse
-          })
-          const result = await gapi.client.request({
-            'path': 'https://www.googleapis.com/oauth2/v3/userinfo',
-          })
-          const json = JSON.parse(result.body)
-          return externalSignin({
-            user: {
-              email: json.email,
-              name: json.name,
-              avatar: json.picture && json.picture.replace('s96-c', 's512-c'),
-              //id: json.id,
-              external: {
-                email: json.email,
-                name: json.name,
-                avatar: json.picture,
-                id: json.id,
-                token: "none"
-              }
-            }, 
-            ...data
-          });
-        } else {
-          throw new Error('Could not fetch Google token. Please try again')
-        }
-      }
-    } catch(e) {
-      onGoogleError(e)
-    }
+    codeClient.current.requestCode();
   }, [])
 
   return [onGoogleAuthRequest, googleSigninRequest]

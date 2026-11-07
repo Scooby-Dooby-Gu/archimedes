@@ -95,7 +95,7 @@ export default (app) => {
     const user = await req.locals.selectOne(query)
     if (user) {
       if (!user.hashedPassword) {
-        if (user.external.source === 'apple') {
+        if (user.external?.source === 'apple') {
           throw new app.locals.Unauthorized('The user does not have password and needs to log in with Apple.')
         } else {
           throw new app.locals.Unauthorized('The user does not have password and needs to log in with Google.')
@@ -110,24 +110,41 @@ export default (app) => {
 
 
   app.postAsync('/signin/external', async (req, res) => {
-    try {
-      if (req.body.user.external.token !== 'none' && req.body.user.external.source === 'google')
-        await app.locals.verifyGoogleToken(req.body.user.external.token);
+    // Identity must come from a verified provider credential, never from the
+    // request body: otherwise anyone could sign in as any email address.
+    const source = req.body.user?.external?.source;
+    if (source !== 'google') {
+      // Apple tokens are not verified server-side yet, so Apple sign-in stays
+      // off until that is implemented.
+      throw new app.locals.Unauthorized('This sign-in method is not available.');
+    }
 
+    let profile;
+    try {
+      profile = await app.locals.verifyGoogleAuthCode(req.body.user.external.code);
     } catch(e) {
       console.log(e)
-      throw new app.locals.Unauthorized('Could not validate google auth token');
+      throw new app.locals.Unauthorized('Could not validate Google sign-in. Please try again.');
     }
 
     const apiKey = app.locals.genRandomString(32);
     var user = await req.locals.selectOne(
-      app.locals.UPSERT('private.users', 
-        ['email', 'name', 'avatar', 'external', 'verified_at', 'api_key'], 
-        'email', 
+      app.locals.UPSERT('private.users',
+        ['email', 'name', 'avatar', 'external', 'verified_at', 'api_key'],
+        'email',
         [],
         ['name', 'avatar', 'verified_at', 'api_key', 'external']),
       [JSON.stringify({
-        ...req.body.user,
+        email: profile.email,
+        name: profile.name,
+        avatar: profile.avatar,
+        external: {
+          source: 'google',
+          id: profile.id,
+          email: profile.email,
+          name: profile.name,
+          avatar: profile.avatar,
+        },
         verified_at: new Date,
         api_key: apiKey
       })],
@@ -233,7 +250,11 @@ export default (app) => {
 
     if (user) {
       // login user if they already have account with this password
-      if (!user.hashedPassword || user.hashedPassword == app.locals.sha512(req.body.user.password, user.salt)) {
+      if (!user.hashedPassword) {
+        // Accounts created through Google/Apple have no password. Never hand
+        // them out to someone who merely knows the email address.
+        throw new app.locals.BadRequest('This email is already registered through Google or Apple. Please sign in that way.');
+      } else if (user.hashedPassword == app.locals.sha512(req.body.user.password, user.salt)) {
         return { user };
       } else {
         throw new app.locals.BadRequest('This email is already registered with a different password. Maybe you would to reset password?');

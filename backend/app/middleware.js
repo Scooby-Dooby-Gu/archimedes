@@ -57,7 +57,7 @@ export async function beforeMiddleware (app) {
         await req.locals.release(req)
         //await delay( Math.random() * 200 + 2300);
         if (result !== res && result !== req) {
-          return res.send(result)
+          return res.send(typeof result === "string" ? result : app.locals.sanitizeResponse(result))
         } else {
           return res.end()
         }

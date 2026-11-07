@@ -11,3 +11,4 @@ export * from './finders.js';
 export * from './notifications.js';
 export * from './proxy.js';
 export * from './embed.js';
+export * from './sanitize.js';

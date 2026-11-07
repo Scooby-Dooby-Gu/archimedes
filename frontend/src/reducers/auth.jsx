@@ -61,7 +61,8 @@ export const reducer = (state, action) => {
           track('send', 'event', 'Login', getBrowserIdentifier())
         }
       }
-      parent.postMessage(action.user.apiKey, '*')
+      // Only hand the session key to a same-origin parent frame, never to an arbitrary embedder.
+      if (parent !== window) parent.postMessage(action.user.apiKey, location.origin)
 
       // Admittedly this delay is a hack
       if (action.redirect)
