@@ -1,0 +1,53 @@
+@import "/style/partials/index.scss";
+.form {
+  text-align: center;
+}
+
+.form textarea {
+  margin-top: 2rem;
+  border: 0;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid $light-gray;
+}
+
+.management {
+  color: #999;
+  border-radius: 10px;
+  display: block;
+  margin-top: 10px;
+  box-shadow: 0 8px 8px rgba(0,0,0,0.08);
+
+  input:checked {
+    ~ p, ~ label {
+      color: $green;
+    }
+  }
+  p {
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    max-width: 400px;
+    padding: 10px;
+    margin: 0 auto;
+
+  }
+}
+
+.author {
+  display: block;
+  //@include typography-smaller
+  font-size: 13px;
+  line-height: 16px;;
+  white-space: nowrap;
+  aside {
+    margin-top: 3px;
+  }
+  * {
+    display: inline-flex;
+  }
+  strong {
+    margin-left: 10px;
+  }
+}

@@ -1,0 +1,230 @@
+@import "/style/partials/index.scss";
+.leaderboard {
+  padding: 0 20px;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  padding-top: var(--safe-area-inset-top);
+
+  h2 {
+    //@include typography-largest
+    font-size: 24px;
+    line-height: 32px;;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  > p {
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    color: $light-gray;
+    text-align: center;
+  }
+
+  :global(.button) {
+    margin-top: auto;
+  }
+
+  .close {
+    position: absolute;
+    top: 20px;
+    top: calc(20px + var(--safe-area-inset-top));
+    right: 20px;
+    color: $light-gray;
+  }
+}
+
+.top {
+  max-width: 500px;
+  display: flex;
+  margin: 0 auto 10px;
+  width: 100%;
+  align-items: stretch;
+  :global(.user) {
+    img {
+      margin: 0;
+    }
+  }
+
+  :global(.placeholder.string) {
+    width: 100px;
+    display: block;
+  }
+
+  .scores {
+    margin-top: 5px;
+    margin-bottom: -5px;;
+  }
+
+  li {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 30%;
+    background: #fff;
+    padding: 10px 5px;  
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    margin: 10px 0;
+    text-align: center;
+    border-radius: 8px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    :global(.user) {
+      display: flex;
+      text-align: center;
+      flex-direction: column;
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+      img {
+        width: 40px;
+        height: 40px;
+      }
+
+    }
+    .score {
+      padding-top: 5px;
+      margin-top: auto;
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+      font-weight: bold;
+    }
+    
+    .rank {
+      position: absolute;
+      top: -11px;
+      right: -6px;
+      width: 22px;
+      height: 22px;
+      background: #ccc;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;
+    }
+  }
+  li.place_1 {
+    margin: 10px;
+    flex-basis: 35%;
+    order: 2;
+
+    > div:first-of-type {
+      margin-top: auto;
+    }
+
+    .rank {
+      background: rgb(254,228,177);
+      color: rgb(259, 199, 64);
+      border: 2px solid currentColor;
+      //@include typography-normal
+      font-size: 15px;
+      line-height: 1.5;;
+      height: 26px;
+      width: 26px;
+      top: -13px;
+      right: -3px;
+    }
+    .score {
+      //@include typography-normal
+      font-size: 15px;
+      line-height: 1.5;;
+      margin: 0;
+      padding: 0;
+    }
+    :global(.user) {
+      //@include typography-normal
+      font-size: 15px;
+      line-height: 1.5;;
+
+      img {
+        width: 55px;
+        height: 55px;
+      }
+    }
+  }
+  li.place_2 {
+    order: 1;
+    margin-left: -30px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    .rank {
+      background: rgb(218,218,226);
+      color: rgb(157, 158, 163);
+      border: 2px solid currentColor;
+    }
+  }
+  li.place_3 {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-right: -30px;
+    order: 3;
+    .rank {
+      background: rgb(222,202,174);
+      color: rgb(154, 142, 121);
+      border: 2px solid rgb(177,139,86);
+    }
+  }
+}
+
+.places {
+  margin: 0 -20px;
+  .rank {
+    width: 25px;
+    margin-left: -10px;
+    padding-right: 10px;
+    text-align: right;
+  }
+  .scores {
+    margin-top: auto;
+    text-align: right;
+  }
+  .score {
+    font-weight: bold;
+    color: $dark-gray;
+  }
+}
+
+.scores {
+  min-height: 24px;
+  color: $gray;
+  svg {
+    margin-right: 3px;
+  }
+}
+.scores .achievements {
+  margin-left: 10px;
+}
+
+
+.scores {
+  display: block;
+  //@include typography-smallest
+  font-size: 12px;
+  line-height: 14px;;
+  svg {
+    width: 14px;
+  }
+}
+
+.previous {
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  right: 0;
+  color: $gray;
+  //@include typography-smallest
+  font-size: 12px;
+  line-height: 14px;;
+}
+
+.you :global(.user) {
+  font-weight: bold;
+}

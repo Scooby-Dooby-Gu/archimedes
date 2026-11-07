@@ -1,0 +1,44 @@
+@mixin typography-tiny {
+  font-size: 10px;
+  line-height: 14px;
+}
+@mixin typography-smallest {
+  font-size: 12px;
+  line-height: 14px;
+}
+@mixin typography-small {
+  font-size: 12px;
+  line-height: 16px;
+}
+@mixin typography-smaller {
+  font-size: 14px;
+  line-height: 16px;
+}
+@mixin typography-large {
+  font-size: 20px;
+  line-height: 24px;
+}
+@mixin typography-larger {
+  font-size: 18px;
+  line-height: 24px;
+}
+@mixin typography-largest {
+  font-size: 24px;
+  line-height: 24px;
+}
+@mixin typography-normal {
+  font-size: 14.66px;
+  line-height: 24px;
+}
+
+@mixin truncate($font-size, $line-height, $lines-to-show) {
+  display: block; // Fallback for non-webkit
+  display: -webkit-box;
+  max-height: $font-size*$line-height*$lines-to-show + 2px; // Fallback for non-webkit
+  font-size: $font-size;
+  line-height: $line-height;
+  -webkit-line-clamp: $lines-to-show;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

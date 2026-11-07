@@ -1,0 +1,92 @@
+@import "/style/partials/index.scss";
+
+
+.initial {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  display: flex;
+  img {
+    width: 4rem;
+    height: auto;
+    align-self: start;
+  }
+  p {
+    margin-left: 10px;
+    &, * {
+      line-height: 1.2rem;
+    }
+    color: $near-black;
+  }
+}
+
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0;
+  padding: 0;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 4px;
+    background: $light-gray;
+    top: 30px;
+    bottom: 0;
+    left: 28px;
+  }
+
+  > div {
+    padding-bottom: 40px;
+
+  }
+
+  > div:global(.rest:not(.leaving)) {
+    height: inherit !important;
+  }
+  > div:global(.leaving) {
+    overflow: hidden;
+  }
+
+  > div > h2 {
+    color: $near-black;
+    font-weight: 500;
+    //@include typography-large
+    font-size: 22px;
+    line-height: 28px;;
+    background: rgba(#f4f9ff, 0.4);
+    padding: 0 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: inline-block;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  ~ .timeline {
+    margin-top: 0;
+    > div > h2 {
+      color: $gray;
+    }
+  }
+
+
+  [stage="decisions"] + [stage="actions"] {
+    margin-top: 20px;
+  }
+  [stage="actions"] + [stage="decisions"] {
+    margin-top: 20px;
+  }
+  [stage="actions"] {
+    border-radius: 4px;
+    //box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.06);
+    background-color: #fff;
+    //padding: 10px;
+  }
+
+}
+

@@ -1,0 +1,665 @@
+.article:not(.ck) {
+
+  figure.card.card {
+    border-radius: 24px;
+  
+    transition: margin-top 0.5s;
+  
+    &[expandable]:not([open]) + figure[expandable]:not([open]) {
+      margin-top: -12px;
+    }
+    
+    
+    .card-title {
+      margin-bottom: 10px;;
+    }
+
+
+    .card-url {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      font-size: 0;
+      line-height: 0;;
+    }
+    
+    &[expandable], &.with-url {
+      background-color: $teal;
+      color: $dark-green;
+  
+      mark[term] {
+        background: #fff;
+      }
+  
+      cursor: pointer;
+      padding-top: 10px;
+    }
+  
+    &[expandable] {
+      &[important]:after  {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 23px;
+        background: url(/assets/images/ui/notch_bottom.png);
+        background-size: 100% 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+      }
+      &:not([important]) .card-title:after {
+        background: 0 center no-repeat url(/assets/atlas/index.svg#IIconsChevronRight-view);
+        background-size: 2rem 2rem;
+        width: 2rem;
+        height: 2rem;
+        display: block;
+        content: '';
+        position: absolute;
+        top: -3px;
+        right: -5px;;
+      }
+      .card-title  {
+        padding-right: 15px;
+        position: relative;
+        z-index: 3;;
+      }
+      &:not([open]) {
+        padding-bottom: 10px;
+        .card-title {
+          margin-bottom: 0;
+        }
+        .card-cta {
+          display: none;;
+        }
+        .card-content {
+          max-height: 0;
+          overflow: hidden;;
+        }
+  
+        a {
+          pointer-events: none;;
+        }
+        
+      }
+      &[open] {
+        //padding-top: 24px;
+        .card-title:after {
+          background: 0 center no-repeat url(/assets/atlas/index.svg#IIconsUp-view);
+          background-size: 2rem 2rem;
+        }
+        max-height: 10000px;
+      }
+  
+      &:not([important]) {
+        .card-title:before {
+          content: '';
+          margin-left: -5px;
+          margin-right: 2px;
+          margin-top: -2px;
+          width: 23px;
+          height: 23px;
+          vertical-align: middle;
+          display: inline-block;
+        }
+      }
+    }
+  }
+  
+  figure.card  { 
+    .card-content {
+      .video, figure {
+        margin: 0 -18px 0;
+        width: calc(100% + 36px);
+        &.image:not(:only-child) img {
+          background: #fff;
+        }
+      }
+      figure.image {
+        &:not(:only-child) {
+          img, picture {
+            border-radius: 0;
+            border: 0;
+          }
+        }
+      }
+    }
+  }
+  figure.card:not(.with-cta)  { 
+    .card-content {
+      .video, figure {
+        &:not([class*="align"]) {
+          &:last-child:not(.image-zoom) {
+            margin-bottom: -16px;
+            border-radius: 0 0 22px 22px;
+            overflow: hidden;
+          }
+          &:only-child {
+            border-radius: 0 0 22px 22px;
+            margin-bottom: -16px;
+            overflow: hidden;
+            img, picture {
+              border: 0;
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+    &[expandable] .card-content {
+      .video {
+        &:last-child {
+          margin-bottom: -42px;
+        }
+      }
+    }
+    &:not(.with-title) .card-content  .video:only-child {
+      margin-top: -25px;
+      border-radius: 25px;
+    }
+    &:not(.with-title) .card-content  .video:first-child:not(:only-child) {
+      margin-top: -25px;
+      margin-bottom: -10px;
+      border-radius: 25px 25px 0 0;
+      overflow: hidden;
+    }
+  }
+   
+  figure.card:not(.image):not(.table) {
+    &:not([expandable]):not([type="definition"]),&[important] {
+      &:before {
+        content: '';
+        display: block;
+        width: 100px;
+        height: 23px;
+        background: url(/assets/images/ui/notch_top.png);
+        background-size: 100% 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        z-index: 4;
+        pointer-events: none;;
+      }
+      .card-content {
+        &:before {
+          content: '';
+        }
+      }
+    }
+  
+    &[expandable][type="definition"]:not([important]) .card-title:before {
+      margin-left: -10px;
+    }
+    .card-content:before {
+      display: block;
+      background: $background-red;
+      border-radius: 50px;
+      border: 2px solid transparent;
+      width: 20px;
+      height: 20px;
+      background-image: url("/assets/atlas/index.svg#ISymbolsCrown-view");
+      background-size: 100% 100%;
+      position: absolute;
+      top: -10px;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      z-index: 4;
+      pointer-events: none;
+    }
+    &[expandable], &.with-url {
+  
+      .card-content:before {
+        background-color: $dark-green;
+      }
+    
+      &[important] {
+        margin: 36px 0;
+        .card-title {
+          position: static;
+        }
+      }
+    }
+    &:not(.with-link):not([expandable]):not([type="section"]):not([type="definition"]):not([important]) {
+      padding-top: 25px;
+  
+      .external-embed:first-child {
+        margin-top: -26px;
+      }
+    }
+  
+    &[important] {
+      padding-top: 42px;
+      &[expandable] {
+        padding-bottom: 42px;;
+        .card-title:after {
+          background: 0 center no-repeat url(/assets/atlas/index.svg#IIconsDown-view);
+          background-size: 2rem 2rem;
+          width: 2rem;
+          height: 2rem;
+          display: block;
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: -10px;
+          top: auto;
+          margin: 0 auto;
+        }
+        &[open] {
+          .card-title:after {
+            background: 0 center no-repeat url(/assets/atlas/index.svg#IIconsUp-view);
+          }
+        }
+      }
+      > figcaption {
+        font-size: 24px;
+        padding-right: 0;
+        text-align: center;
+        margin-bottom: 18px;
+      }
+    }
+  
+    
+    &[type="eureka"] {
+      ul {
+        padding-left: 0;
+      }
+      li {
+        color: #444;
+        font-weight: 200;
+        margin-bottom: 10px;
+        &:before {
+          display: none;
+        }
+      }
+      strong {
+        color: #000;
+      }
+      .card-title:before, &:not([expandable]) .card-content:before{
+        background-image: url("/assets/atlas/index.svg#ISymbolsCrownFill-view");
+      }
+      .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsCrownFillWhite-view");
+      }
+    }
+    
+    &[type="materials"] {
+      .card-title:before, &:not([expandable]):not(.with-link) .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsBookmarkFill-view");
+      }
+      .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsBookmarkFillWhite-view");
+      }
+    }
+    
+    &[type="example"] {
+      .card-title:before, &:not([expandable]):not(.with-url) .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsLightbulbFill-view");
+      }
+      .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsLightbulbFillWhite-view");
+      }
+    }
+    
+    
+    &[type="card"] {
+      .card-title:before, &:not([expandable]):not(.with-url) .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsPaperclip-view");
+      }
+      .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsPaperclipWhite-view");
+      }
+    }
+    
+    &[type="promo"] {
+      .card-title:before, &:not([expandable]):not(.with-url) .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsDollarsignCircle-view");
+        background-size: 225% 225%;
+        background-position: center;
+      }
+      .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsDollarsignCircleWhite-view");
+        background-size: 225% 225%;
+        background-position: center;
+      }
+    }
+    
+    &[type="media"] {
+      .card-title:before, &:not([expandable]):not(.with-url) .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsFilm-view");
+      }
+      .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsFilmWhite-view");
+      }
+    }
+    &[type="section"] {
+      .card-title:before, &:not([expandable]):not(.with-url) .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsStudentdesk-view");
+      }
+      .card-content:before {
+        background-image: url("/assets/atlas/index.svg#ISymbolsStudentdeskWhite-view");
+      }
+    }
+    
+    &[type="definition"] {
+      .card-content:before {
+        content: none;
+        display: none;
+      }
+      &:not([expandable]) {
+        padding: 0;
+        background: none;
+        padding: 0 10px;
+        .card-title {
+          font-size: 20px;
+        }
+      }
+      .card-title:before {
+        content: '';
+        margin-left: -10px;
+        margin-right: 2px;;
+        margin-top: -2px;
+        width: 23px;
+        height: 23px;
+        vertical-align: middle;
+        display: inline-block;
+        background-image: url("/assets/atlas/index.svg#ISymbolsCharacterBookClosedFill-view");
+      }
+      .card-content {
+        background-image: linear-gradient(#808080 33%, rgba(255,255,255,0) 0%);
+        background-position: left;
+        background-size: 2px 4px;
+        background-repeat: repeat-y;
+        padding-left: 20px;
+        color: rgba(0,0,0,0.6);
+      }
+    }
+  }
+  .card-cta {
+    white-space: nowrap;
+    background-color: $dark-green;
+    color: #fff;
+    z-index: 1;;
+    padding: 12px 10px 12px 20px;
+    font-weight: 600;
+    text-decoration: none;;
+    border-radius: 24px;;
+    max-width: 600px;
+    flex-grow: 1;
+    margin-top: 24px;
+    width: 100%;
+    align-self: center;
+    color: $teal;
+    
+    &:after {
+      content: '';
+      float: right;
+      display: block;
+      background: 0 center no-repeat url(/assets/atlas/index.svg#IIconsChevronRightTeal-view);
+      background-size: 2rem 2rem;
+      width: 2rem;
+      height: 2rem;
+      margin: -3px 0;
+    }
+  }
+
+
+  &:not(.ck.ck.ck.ck) {
+    counter-reset: q;
+    
+    .card.card[type="lock"] {
+      background: rgb(250,247,243);
+      color: #999;
+      svg {
+        display: none;;
+      }
+      &[expandable] {
+        border-radius: 5px;
+        padding-bottom: 5px;
+        padding-top: 5px;
+      }
+    }
+    
+    .card.card[type="lock"] {
+      &:not([expandable]), [expandable][open] {
+        color: #000;
+        padding-bottom: 20px;
+        .card-cta {
+          background: #D0FCFF;
+          color: #000;
+          border: 1px solid #ccc;
+          &:after {
+            background: left 45%  no-repeat url(/assets/atlas/index.svg#IIconsChevronRight-view);
+      
+          }
+        }
+      }
+      &:not([expandable]) {
+        > .card-content {
+          &:before {
+            background-color: rgb(250,247,243);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-image: url("/assets/atlas/index.svg#IIconsLock-view");
+            background-size: 85%;
+          }
+        }
+      }
+    }
+    .card.card + .card[type="lock"] {
+      margin-top: -20px;
+    }
+    .card[type="lock"] + .card[type="lock"] {
+      margin-top: -25px;
+      border-top: 1px solid #eaeaea;
+      padding-top: 5px;
+      border-radius: 0 0 5px 5px;
+    }
+    .card[type="lock"] + .card[type="lesson"] {
+      margin-top: -20px;
+    }
+    .card[type="promo"] {
+      .card-content {
+        &:before {
+          background-image: url("/assets/atlas/index.svg#ISymbolsCrownWhite-view");
+          background-size: 100%;
+        }
+      }
+      max-width: 420px;
+      margin: 50px auto;
+    }
+    .card[type="lesson"] + .card[type="lesson"] {
+      margin-top: -20px;
+    }
+    .card[type="lock"] {
+      figcaption {
+        &:before {
+          opacity: 0.2;
+          background-image: url("/assets/atlas/index.svg#ISymbolsStudentdesk-view");
+        }
+        &:after {
+          background-image: url("/assets/atlas/index.svg#IIconsLock-view");
+          opacity: 0.15;
+          height: 20px;
+          width: 20px;
+          background-size: 100%;
+          margin-top: 5px;
+        }
+      }
+    }
+    .card[type="question"] {
+      &:not([expandable]) {
+        .card-content * {
+          display: none;
+        }
+        &:after {
+          content: '';
+          background: left 45%  no-repeat url(/assets/atlas/index.svg#IIconsChevronRight-view);
+          background-size: 32px 32px;
+          width: 32px;
+          height: 32px;
+          display: inline-block;
+          position: absolute;
+          right: 5px;
+          top: 30px;
+          bottom: 0;
+
+        }
+        .card-title {
+          padding-right: 10px;
+        }
+      }
+      .card-title {
+        text-align: left;
+      }
+      .card-content {
+        &:before {
+          counter-increment: q;
+          background-image: none;
+          content: counter(q);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          font-family: 'New York Small';
+          font-weight: normal;
+          background-color: transparent;
+          margin-top: 8px;
+          width: 18px;
+          height: 18px;
+          color: #666;
+        }
+      }
+
+      &[important] {
+        .card-title {
+          margin: -10px 0 10px
+        }
+      }
+
+      + .card[type="question"] {
+        margin-top: -32px;
+      }
+    }
+    .card[type="lesson"] {
+      min-height: 200px;
+      .card-content {
+        &:before {
+          margin-top: -5px;
+          border: 5px solid #fff;
+          width: 24px;
+          height: 24px;
+        }
+      }
+      .card-content {
+        &:before {
+          background-image: url("/assets/atlas/index.svg#ISymbolsStudentdeskWhite-view");
+          background-size: 20px;
+          background-position: center;
+        }
+      }
+      &.complete {
+        .card-content {
+          &:before {
+            background-image: url("/assets/atlas/index.svg#ISymbolsStudentdeskWhite-view");
+            background-size: 20px;
+            background-position: center;
+          }
+        }
+        background: rgb(214,238,218);
+        figure.image:after {
+          background: linear-gradient(to right, rgb(214,238,218), transparent);
+        }
+        img {
+          filter: contrast(0.75) brightness(1) grayscale(1) sepia(1) hue-rotate(377deg);
+        }
+      }
+      &.started {
+        //img {
+        //		filter: contrast(0.75) brightness(1) grayscale(1) sepia(1) hue-rotate(377deg);
+        //}
+      }
+      .card-url {
+        z-index: 2;
+      }
+      img {
+        filter: contrast(0.75) brightness(1) grayscale(1) sepia(1) hue-rotate(164deg);
+      }
+      @media (max-width:800px) {
+        img {
+          height: 100%;
+          width: 100%;
+          object-fit: cover;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          opacity: 0.2;
+          border-radius: 24px !important;
+          overflow: hidden;
+        }
+      }
+      @media (min-width: 801px) {
+        padding-right: 50%;
+        img {
+          height: 100%;
+          width: 50%;
+          object-fit: cover;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          opacity: 0.4;
+          border-radius: 24px !important;
+          overflow: hidden;
+          pointer-events: none;;
+        }
+        figcaption {
+          white-space: nowrap;
+        }
+        figure.image:after {
+          background: linear-gradient(to right, #D0FCFF, transparent);
+          width: 70px;
+          left: 50%;
+          top: 0;
+          bottom: 0;
+          content: '';
+          display: block;
+          position: absolute;
+          z-index: 0;
+          pointer-events: none;;
+        }
+      }
+      figcaption {
+        color: #000;
+        z-index: 1;
+        font-size:20px;
+        font-weight: normal;
+        &:after {
+          content: '';
+          background: left 45%  no-repeat url(/assets/atlas/index.svg#IIconsChevronRight-view);
+          background-size: 24px 24px;
+          width: 24px;
+          height: 24px;
+          display: inline-block;
+          vertical-align: -6px;
+        }
+      }
+      p {
+        z-index: 1;
+        position: relative;
+        color: #000;
+      }
+    }
+
+  }
+
+  
+}

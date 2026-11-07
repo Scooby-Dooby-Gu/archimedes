@@ -1,0 +1,33 @@
+
+.largest {
+  @include typography-largest
+}
+
+.large {
+  @include typography-large
+}
+
+.larger {
+  @include typography-larger
+}
+
+.normal {
+  @include typography-normal
+}
+
+.small {
+  @include typography-small
+}
+.smaller {
+  @include typography-smaller
+}
+
+.light-gray {
+  color: $light-gray;
+}
+.dark-gray {
+  color: $dark-gray;
+}
+.gray {
+  color: gray;
+}

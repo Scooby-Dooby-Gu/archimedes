@@ -1,0 +1,155 @@
+@import "/style/partials/index.scss";
+@import '/style/content/_article.scss';
+@import '/style/content/_fonts.scss';
+
+@import '/style/content/_figure.scss';
+@import '/style/content/_card.scss';
+
+.theme-lightblue {
+  @include theme($palette-lightblue);
+}
+.theme-blue {
+  @include theme($palette-blue);
+}
+.theme-purple {
+  @include theme($palette-purple);
+}
+.theme-green {
+  @include theme($palette-green);
+}
+.theme-red {
+  @include theme($palette-red);
+}
+.theme-yellow {
+  @include theme($palette-yellow);
+}
+.theme-pink {
+  @include theme($palette-pink);
+}
+.theme-orange {
+  @include theme($palette-orange);
+}
+.theme-black {
+  --theme-background: rgb(15,15,15);
+  --theme-secondary: #444;
+  --theme-dark: #{background($palette-green)};
+  --theme-accent-color: #fff;
+}
+.theme-white {
+  --theme-background: #fff;
+  --theme-secondary: #ccc;
+  --theme-dark: #fff;
+  --theme-accent-color: #444;
+}
+
+.theme-gray {
+  --theme-background: $background-gray;;
+  --theme-secondary: #ccc;
+  --theme-dark: $background-gray;;
+  --theme-accent-color: #fff;
+}
+
+.cover a:not(.button) {
+  color: inherit;
+}
+.cover.theme-quiz {
+  color: #fff;
+  @include cover-quiz;
+}
+.cover.theme-purple {
+  color: #fff;
+  @include cover-purple;
+}
+.cover.theme-red {
+  color: #fff;
+  @include cover-red;
+}
+.cover.theme-blue {
+  color: #fff;
+  @include cover-blue;
+}
+.cover.theme-violet {
+  color: #fff;
+  @include cover-violet;
+}
+.cover.theme-green {
+  color: #fff;
+  @include cover-green;
+}
+.cover.theme-orange {
+  color: #fff;
+  @include cover-orange;
+}
+.cover.theme-black {
+  color: #fff;
+  @include cover-black;
+}
+.cover.theme-darkgray {
+  color: #fff;
+  @include cover-darkgray;
+}
+.cover.theme-darkgreen {
+  color: #fff;
+  @include cover-darkgreen;
+}
+.cover.theme-lightblue {
+  color: #fff;
+  @include cover-lightblue;
+}
+.cover.theme-vibrantgreen {
+  color: #fff;
+  @include cover-vibrantgreen;
+}
+.cover.theme-yellow {
+  color: #fff;
+  @include cover-yellow;
+}
+.cover.theme-gray {
+  color: $near-black;
+  background: $background-gray;
+}
+
+.theme-faint-red {
+  color: $near-black;
+  background: $background-red;
+}
+.theme-faint-blue {
+  color: $near-black;
+  background: $background-blue;
+}
+
+.near-black {
+  color: $near-black;
+}
+
+.list {
+  padding-left: 20px;
+  > li {
+    list-style: disc;
+  }
+}
+
+a, a.blue, section a.blue {
+  color: $purple;
+  text-decoration: underline;
+}
+
+.empty-state {
+  color: $light-gray;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  svg {
+    width: 7rem;
+    height: 7rem;
+    color: $ghostly-gray;
+  }
+
+  .button {
+    margin-top: 1rem;
+  }
+}

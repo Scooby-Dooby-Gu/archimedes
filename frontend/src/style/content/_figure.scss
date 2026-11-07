@@ -1,0 +1,599 @@
+@import "/style/partials/index.scss";
+
+
+figure.card {
+  background: #fafafa;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 24px 0;
+
+  figcaption {
+    text-align: left;
+    font-weight: bold;
+  }
+
+  figcaption.card-title {
+    text-align: left;
+    font-weight: 600;
+    color: inherit;
+    font-family:  "SF Pro Text", "SF Pro Display", -apple-system, -apple-system, system-ui, BlinkMacSystemFont;;
+    font-size: 15px;
+  }
+
+  &[type="promo"], &[type="card"] {
+    * {
+      font-family:  "SF Pro Text", "SF Pro Display", -apple-system, -apple-system, system-ui, BlinkMacSystemFont;;
+    }
+  }
+
+  &.ck-widget {
+    margin-top: 30px !important;
+  }
+  input[type="file"] {
+    position: absolute;
+    opacity: 0.001;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  > * {
+    order: 1;
+  }
+  h3 {
+    margin: 5px 0 5px 0;
+  }
+  .card-actions {
+    order: 0;
+  }
+  .card-title {
+    color: #666;
+  }
+  .card-tabs:not(:hover) li:not(.selected){
+    opacity: 0;
+  }
+  .ck-placeholder .crawl svg{
+    display: none;
+  }
+
+  .card-url.ck-placeholder {
+    line-height: 20px;
+    height: 20px;
+    display: block;
+  }
+  div.card-url {
+    text-decoration: underline;
+    color: #999;;
+  }
+
+  &:not(:hover) .crawl, .ck-placeholder .crawl, &:not(:hover) .upload-image, &:not(:hover) .make-expandable, &:not(:hover) .make-important {
+    opacity: 0;
+  }
+  .card-cta.ck-editor__editable:not(.ck-placeholder) {
+    border: 2px solid #ccc !important;
+    border-radius: 20px;
+    padding: 2px 10px;
+    display: table;
+    align-self: flex-start;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: 1%;
+  }
+  .crawl {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 3px -5px 0px 5px;
+    border: 0;
+    background: 0;
+    padding: 0;
+    svg {
+      fill: currentColor;
+      width: 20px;
+      height: 20px;
+      color: #ccc;
+    }
+    &.loading svg {
+      animation: spin 1s infinite linear;
+    }
+    
+  }
+
+
+  .ck-widget__type-around__button_before.ck-widget__type-around__button_before.ck-widget__type-around__button_before {
+    left: -7px;
+  }
+
+  
+  .make-expandable {
+    position: absolute;
+    bottom: 100%;
+    right: 120px;
+    padding-bottom: 5px;;
+    color: #999;
+
+    input[type="checkbox"] {
+      transform: scale(0.5);
+      display: none;
+      ~ span:before {
+        display: inline-block;
+        content: 'Always open'
+      }
+      &:checked ~ span:before {
+        display: inline-block;
+        content: 'Starts collapsed'
+      }
+    }
+  }
+  .make-important {
+    position: absolute;
+    bottom: 100%;
+    left: 120px;
+    padding-bottom: 5px;;
+    color: #999;
+
+    input[type="checkbox"] {
+      transform: scale(0.5);
+      display: none;
+      ~ span:before {
+        display: inline-block;
+        content: 'Regular size';
+      }
+      &:checked ~ span:before {
+        display: inline-block;
+        content: 'Large size';
+      }
+    }
+  }
+  .upload-image {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    padding-bottom: 5px;;
+    color: #999;
+  }
+  .card-tabs {
+    display: flex;
+    position: absolute;
+    bottom: 100%;
+    left: 0px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    appearance: none;
+    font:inherit;
+    background: none;
+    border: 0;
+    padding: 5px 10px 2px;
+    color: #666;
+    font-weight: bold;
+    width: auto;
+    min-width: 1px;
+    text-transform: capitalize;
+    option {
+      text-align: center;
+      display: block;
+      appearance: none;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+
+
+
+.article {
+
+  > figure {
+    max-width: 100%;
+  }
+
+  figure.media {
+    padding: 0;
+    border-radius: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    .embedly-card-hug {
+      margin: 0 auto !important;
+    }
+    background: #f2f5f2; 
+    border-radius: 10px; 
+    padding: 10px;
+  }
+
+  .details-box-content figure.media:only-child {
+    margin: 0 0 0;
+    border: 0;
+    border-radius: 10px; 
+    padding: 10px;
+    //background: transparent; 
+  }
+
+
+  figure.media:not(.tweet) {
+    border: 1px solid $lightest-gray; 
+  }
+
+  figcaption {
+    text-align: center;
+  }
+
+  figure.image:not(.image-style-side) {
+
+    img {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+  }
+  figure.image.image-style-side {
+    float: left;
+    clear: left;
+    width: 70px !important;
+    margin-left: 0;
+    margin-bottom: 0;
+    margin-top: -4px;
+  
+    img {
+      width: 60px;
+      margin-left: 0;
+    }
+
+    + blockquote {
+      margin-left: 55px;
+      border: 0;
+      font-style: italic;
+      strong:last-child {
+        font-style: normal;
+      }
+    }
+  }
+
+  figure.image.image-style-block-align-left,
+  figure.image.image-style-block-align-right  {
+    display: flex;
+    width: 100%;
+    min-width: 100%;
+    max-width: auto;
+    margin: 24px 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: flex-start;
+    margin-left: 0;
+    margin-right: 0;
+
+    img {
+      flex-basis: 60%;
+      flex-shrink: 1;
+      margin: 0 10px 0 0 ;
+      width:55%;
+      height: auto !important;
+      min-height: auto;
+      min-width: auto;
+      border: 0;
+      flex-grow: 1;
+    }
+
+    figcaption {
+      flex-grow: 1;
+      flex-basis: 40%;
+      font-size: 16px;
+      color: #777;
+      text-align: center;
+      flex-grow: 1;
+      text-align: left;
+      word-break:normal;
+      padding: 0;
+    }
+  }
+
+  figure.image.image-style-block-align-right  {
+    img {
+      order: 2;
+      margin: 0 0 0 10px ;
+    }
+
+    figcaption {
+      text-align: left;
+    }
+  }
+}
+
+
+
+
+
+figure.image {
+  width: 100%;
+}
+
+figure.media, figure.image {
+  margin: 0 auto;
+  //max-width: 600px;
+  height: auto;
+
+  // remove ckeditor's own ratio placeholder
+  [data-oembed-url] > div[style*="height: 0px"] {
+    height: auto !important;
+    padding-bottom: 0 !important;
+  }
+
+  figcaption {
+    font-weight: normal;
+    opacity: 0.6;
+    padding: 10px 10px 10px;
+  }
+
+  img {
+    margin: 0 auto;
+    display: block;
+    max-width: 100%;
+  }
+
+  figcaption {
+    font-style: italic;
+    padding-top: 5px;
+  }
+}
+
+
+.details-box:not(.ck-widget) .details-box-content {
+  overflow: hidden;
+  max-height: 0;
+  max-width: 0;
+  width: 100%;
+  display: block;
+}
+
+figure.details-box:not([open]) {
+  display: inline-flex;
+  flex-wrap: wrap;
+  figcaption {
+    margin: 0;
+    cursor: pointer;
+  }
+  .details-box-content {
+    overflow: hidden;
+    max-height: 0;
+  }
+}
+
+figure.details-box:not([open]) {
+  margin-right: 20px;
+}
+
+figure.details-box {
+  .details-box-content {
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  &[open] .details-box-content {
+    max-height: 2000px;
+    max-width: 100%;
+    transition: max-height .5s;
+  }
+  &:not([open]) {
+    > figcaption {
+      &:after {
+        margin-left: 0.5rem;
+        content: '';
+        background: url("/assets/atlas/index.svg#IIconsDownWhite-view");
+        background-size: 100%;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: inline-block;
+      }
+    }
+  }
+  > figcaption {
+    width: 100%;
+    &:after {
+      margin-left: auto;
+      content: '';
+      background: url("/assets/atlas/index.svg#IIconsUpWhite-view");
+      background-size: 100%;
+      width: 1.5rem;
+      height: 1.5rem;
+      display: inline-block;
+    }
+  }
+}
+
+figure.details-box {
+  > figcaption {
+    align-items: center;
+    display: inline-flex;
+    flex-wrap: wrap;
+  }
+}
+
+figure.media {
+  .lesson-embed {
+    margin: -10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: $background-blue;
+    img {
+      height: auto;
+      margin-bottom: 4px;
+    }
+  }
+  .lesson-embed-meta {
+    text-decoration: none;
+    color: inherit;
+  }
+  .lesson-embed-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    text-decoration: none;
+    margin-left: 2px;
+  }
+  p {
+    font-size: 13px;
+    line-height: 20px;
+    margin-top: 3px;
+  }
+}
+
+
+figure.media {
+  .external-embed {
+    margin: -10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: $background-green;
+    overflow: hidden;
+
+    &.compact {
+      img {
+        float: left;
+        margin-left: 0;
+        margin-top: 0;
+        margin-right: 10px;
+        max-width: 80px;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+    }
+    img {
+      height: auto;
+      margin: -10px;
+      max-width: calc(100% + 20px); 
+      margin-bottom: 10px;
+      border-radius: 10px 10px 0 0;
+    }
+  }
+  .external-embed-meta {
+    text-decoration: none;
+    color: inherit;
+  }
+  .external-embed-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 25px;
+    text-decoration: none;
+  }
+  .external-embed-action {
+    color: $gray;
+    margin-right: 10px;
+    @include typography-smaller;
+  }
+  svg {
+    height: 25px;
+    margin-left: -5px;
+    margin-right: -5px;
+  }
+  p {
+    font-size: 13px;
+    line-height: 20px;
+    margin-top: 3px;
+  }
+}
+.details-box {
+  vertical-align: top;
+
+  > figcaption {
+    display: block;
+  }
+
+  &[data-type="section"] {
+    border-color: $light-gray;
+    > figcaption {
+      &:after {
+        background: url("/assets/atlas/index.svg#IIconsUp-view");
+      }
+    }
+    &:not([open]) {
+      > figcaption {
+        &:after {
+          background: url("/assets/atlas/index.svg#IIconsDown-view");
+        }
+      }
+    }
+  }
+
+  &[data-type="tool"] {
+    background: $background-gray;
+    > figcaption {
+      &:before {
+        margin-right: 0.5rem;
+        content: '';
+        background: url("/assets/atlas/index.svg#IIconsInfoWhite-view");
+        background-size: 100%;
+        width: 1.25rem;
+        height: 1.25rem;
+        display: inline-block;
+      }
+    }
+  }
+  &[data-type="external"] {
+    background: rgb(127, 117, 178);
+    color: #fff;
+    > figcaption {
+      &:before {
+        margin-right: 0.5rem;
+        content: '';
+        background: url("/assets/atlas/index.svg#IIconsInfoWhite-view");
+        background-size: 100%;
+        width: 1.25rem;
+        height: 1.25rem;
+        display: inline-block;
+      }
+    }
+  }
+  &[data-type="media"] {
+    background: rgb(132, 181, 172);
+    color: #fff;
+    > figcaption {
+      &:before {
+        margin-right: 0.5rem;
+        content: '';
+        background: url("/assets/atlas/index.svg#IIconsInfoWhite-view");
+        background-size: 100%;
+        width: 1.25rem;
+        height: 1.25rem;
+        display: inline-block;
+      }
+    }
+  }
+
+  > figcaption {
+    font-weight: bold;
+    //@include typography-normal
+    font-size: 15px;
+    line-height: 1.5;;
+  }
+
+  border: 1px solid transparent;
+  padding: 4px 10px 10px;
+  border-radius: 10px;
+  
+  &:not([open]):not(.ck-widget)  {
+    padding: 4px 10px;
+    border-radius: 20px;
+    > figcaption {
+      &:before {
+        margin-left: -4px;
+      }
+      &:after {
+        margin-right: -4px;
+      }
+    }
+  }
+  
+  img {
+    max-width: 100%;
+  }
+
+}
+
+
+@keyframes spin {
+  0%  {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}   
+}

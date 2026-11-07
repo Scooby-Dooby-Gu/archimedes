@@ -1,0 +1,108 @@
+@import "/style/partials/index.scss";
+.section {
+  //box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.04);
+  padding: 15px 10px;
+  background: #fff;;
+  margin-bottom: 10px;
+
+  h2 {
+    //@include typography-normal
+    font-size: 15px;
+    line-height: 1.5;;
+    color: $gray;
+
+    svg {
+      height: 1.1rem;
+      width: 1.2rem;
+      margin-right: -2px;
+      vertical-align: -3px;
+    }
+  }
+
+  .list {
+    border-left: 2px solid $ghostly-gray;
+    padding-left: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+
+    > li + li{
+      padding-top: 10px;
+    }
+
+    p.status {
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+      margin-bottom: 5px;
+      color: $gray;
+    }
+
+    p.status + progress {
+      margin-top: 10px;
+      display: block;
+      flex-grow: 1;
+    }
+    
+    dl {
+      clear: both;
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+      line-height: 16px;
+      color: $gray;
+
+      display: flex;
+      flex-wrap: wrap;
+
+      dt {
+        flex-basis: 50%;
+      }
+      dd {
+        flex-basis: 50%;
+        text-align: right;
+      }
+      
+      /*.separate {
+        margin-top: 2px;
+        padding-top: 2px;
+        border-top: 1px solid $ghostly-gray;
+      }*/
+
+    }
+
+    .current {
+      h3 {
+        //@include typography-normal
+        font-size: 15px;
+        line-height: 1.5;;
+        font-weight: 800;
+      }
+      aside {
+        //@include typography-smaller
+        font-size: 13px;
+        line-height: 16px;;
+        line-height: 22px;
+
+      }
+    }
+
+    .old {
+      h3 {
+        //@include typography-normal
+        font-size: 15px;
+        line-height: 1.5;;
+      }
+      aside {
+        //@include typography-smallest
+        font-size: 12px;
+        line-height: 14px;;
+        line-height: 22px;
+        color: $gray;
+      }
+    }
+
+    aside {
+
+    }
+  }
+}

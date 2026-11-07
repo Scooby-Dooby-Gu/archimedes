@@ -1,0 +1,192 @@
+@import "/style/partials/index.scss";
+
+
+.market {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  margin: 10px auto 10px;
+  box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.06);
+  padding: 15px 10px;
+  border-radius: 8px;
+  background: #fff;
+
+  svg[class*="Houses"] {
+    width: 15rem;
+    height: 3rem;
+    margin: 0 auto;
+  }
+
+  h2 {
+    //@include typography-larger
+    font-size: 17px;
+    line-height: 1.3;;
+    font-weight: 500;
+    margin: 10px 0;
+  }
+
+  p {
+    margin-bottom: 20px;
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+  }
+
+}
+
+
+.badge {
+  font-weight: normal;
+  margin-left: 5px;
+  //@include typography-smaller
+  font-size: 13px;
+  line-height: 16px;;
+  margin-top: 1px;
+}
+
+
+.actions {
+  display: flex;
+  align-items: flex-start;
+  margin: 15px -5px 0 -5px;
+
+  :global .button.button {
+    padding: 5px 1px;
+    margin: 0 5px;
+    white-space: nowrap;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 30%;
+    flex-wrap: nowrap;
+  }
+}
+
+.list {
+  margin-bottom: 20px;
+  > li {
+    border-top: 1px solid $ghostly-gray;
+    margin-left: -10px;
+    background-color: #fff;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    > a {
+      display: flex;
+      align-items: center;
+      margin: 0 -10px;
+      padding: 20px;
+      color: inherit;
+      text-decoration: none;
+    }
+    &:last-child {
+      border-bottom: 1px solid $ghostly-gray;
+    }
+
+    aside {
+      order: 1;
+      align-self: flex-start;
+      white-space: nowrap;
+      display: flex;
+      flex-wrap: nowrap;
+      text-align: right;
+      small {
+        line-height: 0.15;
+        display: block;
+      }
+
+      svg {
+        color: $light-gray;
+        height: 3rem;
+        float: right;
+      }
+    }
+
+    small {
+      display: inline-block;
+      margin-top: 5px;
+    }
+
+    .summary {
+      flex-grow: 1;
+    }
+
+    .image {
+      width: 4rem;
+      height: 2.5rem;
+      align-self: flex-start;
+
+      svg {
+        width: 3.25rem;
+        height: auto;
+        max-height: 2.5rem;
+        margin-right: auto;
+      }
+    }
+
+    h3 {
+      //@include typography-larger
+      font-size: 17px;
+      line-height: 1.3;;
+      font-weight: bold;
+    }
+
+    .status {
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+    }
+    
+    progress {
+      display: block;
+      margin-top: 5px;
+      width: 100%;
+    }
+
+    .details {
+      order: 2;
+      width: 100%;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      padding-bottom: 20px;
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+      max-height: 350px;
+      overflow: hidden;
+      transition: max-height .3s, opacity .3s;
+      &[hidden] {
+        max-height: 0;
+        opacity: 0;
+        display: block;
+      }
+    
+    }
+
+  }
+}
+
+.rental li {
+  > a {
+    padding: 10px 20px;
+
+    .summary {
+
+      h3 {
+        font-weight: normal;
+        //@include typography-normal
+        font-size: 15px;
+        line-height: 1.5;;
+      }
+    }
+  }
+}
+
+.section {
+  > h2 {
+    //@include typography-smallest
+    font-size: 12px;
+    line-height: 14px;;
+    color: $light-gray;
+    line-height: 22px;
+  }
+}

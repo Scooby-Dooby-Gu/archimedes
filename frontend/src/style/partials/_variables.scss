@@ -1,0 +1,75 @@
+@import "./_palette.scss";
+
+/* Breakpoints */
+
+/* Mobile first: breakpoint-small is anything less than 600px */
+$breakpoint-medium: 600px;
+$breakpoint-large: 1024px;
+$breakpoint-xl: 1920px;
+
+$teal: #D0FCFF;
+$dark-green: #26442E;
+$darkest-green: #1D3122;
+
+/* Colors */
+$near-black: #020202;
+$blackish: #333;
+$dark-gray: #8a8a8f;
+$gray: #8e8e93;
+$light-gray: #B7B6B5;
+$lightest-gray: #d8d8d8;
+$ghostly-gray:#ececec;
+$dark-purple: rgb(19,26,101);
+$light-purple: rgb(207,209,223);
+$purple: #3542BA;
+$green: #3EB44A;
+$jade: #5ac8ae;
+$red: #B4533E;
+$yellow: #F0BD64;
+$light-red: rgb(255,126,112);
+$light-green: rgb(141, 186, 150);
+$light-yellow: rgb(189, 166, 89);
+$light-blue: rgb(125, 182, 236);
+
+$background-gray: #f5f4f2;
+$background-red: rgb(250,247,243);
+$background-blue: rgb(243,245,251);
+$background-green: #f2f5f2;
+$background-gray: rgb(245,244,242);
+
+$base-palette: (
+  'base': hsl(126deg, 49%, 47%),
+  'colors': hsl(126deg, 49%, 47%) hsl(133deg, 47%, 33%) hsl(136deg, 28%, 21%) hsl(135deg, 35%, 11%)
+) !default;
+$palette-diff: palette-diff($base-palette);
+
+
+
+$palette-green: palette(hsl(126deg, 49%, 47%));
+$palette-lightblue: palette(rgb(63, 187, 188));
+$palette-blue: palette(hsl(218deg, 46%, 48%));
+$palette-purple: palette(hsl(291deg,31%,48%));
+$palette-orange: palette(hsl(26, 49%, 47%));
+$palette-pink: palette(hsl(307, 49%, 47%));
+$palette-yellow: palette(hsl(58, 49%, 47%));
+$palette-red: palette(hsl(0, 49%, 47%));
+
+
+$theme-blue: rgb(69, 111, 179);
+$theme-purple: hsl(291deg,31%,48%);
+$theme-purple-background: darken($theme-purple, 20%);
+$theme-violet: rgb(61, 36, 98);
+$theme-green: hsl(126deg, 49%, 47%);
+$theme-green-background: hsl(136deg, 28%, 21%);
+$theme-yellow: rgb(208, 155, 92);
+$theme-black: rgb(41, 44, 71);
+$theme-red: rgb(232, 98, 98);
+
+
+$accent: hsl(56deg, 92%, 71%);
+$theme-lightblue: rgb(63, 187, 188);
+$theme-lightblue-hue: 68deg; 
+$theme-darkgreen: rgb(54,97,92);
+$theme-vibrantgreen: rgb(126,161,53);
+$theme-darkgray: rgb(80,77,77);
+$theme-orange: rgb(185,125,98);

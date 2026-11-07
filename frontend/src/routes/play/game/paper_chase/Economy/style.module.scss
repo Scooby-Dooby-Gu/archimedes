@@ -1,0 +1,297 @@
+@import "/style/partials/index.scss";
+.news {
+  color: $near-black;
+  //padding-bottom: 50px;
+  > h2 {
+    font-variant: small-caps;
+    font-family: serif;
+    text-align: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+    max-height: 32px;
+    transition: max-height 0.1s 1s, margin-bottom 0.1s 1s, margin-top 0.1s 1s;
+
+    &[hidden] {
+      display: block;
+      margin-top: 0;
+      margin-bottom: 0;
+      max-height: 0;
+    }
+  }
+  aside {
+    text-align: right;;
+    //@include typography-smallest
+    font-size: 12px;
+    line-height: 14px;;
+
+    strong {
+      display: block;
+      text-align: right;
+    }
+    &.Low strong, &.Novice strong{
+      color: $red;
+    }
+    &.Medium strong{
+      color: $light-yellow;
+    }
+    &.High strong, &.prediction strong{
+      color: $jade;
+    }
+
+  }
+  h3 {
+    //@include typography-tiny
+    font-size: 10px;
+    line-height: 14px;;
+    text-transform: uppercase;
+    color: $gray;
+    margin-bottom: 5px;
+
+    .tag {
+      display: inline-block;
+      margin-right: 10px;
+      text-align: right;
+      letter-spacing: 1px;
+
+      span {
+        background-color: $dark-gray;
+        color: #fff;
+        border-radius: 2px;;
+        padding: 2px 4px;
+      }
+    }
+  }
+
+  .boosts {
+    width: 120px;
+  }
+
+  .boost {
+    color: $gray;
+    padding-left: 10px;
+    display: block;
+    margin-top: 0px;
+    svg {
+      width: 18px;
+      margin-right: 2px;
+      color: $jade;
+      white-space: nowrap;
+    }
+    + .boost {
+      margin-top: -5px;
+    }
+  }
+
+  .categories > li {
+    //width: 400px;
+    position: relative;
+    background: #fff;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    
+
+    &:first-child .tag span {
+      background: $jade;
+    }
+    &:nth-child(2) .tag span  {
+      background: $light-blue;
+    }
+    &:last-child .tag span  {
+      background: $light-purple;
+    }
+  }
+  
+
+  .toolbar {
+    position: absolute;
+    left: 100%;
+    opacity: 0;
+    transform: translateX(-160px);
+    transition: transform 0.3s, opacity 0.3s;
+    margin-left: 15px;
+    top: -30px;
+    color: $near-black;
+    opacity: 0;
+
+    &:before {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      bottom: 0;
+      background: linear-gradient(to right );
+    }
+    
+    li {
+      border-radius: 50px;
+      border: 1px solid currentColor;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+
+      :global(.button) {
+        flex-shrink: 0;
+        text-align: left;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        justify-content: flex-start;
+        //@include typography-smallest
+        font-size: 12px;
+        line-height: 14px;;
+        width: 140px;
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+  }
+
+  .steps {
+    position: relative;
+    transition: height 0.3s;
+    overflow: hidden;
+    padding: 20px 15px 15px ;
+    > li {
+      position: absolute;
+      width: calc(100% - 30px);
+    }
+  }
+
+  h4 {
+    //@include typography-larger
+    font-size: 17px;
+    line-height: 1.3;;
+    color: $near-black;
+    margin-top: 12px;
+  }
+  p {
+    margin-top: 5px;
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+  }
+
+  .meta {
+    margin-top: 15px;
+    background: $background-green;
+    //@include typography-smallest
+    font-size: 12px;
+    line-height: 14px;;
+    padding: 10px;
+    border-radius: 4px;
+  }
+
+  .back {
+    margin-left: -10px;
+    margin-right: -10px;
+    color: $light-gray;
+
+    svg {
+      margin-top: -4px;
+      height: 27px;
+      margin-right: -8px;
+    }
+  }
+
+  .forward {
+    margin-left: -10px;
+    color: $light-gray;
+
+    svg {
+      margin-top: -4px;
+      margin-right: -10px;
+      height: 27px;
+      margin-left: -8px;
+    }
+  }
+
+  .progress {
+    height: 3px;
+    position: relative;
+    z-index: 1px;;
+    background-color: $lightest-gray;
+    .bar {
+      height: 3px;
+      width: 50%;
+      background: $purple;
+      position: absolute;
+      top: 0;
+      transition: left 0.3s;
+      z-index: 1;
+    }
+    .prediction {
+      height: 3px;
+      width: 50%;
+      border-bottom: 3px dashed lighten($jade,15%);
+      position: absolute;
+      top: 0;
+    }
+  }
+
+  h4 > span {
+    color: $light-gray;
+    margin-right: 5px;
+  }
+
+  .unlock {
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    transition: opacity 0.3s;
+    background-color: $purple;
+    color: #fff;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+
+    &.jade {
+      background-color: $jade;
+    }
+  }
+
+  .requirement {
+    position: absolute;
+    left: 10px;
+    padding-top: 20px;
+    text-shadow: 0 0px 1px #fff;
+    color: $near-black;
+    z-index: 2;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    translate: rotateZ(1px);
+    font-style: italic;
+  }
+
+  .navigation {
+    display: flex;
+    align-items: baseline;
+    width: 100%;
+    margin-top: 15px;
+    height: 36px;
+    align-items: flex-end;
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    > li {
+      flex-grow: 1;
+
+      &.forward {
+        text-align: right;
+      }
+
+    }
+
+    :global(.button) {
+      svg {
+        margin-right: -5px;
+        margin-left: 5px;
+      }
+    }
+  }
+    
+}

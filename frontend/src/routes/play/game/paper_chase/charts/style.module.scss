@@ -1,0 +1,58 @@
+@import "/style/partials/index.scss";
+.donut_middle {
+  height: 150px;
+  width: 120px;
+  top: 0;
+  margin: auto;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  text-align: center;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 0.8rem;
+    justify-items: center;
+
+    li {
+      margin: 0;
+      padding: 0;
+      margin-top: .3rem;
+    }
+
+    span {
+      margin-left: -.68rem;
+    }
+
+    strong {
+      float: right;
+    }
+
+    li:not([class*="result"]) {
+      width: 100%;
+    }
+
+    [class*="result"] {
+      border-top: 1px solid #666;
+    }
+  }
+}
+
+.donut {
+  position: relative;
+
+  [class*="chart"] {
+    margin: 0 auto;
+  }
+}
+
+[class*="alexcharts-tooltip"] {
+  pointer-events: none;
+}

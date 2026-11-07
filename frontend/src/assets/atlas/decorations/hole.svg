@@ -1,0 +1,17 @@
+<svg viewBox="0 0 91 90" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linecap="round" stroke-miterlimit="10" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-miterlimit:10;">
+  <g transform="matrix(1.01111 0 0 1 -5321.48 -2583)">
+    <path fill="none" d="M5263 2583h90v90h-90z"/>
+    <clipPath id="a">
+      <path d="M5263 2583h90v90h-90z"/>
+    </clipPath>
+    <g clip-path="url(#a)">
+      <g opacity=".5">
+        <path d="M5270.511 2629.304c.047 11.333 16.627 20.501 37.038 20.477 20.407-.028 36.916-9.231 36.879-20.564-.046-11.334-16.631-20.502-37.038-20.477-20.41.028-36.916 9.23-36.879 20.564" fill="#3eb44a" fill-rule="nonzero"/>
+        <ellipse cx="8.968" cy=".01" rx="4.925" ry="8.975" fill="none" stroke="#3eb44a" stroke-width="3.01" transform="scale(4.12088 -4.16667) rotate(-89.933 332.571 -955.744)"/>
+      </g>
+      <path d="M0-4.941C.01-2.221-3.996-.012-8.949-.006-13.901 0-17.925-2.2-17.936-4.92" fill="none" stroke="#3eb44a" stroke-width="1.4" transform="matrix(4.12088 0 0 4.16667 5344.43 2649.802)"/>
+      <path d="M5293.98 2634.87c.017 4.134 6.065 7.478 13.504 7.47 7.442-.013 13.455-3.37 13.446-7.498-.016-4.134-6.065-7.477-13.508-7.47-7.438.013-13.455 3.37-13.442 7.499" fill="var(--theme-background)" fill-rule="nonzero"/>
+      <path d="M-11.34-11.34h22.68" fill="none" stroke="#3eb44a" stroke-width=".5" transform="matrix(0 4.16667 4.12088 0 5355.062 2729.844)"/>
+    </g>
+  </g>
+</svg>

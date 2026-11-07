@@ -1,0 +1,440 @@
+@import "/style/partials/index.scss";
+
+.page {
+  background: rgb(15,15,15);
+  padding-left: 25px;
+  display: flex;
+  padding-right: 25px;
+  position: relative;
+  transform: translate3d(0,0,0);
+  perspective: 1000;
+  backface-visibility: hidden;
+  @media (min-width: 784px) {
+    &:global(:not(.has_header)) {
+      padding-top: 76px;
+    }
+  }
+}
+
+.wrapper {
+  z-index: 15;
+}
+
+.buttonHole {
+  svg {
+    position: absolute;
+    width: 37px;
+    height: 37px;
+    
+    &:global(.front) {
+      z-index: 30;
+    }
+    &:global(.top) {
+      z-index: 15;
+    }
+    &:global(.back) {
+      z-index: 0;
+    }
+  }
+}
+
+.checkmark {
+  position: absolute;
+  color: var(--theme-primary);
+  right: -2px;
+  top: -2px;
+  width: 40px;
+
+  ~ .icon {
+    visibility: hidden;
+  }
+}
+
+.hole {
+  color: #fff;
+  --theme-primary: #fff;
+  --theme-secondary: red;
+  --theme-dark: rgb(15,15,15);
+  height: 38px;
+  width: 38px;
+  position: absolute;
+  margin-right: -1px;
+  z-index: 22;;
+  transition: 1s opacity;
+  color: transparent;
+}
+.ball {
+  position: absolute;
+  width: 79px;
+  top: -22px;
+  left: -20px;
+  height: 80px;
+  z-index: 20;;
+}
+div.hole {
+  float: right;
+  position: relative;
+  margin-top: -7px;
+}
+
+
+.line {
+  display: block;
+  position: absolute;
+  top: -70px;
+  height: 0;//58px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 1px;
+  background: rgba(255,255,255,0.5);
+  transition: 0.3s opacity, 0.3s transform;
+}
+
+.header {
+  color: #eee;
+  @include typography-larger;
+  font-weight: 600;
+  margin-bottom: 55px;;
+  transition: opacity 1s 1s;
+}
+
+
+@mixin dashed-line {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--theme-primary) 25%, rgba(255,255,255,0) 0%);
+  background-position: right;
+  background-size: 1px 4px;
+  background-repeat: repeat-y;
+}
+
+
+.ambition {
+  .title {
+    color: #fff;
+    @include typography-larger;
+    font-weight: bold;
+  }
+  .icon {
+    width: 37px;
+    height: 37px;
+    color: var(--theme-primary);
+    margin-left: 10px;
+    margin-top: -9px;
+
+
+  }
+  .tagline {
+    margin-top: 5px;
+    color: #aaa;
+    transition: color 1s;
+    @include typography-smaller;
+  }
+  &.complete {
+    .title {
+      color: var(--theme-primary);
+    }
+  }
+  &.dependee {
+    &:after {
+      top: 35px;
+      bottom: -30px;
+      right: 18px;
+      @include dashed-line;
+    }
+  }
+  &.chosen.dependee {
+    &:after {
+      display: none;
+    }
+  }
+
+  .link {
+    text-decoration: none;
+    display: block;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 40px;
+  }
+  
+}
+.clip {
+  
+  position: absolute;
+  width: 37px;
+  height: 28px;
+  overflow: hidden;
+}
+
+.frame {
+  filter: hue-rotate(calc(var(--theme-hue)));
+}
+
+
+.question {
+  margin: 0 -20px -20px -25px;
+  padding: 40px 20px 120px;
+  position: absolute;
+  z-index: 10;;
+  height: calc(100vh);
+  width: 100%;
+  top: calc(100% + 120px);
+  background: none;//var(--theme-background);
+  color: var(--theme-primary);
+
+  .form {
+
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform: translate3d(0,0,0);
+  }
+
+  .mask {
+    background:  bottom repeat-x  url('/assets/images/liquid/mask.png');
+    z-index: 3;
+    position: absolute;
+    top: -80px;
+    left: -20px;
+    right: -20px;
+    height: 110px;
+    background-size: 640px 120px;
+    animation: 8s linear infinite scroll-mask, 4s linear infinite bounce-wave;
+  }
+  
+  .form {
+    backface-visibility: hidden;
+    transition: opacity 0.5s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    //align-items: center;
+    text-align: center;
+    padding: 0 10px;
+
+    &:after {
+      display: block;
+      content: '';
+      flex-shrink: 100;
+      flex-grow: 2;
+    }
+    &:before {
+      display: block;
+      content: '';
+      flex-shrink: 100;
+      flex-grow: 2;
+    }
+
+    [class*="Wave"] {
+      color: var(--theme-primary);
+      width: 150px;
+      margin: 0 auto 0;
+      transform-style: preserve-3d;
+      
+    }
+
+    input {
+      display: none;
+    }
+    .intro {
+      @include typography-larger;
+      color: #fff;
+    }
+
+    h2 {
+      color: #fff;
+      @include typography-large;
+    }
+    // make everything grow
+    > *, > * > *, > * > .top > * {
+      flex-grow: 1;
+      flex-shrink: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    > ul {
+      flex-grow: 2;
+      justify-content: center;
+      margin: -30px -30px;
+      padding: 30px 20px;
+      overflow: hidden;
+    }
+    li {
+      @include typography-larger;
+      color: $accent;
+      flex-grow: 0;
+      flex-shrink: 1;
+      flex-basis: 30px;
+      
+      &:first-child {
+        margin-top: 30px;
+      }
+      &:last-child {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: flex;
+        justify-content: center;;
+        flex-direction: column;
+        height: 100%;
+        position: relative;
+        z-index: 1;
+      }
+    }
+
+    .flex {
+      flex-grow: 0;
+      flex-shrink: 10;
+      flex-basis: 30px;
+      max-height: 30px;
+    }
+
+    //@media (max-width: 375px), (min-width: 784px) {
+      .intro {
+        @include typography-normal;
+      }
+
+      .intro, h2 {
+        justify-content:  center
+      }
+      
+      h2 {
+        @include typography-larger;
+      }
+  
+      li {
+        @include typography-normal;
+      }
+    //}
+  }
+  * {
+    z-index: 1;
+  }
+}
+
+.frame, .mask {
+  pointer-events: none;
+}
+.frame {
+  display: block;
+  position: absolute;
+  z-index: 0;
+  top: -50px;
+  bottom: -120px;
+  right: 0;
+  left: 0;
+  background-size: 100% 100%;
+  transition: opacity 4s, transform 4s;
+  transform:  scaleX(1.1);
+  transform-origin: top;
+  opacity: 0.7;
+  &.current {
+    transition: opacity 2s, transform 2s;
+  }
+
+  &[frame="1"] {
+    background:  no-repeat center top url('/assets/images/liquid/1.png');
+  }
+  &[frame="2"] {
+    background:  no-repeat center top url('/assets/images/liquid/2.png');
+  }
+  &[frame="3"] {
+    background:  no-repeat center top url('/assets/images/liquid/3.png');
+  }
+  &[frame="4"] {
+    background:  no-repeat center top url('/assets/images/liquid/4.png');
+  }
+
+  &:not(.current) {
+    opacity: 0.01;
+  }
+}
+
+
+
+.questioning {
+  pointer-events: none;
+
+  .header {
+    opacity: 0;
+  }
+  svg.hole {
+    opacity: 0;
+  }
+  .ambition {
+    transition: opacity 1.5s; 
+    &:not(.chosen) {
+      opacity: 0 !important;
+    }
+  }
+  &.focused { // ios wrapper has issues with links being click through regardless of pointer events
+    .ambition:not(.chosen) {
+      visibility: hidden;
+    }
+  }
+  .chosen {
+//    z-index: 10;
+    //position: relative;
+    .tagline {
+      transition: 0.3s opacity;
+      opacity: 0;
+    }
+  }
+
+  
+}
+
+@keyframes scroll-mask {
+  0% {
+    background-position: 0%  bottom;
+  }
+
+  100% {
+    background-position: 640px bottom;
+  }
+}
+
+@keyframes bounce-wave {
+  0% {
+    transform: translateY(20.00px)
+  }
+  3.13% { transform: translateY(19.74px) }
+  6.25% { transform: translateY(19.09px) }
+  9.38% { transform: translateY(18.08px) }
+  12.50% { transform: translateY(16.75px) }
+  15.63% { transform: translateY(15.16px) }
+  18.75% { transform: translateY(13.35px) }
+  21.88% { transform: translateY(11.41px) }
+  25.00% { transform: translateY(9.42px) }
+  28.13% { transform: translateY(7.44px) }
+  31.25% { transform: translateY(5.57px) }
+  34.38% { transform: translateY(3.88px) }
+  37.50% { transform: translateY(2.43px) }
+  40.63% { transform: translateY(1.28px) }
+  43.75% { transform: translateY(0.48px) }
+  46.88% { transform: translateY(0.06px) }
+  50.00% { transform: translateY(0.04px) }
+  53.13% { transform: translateY(0.41px) }
+  56.25% { transform: translateY(1.17px) }
+  59.38% { transform: translateY(2.27px) }
+  62.50% { transform: translateY(3.69px) }
+  65.63% { transform: translateY(5.35px) }
+  68.75% { transform: translateY(7.21px) }
+  71.88% { transform: translateY(9.17px) }
+  75.00% { transform: translateY(11.17px) }
+  78.13% { transform: translateY(13.12px) }
+  81.25% { transform: translateY(14.94px) }
+  84.38% { transform: translateY(16.57px) }
+  87.50% { transform: translateY(17.94px) }
+  90.63% { transform: translateY(18.99px) }
+  93.75% { transform: translateY(19.68px) }
+  100% {
+    transform: translateY(20.00px)
+  }
+}

@@ -1,0 +1,30 @@
+@import "/style/partials/index.scss";
+.open.open.open.open {
+    padding-bottom: 30px;
+    padding-top: 15px;
+
+    h3:global(.larger) {
+    }
+    
+
+}
+
+.bar {
+    color: $gray;
+    margin-bottom: 10px;;
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    
+    a {
+        text-decoration: underline;
+    }       
+}
+
+.wrapper {
+    margin: 0 -10px -10px;
+    padding: 10px;
+    padding-bottom: 10px;
+    background: rgb(245,244,242);
+    border-radius: 10px 10px 10px 10px;
+}

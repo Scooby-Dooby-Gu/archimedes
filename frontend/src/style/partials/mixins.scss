@@ -1,0 +1,165 @@
+@mixin for-small-phone-only {
+  @media (max-width: 400px) {
+    @content
+  }
+}
+
+@mixin for-phone-only {
+  @media (max-width: 599px) {
+    @content
+  }
+}
+
+@mixin for-tablet-portrait-up {
+  @media (min-width: 600px) {
+    @content
+  }
+}
+
+@mixin for-tablet-landscape-up {
+  @media (min-width: 784px) {
+    @content
+  }
+}
+
+@mixin for-desktop-up {
+  @media (min-width: 1144px) {
+    @content
+  }
+}
+
+@mixin for-big-desktop-up {
+  @media (min-width: 1440px) {
+    @content
+  }
+}
+
+
+@mixin scrolling-shadows($background-color: rgb(255, 255, 255), $shadow-intensity: 0.3, $shadow-color: rgb(0,0,0), $cover-size: 40px, $shadow-size: 14px) {
+
+	background:
+		// Shadow covers 
+		linear-gradient($background-color 30%, rgba($background-color,0)),
+		linear-gradient(rgba($background-color,0), $background-color 70%) 0 100%,
+
+		// Shadows 
+		radial-gradient(farthest-side at 50% 0, rgba($shadow-color,$shadow-intensity), rgba($shadow-color,0)),
+		radial-gradient(farthest-side at 50% 100%, rgba($shadow-color,$shadow-intensity), rgba($shadow-color,0)) 0 100%;
+	background-repeat: no-repeat;
+	background-color: $background-color;
+	background-size: 100% $cover-size, 100% $cover-size, 100% $shadow-size, 100% $shadow-size;
+
+	// Opera doesn't support this in the shorthand 
+	background-attachment: local, local, scroll, scroll;
+}
+
+
+@mixin cover-quiz {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsQuiz-view");
+  background-color: rgb(27, 37, 130);
+  background-size: 500px 586px;
+  background-position: -2rem -7rem;
+}
+@mixin cover-blue {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsBlue-view");
+  background-color: $theme-blue;
+  background-size: 718px 401px;
+  background-position: -5rem -7rem;
+};
+@mixin cover-black {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsBlack-view");
+  background-color: $theme-black;
+  background-size: 783px 546px;
+  background-position: top left;
+};
+@mixin cover-green {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsGreen-view");
+  background-color: $theme-green;
+  background-size: 1150px 401px;
+  background-position: top left;
+};
+@mixin cover-orange {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsOrange-view");
+  background-color: $theme-orange;
+  background-size: 610px 466px;
+  background-position: top left;
+};
+@mixin cover-purple {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsPurple-view");
+  background-color: $theme-purple;
+  background-size: 681px 586px;
+  background-position: top left;
+};
+@mixin cover-red {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsRed-view");
+  background-color: $theme-red;
+  background-size: 799px 528px;
+  background-position: -30rem -2rem;
+};
+@mixin cover-violet {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsViolet-view");
+  background-color: $theme-violet;
+  background-size: 610px 491px;
+  background-position: top left;
+};
+@mixin cover-darkgreen {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsDarkgreen-view");
+  background-color: $theme-darkgreen;
+  background-size: 610px 491px;
+  background-position: top left;
+};
+@mixin cover-darkgray {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsDarkgray-view");
+  background-color: $theme-darkgray;
+  background-size: 610px 491px;
+  background-position: top left;
+};
+@mixin cover-lightblue {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsLightblue-view");
+  background-color: $theme-lightblue;
+  background-size: 610px 491px;
+  background-position: top left;
+};
+@mixin cover-vibrantgreen {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsVibrantgreen-view");
+  background-color: $theme-vibrantgreen;
+  background-size: 1150px 401px;
+  background-position: top left;
+};
+@mixin cover-yellow {
+  background-image: url("/assets/atlas/index.svg#IBackgroundsYellow-view");
+  background-color: $theme-yellow;
+  background-size: 610px 491px;
+  background-position: top left;
+};
+
+
+
+
+
+
+@mixin bevel-corners-bottom($size, $color) {
+  &:before, &:after {
+    content: "";
+    position: absolute;
+
+    height: $size;
+    width: $size * 2;
+
+    bottom: 0;
+  }
+
+  &:after {
+    right: $size * -2;
+
+    border-radius: 0 0 0 $size;
+    box-shadow: -$size 0 0 0 $color;
+  }
+
+  &:before {
+    left: $size * -2;
+
+    border-radius: 0 0 $size 0;
+    box-shadow: $size 0 0 0 $color;
+  }
+}

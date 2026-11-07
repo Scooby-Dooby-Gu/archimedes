@@ -1,0 +1,60 @@
+@import "/style/partials/index.scss";
+
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.page:global(.centered) {
+  flex-grow: 1
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--safe-area-inset-bottom);
+}
+
+.item[index="3"] {
+  margin-top: 10px;
+}
+
+.tagline {
+  //@include typography-largest
+  font-size: 24px;
+  line-height: 32px;;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.item[index="0"] {
+  margin-top: auto;
+}
+.item[index="1"] {
+  margin-bottom: auto;
+}
+.item[index="2"] {
+  margin-top: auto;
+}
+
+
+.header {
+  font-size: 28px;
+  margin: 32px auto 0;
+  width: 300px;
+  max-width: 80%;
+  display: block;
+}
+
+.image {
+  flex-shrink: 5;
+  flex-grow: 0;
+  max-height: 25vh;
+}
+
+.or {
+  color: $light-gray;
+  margin: 0.5rem auto;
+}

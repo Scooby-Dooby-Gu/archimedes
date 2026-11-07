@@ -1,0 +1,181 @@
+@import "/style/partials/index.scss";
+
+.badge {
+  background: $purple;
+  border-radius: 20px;
+  color: #fff;
+  padding: 1px 3px;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.bar {
+
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin: auto 0 0;
+  padding: .45rem 20px .5rem;
+  background: #fff;
+  box-shadow: 0 -8px 16px rgba($near-black, .05);
+  height: 64px;
+
+  a {
+    color: $light-gray;    
+  }
+}
+
+.footer {
+  border-radius: 24px; 
+  display: flex;
+  width: calc(100% - 24px);
+  justify-content: center;
+  margin: auto auto 12px;
+  left: 10px;
+  right: 10px;
+  padding: .45rem 0 .5rem 0;
+  background: #0F0F0E;
+  box-shadow: 0 -0px 2px rgba(#fff, .2);
+  z-index: 4;
+  flex-shrink: 0;
+  max-width: 372px;
+  height: 72px;
+  li[disabled] a{
+    opacity: 0.6;
+    display: block;
+    z-index: 1;
+    position: relative;
+    transition: transform 0.4s, opacity 0.3s;
+  }
+
+  svg[src*="Lock"] {
+    position: absolute;
+    width: 17px;
+    right: 14px;
+    top: -2px;
+    background: #fff;
+    color: #000;
+    border-radius: 30px;;
+    display: block;
+    height: 17px;
+    padding: 2px;
+  }
+
+  li[disabled].clicked {
+    svg {
+      animation: .5s shake;
+    }
+
+    .message {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    &.clicked.clicked {
+
+      a {
+        opacity: 1;
+      }
+      a {
+        transform: scale(1.25);
+      }
+    }
+
+  }
+  li:last-child[disabled] .message{
+    transform: translateY(0);
+    right: 0;
+    left: auto;
+
+  }
+
+
+  li .wide {
+    margin: 0 -15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+  }
+
+  li.big {
+    position: relative;
+    a {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      padding-top: 2rem
+    }
+  }
+
+
+
+  li {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 5rem;
+    text-align: center;
+    list-style: none;
+    flex-shrink: 1;
+    position: relative;
+  }
+
+
+  a {
+    &, ~ svg {
+      color: #fff;
+    }
+    div {
+      display: none;
+    }
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 500;
+
+    &.active {
+      &, ~ svg {
+        color: $teal;
+      }
+    }
+  }
+
+  .avatar {
+    width: 25px;
+    height: 25px;
+    margin: 3px 0 -3px;
+  }
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.message {
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  transition: 0.4s opacity, 0.3s transform;;
+  box-shadow: 0 -16px 16px rgba(0,0,0,0.16);  
+  background: #fff;
+  min-width: 220px;
+  @include typography-smaller;
+  padding: 20px;
+  border-radius: 20px 20px 0 0;
+}
+@keyframes shake {
+  0% { transform: translate(15px); opacity: 1; }
+  20% { transform: translate(-15px); }
+  40% { transform: translate(7px); }
+  50% {  opacity: 0.5 }
+  60% { transform: translate(-7px); }
+  80% { transform: translate(4px); }
+  100% { transform: translate(0px); opacity: 1; }
+}

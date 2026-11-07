@@ -1,0 +1,402 @@
+@import "/style/partials/index.scss";
+.chart {
+  min-height: 220px;
+  margin: -10px -10px 0 -40px;
+}
+
+.kind {
+  text-transform: uppercase;
+  color: $light-gray;
+  text-align: center;
+  //@include typography-smaller
+  font-size: 13px;
+  line-height: 16px;;
+}
+
+
+.bar {
+  margin-top: calc(var(--safe-area-inset-top) + 10px);
+  display: flex;
+  width: 100%;
+  justify-content: center;
+
+  .next, .previous {
+    margin-top: 20px;
+    color: #999;
+    position: relative;
+  }
+  .next {
+    margin-left: 10px;
+  }
+  .previous {
+    margin-right: 10px;
+  }
+  > div {
+    margin: 0 -40px;
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  h1 {
+    //@include typography-large
+    font-size: 22px;
+    line-height: 28px;;
+    font-weight: bold;
+    text-align: center;;
+    margin-top: 5px;
+  }
+}
+
+.close {
+  position: absolute;
+  z-index: 2;
+  right: 15px;
+  top: calc(var(--safe-area-inset-top) + 10px);
+  color: $light-gray;
+  height: 2rem;
+  width: 4rem;
+  margin-right: -1.75rem;
+  pointer-events: all !important;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+}
+
+
+  .inventory {
+    display: flex;
+    width: 100%;
+    position: relative;
+    flex-shrink: 0;
+
+    margin-bottom: 20px;
+  
+    input {
+      position: absolute;
+      top: -1px;
+      //@include typography-large
+      font-size: 22px;
+      line-height: 28px;;
+      font-weight: bold;
+      line-height: 1;
+      left: 0;
+      right: 0;
+      border: 0;
+      width: 5rem;
+      margin: 0 auto;
+      border-radius: 4px;
+      padding: 11px 0 10px 0;
+      opacity: 0.1;
+      font-family: inherit;
+      transition: 0.3s opacity;
+      text-align: center;
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+          /* display: none; <- Crashes Chrome on hover */
+          -webkit-appearance: none;
+          margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+      }
+  
+      &[type=number] {
+          -moz-appearance:textfield; /* Firefox */
+      }
+      &:not(:focus) {
+        color: transparent;
+        border-color: transparent;
+      }
+      &:focus {
+        opacity: 1;
+
+        ~ p {
+          text-align: center;
+          opacity: 1;
+        }
+      }
+      ~ p {
+        padding-top: 5px;
+        color: $light-gray;
+        position: absolute;
+        left: 0;
+        right: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+        opacity: 0;
+      }
+    }
+  
+    > * {
+      flex-grow: 1;
+      align-items: center;
+    }
+    .account {
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+      display: block;
+      line-height: 1;
+      color: $gray;
+      font-weight: normal;
+    }
+  
+    
+  
+  
+    .amount {
+      width: 30%;
+      flex-grow: 0;
+      text-align: center;
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+      line-height: 1;
+  
+      strong {
+        display: block;
+        //@include typography-large
+        font-size: 22px;
+        line-height: 28px;;
+        line-height: 1;
+      }
+    }
+  
+    :global(.button[hidden]) {
+      opacity: 0;
+    }
+
+    :global(.button) {
+      min-width: 5rem;
+      box-shadow: 0 0px 8px rgba(0,0,0,0.06);
+    }
+  
+    ~ .inventory {
+      margin-top: 20px;
+    }
+  
+    ~ p {
+      margin-top: 20px;
+    }
+  }
+
+
+.stats {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin: -20px -20px 0;
+  .color {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 5px;
+    border-radius: 8px;
+    vertical-align: top;
+    margin-top: 4px;
+  }
+  .row {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 24px;;
+  }
+  dt {
+    padding-left: 20px;
+    flex-basis: 60%;
+    flex-grow: 1;
+    text-transform: uppercase;
+    color: gray;
+    border-bottom: 1px solid $ghostly-gray;
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    line-height: 25px;
+  }
+  dd {
+    padding-right: 20px;
+    flex-basis: 40%;
+    text-align: right;
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    line-height: 25px;
+    border-bottom: 1px solid $ghostly-gray;
+
+    strong {
+      margin-right: 10px;
+    }
+  }
+  margin-bottom: 30px;
+}
+
+.description {
+  //@include typography-smaller
+  font-size: 13px;
+  line-height: 16px;;
+}
+
+.inventory ~ .news {
+  margin-top: 40px;
+
+}
+
+
+.table {
+  width: calc(100% + 40px);
+  text-align: left;
+  border-collapse: collapse;
+  margin: 50px -20px 20px;
+  th, td {
+    padding: 0;
+  }
+
+  tr[portfolio] {
+    &, & {
+      cursor: pointer;
+    }
+  }
+
+  .price {
+    svg {
+      position: absolute;
+      right: 5px;
+      margin-top: -4px;
+      color: $light-gray;
+    }
+    strong {
+      display: block;
+    }
+  }
+  th > a {
+    color: inherit;
+    font-weight: bold;
+    text-decoration: none;
+
+    svg {
+      margin-top: -6px;
+      margin-bottom: -5px;
+      margin-left: -8px;
+    }
+  }
+  table-layout: fixed;
+
+  .amount {
+    text-align: right;
+    padding-right: 20px;
+    width: 30px;
+  }
+  small {
+    margin-top: 2px;
+    color: $light-gray;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    &:not([hidden]) {
+      display: block;
+    }
+  }
+  th:first-child, td:first-child {
+    padding-left: 20px;
+  }
+  th.year {
+    color: $light-gray;
+  }
+  th.year, th.price {
+    width: 4rem;
+  }
+  th.amount {
+    width: 4rem;
+  }
+
+  th.operation {
+    width: 4.5rem;
+  }
+
+  th.price strong {
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    margin-left: -12px;
+  }
+
+  .legend {
+    //@include typography-smallest
+    font-size: 12px;
+    line-height: 14px;;
+    color: $light-gray;
+    th {
+      border-bottom: 1px solid $light-gray;
+      line-height: 24px;
+    }
+  }
+
+  .heading.standalone {
+    th {
+      padding-bottom: 10px;
+    } 
+  }
+
+  .heading {
+    th {
+      padding-top: 10px;
+      border-top: 1px solid $ghostly-gray;
+      padding-bottom: 5px;
+    }
+    th {
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+      vertical-align: top;
+    }
+    th:last-child {
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+      font-weight: bold;
+    }
+  }
+
+  .breakdown {
+    margin-top: -5px;
+    tr:last-child {
+      td {
+        padding-bottom: 8px;
+      }
+    }
+    th:first-child {
+      padding-left: 40px;
+      color: $gray;
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+      line-height: 18px;
+    }
+    td:last-child {
+      color: $gray;
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+      line-height: 18px;
+    }
+  }
+
+  .total {
+    th {
+      padding-top: 5px;
+      font-weight: bold;;
+    }
+  }
+
+  th {
+    font-weight: normal;
+  }
+
+}
+
+.empty {
+  padding: 5px 20px;
+  color: $light-gray;
+}

@@ -1,0 +1,80 @@
+@import "/style/partials/index.scss";
+.form {
+  text-align: center;
+}
+
+.form.form textarea {
+  margin-top: 2rem !important;
+  border: 0;
+  width: 100%;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 1px solid $light-gray;
+  background: #fff;
+
+  &:placeholder-shown {
+    height: 2rem;
+  }
+}
+
+.section {
+  padding: 20px;
+  h2 {
+    @include typography-larger;
+  }
+  p {
+    margin: 10px auto;
+  }
+
+  :global(.button) {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  > * {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  ~ .section {
+    background: linear-gradient(#eee, #fff);
+    margin: 0 -20px -20px;
+  }
+}
+
+.success {
+  color: $green;
+}
+
+.section .or {
+  margin: 0 auto 20px;
+  display: block;
+  color: $gray;
+  font-style: italic;
+  @include typography-larger;
+}
+
+
+
+.management {
+  color: #999;
+  border-radius: 10px;
+  display: block;
+  margin-top: 10px;
+  box-shadow: 0 8px 8px rgba(0,0,0,0.08);
+
+  input:checked {
+    ~ p, ~ label {
+      color: $green;
+    }
+  }
+  p {
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    max-width: 400px;
+    padding: 10px;
+    margin: 0 auto;
+
+  }
+}

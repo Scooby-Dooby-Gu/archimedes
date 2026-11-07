@@ -1,0 +1,36 @@
+@import "/style/partials/index.scss";
+.wrapper {
+  padding: 2px 0px;
+  border-bottom: 1px solid $gray;
+  position: relative;
+  padding-top: var(--safe-area-inset-top);
+  padding-bottom: 10px;
+  display: block;
+
+  transition: height 0.3s, padding 0.1s;
+  height: 28px;
+  height: calc(28px + var(--safe-area-inset-top));
+  overflow: hidden;
+
+  &[hidden] {
+    display: block;
+    height: 0px;
+    padding-top: 0;
+    padding-bottom: 0;;
+    border: 0;
+  }
+
+  &:global(.full):not([hidden]) {
+    padding-top: calc(15px + var(--safe-area-inset-top));
+    height: calc(3.5rem + var(--safe-area-inset-top));
+    color: transparent;
+  }
+
+  svg {
+    height: 26px;
+    margin-top: -2px;
+    margin-right: -5px;
+  }
+
+  text-decoration: none;
+}

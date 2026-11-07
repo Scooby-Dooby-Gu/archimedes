@@ -1,0 +1,12 @@
+@import "/style/partials/index.scss";
+.pinned.pinned.pinned.pinned {
+  margin-bottom: 30px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+
+  + li {
+    border-top: 0;
+    &.pinned {
+      margin-top: -29px;
+    }
+  }
+}

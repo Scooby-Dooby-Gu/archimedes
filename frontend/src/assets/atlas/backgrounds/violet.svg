@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="610px" height="491px" viewBox="0 0 610 491" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>Cover - 1</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Cover---1" transform="translate(0.000000, 25.000000)">
+            <rect id="Rectangle" fill="#321D53" x="519" y="0" width="66" height="240" rx="2"></rect>
+            <polygon id="Triangle" fill="#757CA6" opacity="0.183942522" points="201.5 -9 312 120 91 120"></polygon>
+            <polygon id="Triangle-Copy-7" fill="#757CA6" opacity="0.183942522" points="499.5 337 610 466 389 466"></polygon>
+            <polygon id="Triangle-Copy-2" fill="#1E213D" points="139.5 -25 193 38 86 38"></polygon>
+            <polygon id="Triangle-Copy" fill="#1E213D" opacity="0.285435268" transform="translate(66.500000, 294.500000) rotate(-270.000000) translate(-66.500000, -294.500000) " points="66.5 228 173 361 -40 361"></polygon>
+        </g>
+    </g>
+</svg>

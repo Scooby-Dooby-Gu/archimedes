@@ -1,0 +1,170 @@
+@import "/style/partials/index.scss";
+.top {
+  background: #fff;
+  margin: -20px -20px 20px;
+  padding: 20px;
+}
+
+.expanded {
+  max-width: calc(100% + 40px);
+  height: auto; 
+  margin: 20px -20px 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+}
+
+.collapsed {
+  margin-top: 20px;
+  max-height: 300px;
+  max-width: 100%;
+  width: auto;
+}
+
+
+.reply_link {
+  position: absolute;
+  top: 57px;
+  width: 50px;
+  text-align: center;
+  left: -5px;
+  color: $gray;
+  &[disabled] {
+    text-decoration: none;
+    color: $green;
+  }
+}
+.post {
+  margin-top: 10px;
+}
+
+.bar {
+  font-weight: 800;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+
+.replying {
+  //@include typography-smaller
+  font-size: 13px;
+  line-height: 16px;;
+  color: $gray;
+  span, a {
+    color: $near-black;
+  }
+}
+
+.replies {
+  flex-grow: 1;
+}
+
+.reply {
+  border-top: 1px solid $lightest-gray;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  margin: 0 -20px;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+
+  .reply_body {
+    //@include typography-small
+    font-size: 12px;
+    line-height: 16px;;
+    flex-grow: 1;
+    margin-right: 10px
+  }
+}
+
+.focused {
+  background: $background-green;
+}
+
+.request {
+  background: $lightest-gray;
+  margin: -20px -20px 40px;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid $light-gray;
+  border-bottom: 1px solid $light-gray;
+
+  :global(.button) {
+    margin-top: 10px;
+  }
+
+  time {
+    color: #333333;
+    font-weight: bold
+  }
+
+  p {
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+  }
+}
+
+
+.date {
+  //@include typography-small
+  font-size: 12px;
+  line-height: 16px;;
+  margin-top: 12px;
+}
+
+.respond {
+  :global(.button) {
+    margin-top: 1rem;
+  }
+
+}
+
+.votes {
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -5px;
+
+  .score {
+    font-weight: bold;
+    //margin: -10px 0;
+  }
+  
+
+  svg {
+    color: $light-gray;
+    widows: 4rem;
+    height: 4rem;
+  }
+
+  .active svg{
+    color: $purple;
+  }
+
+  a:first-of-type svg {
+    margin: -20px 4px -20px;
+    display: block;
+    position: relative;
+    z-index: 1;;
+  }
+  
+}
+.prompt {
+  margin: 0 -20px ;
+  border-radius: 0;
+  max-height: 150px;
+
+}
+
+:global(.meta) .remove {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: $gray;
+  margin: 0 0 -1rem;
+  position: absolute;
+  right: 0.5rem;
+  margin-top: 2.5rem;
+}

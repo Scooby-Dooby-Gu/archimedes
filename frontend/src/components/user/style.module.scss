@@ -1,0 +1,47 @@
+@import "/style/partials/index.scss";
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 0;
+  align-self: center;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.avatar {
+  margin-right: .5rem;
+  object-fit: cover;
+  display: block;
+
+  &:global(.huge) {
+    width: 8rem;
+    height: 8rem;
+    border: 3px solid #fff;
+  }
+  &:global(.small) {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+.crown {
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  top: -14px;
+  left: -2px;
+  transform: rotateZ(-25deg);
+  stroke-width: 1;
+  color: #A57164 !important;
+}
+
+.picture {
+  display: inline-block;
+  position: relative;
+  stroke: lighten(#A57164,40%);
+  color: #A57164 !important;
+}

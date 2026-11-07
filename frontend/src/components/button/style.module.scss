@@ -1,0 +1,200 @@
+@import "/style/partials/index.scss";
+@import "/style/partials/index.scss";
+
+.button {
+  border-radius: 8px;
+  border: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  text-decoration: none;
+  transition: background-color, color 0.35s;
+  padding: 10px;
+  font-weight: 500;
+  justify-content: center;
+  vertical-align: middle;
+  background-color: white;
+  color: $near-black;
+  font-size: inherit;
+  outline: none;
+  flex-shrink: 0 !important;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.08);
+  position: relative;
+
+
+  + .button {
+    margin-top: 10px;
+  }
+
+  @media (hover) {
+
+    &:hover:not([disabled]){
+      background-color: $near-black;
+      color: white;
+    };
+  }
+
+  &:not([disabled]) {
+    cursor: pointer;
+  }
+
+  /*
+  &.active {
+    color: white;
+    background-color: $purple;
+    &:hover:not([disabled]) {
+      background-color: $dark-purple;
+    }
+  }*/
+
+  &[disabled] {
+    opacity: 0.5
+  }
+
+
+  &:global(.shadow) {
+    box-shadow: 0 -1px 10px 0 rgba(0, 0, 0, 0.08);
+  }
+
+
+  &:global(.wide) {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    display: flex;
+  }
+
+  &:global(.compact) {
+    padding: 7px;
+  }
+
+  &:global(.small) {
+    padding: 2px 16px;
+  }
+
+  &:global(.primary) {
+    color: white;
+    background-color: $purple;
+    &:hover:not([disabled]) {
+      background-color: $dark-purple;
+    }
+  }
+
+
+  &:global(.optional) {
+    color: $dark-purple;
+    background-color: $light-purple;
+    &:hover:not([disabled]) {
+      background-color: $purple;
+      color: white;
+    }
+  }
+
+  &:global(.transparent) {
+    color: inherit;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.4);
+  }
+  &:global(.semi-transparent) {
+    color: inherit;
+    background: rgba(255,255,255,0.5);
+    border: 2px solid rgba(255,255,255,0.4);
+  }
+
+  &:global(.green) {
+    background: $green;
+    color: #fff;
+
+    &:hover:not([disabled]){
+      background: darken($green, 20%);
+      color: white;
+    }
+  }
+
+  &:global(.white) {
+    background: #fff;
+    color: #000;
+  }
+
+  &:global(.yellow) {
+    background: $yellow;
+    color: #000;
+  }
+
+  &:global(.gray) {
+    background: transparent;
+    color: $gray;
+    &:hover {
+      background: transparent;
+      color: #000;
+    }
+  }
+
+  &:global(.round) {
+    padding: 5px 10px;
+    border-radius: 2rem;
+  }
+
+  &:global(.circle) {
+    width: 3rem;
+    height: 3rem;
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    padding: 0;
+  }
+    
+
+  [class*="icon"] {
+    margin-left: -.25rem;
+    margin-right: .5rem;
+    margin-top: -.5rem;
+    margin-bottom: -.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  :global(.IIconsChevronLeft) {
+    margin-top: -.35rem;
+  }
+
+  :global(.IIconsChevronRight) {
+    margin-top: -.25rem;
+  }
+
+
+  &[class*="icon-right"] [class*="icon"]{
+    order: 2;
+    margin-left: .25rem;
+    margin-right: -.25rem;
+  }
+
+  :global(.badge) {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: $yellow;
+    border-radius: 20px;
+    stroke-width: 2;
+    width: 24px;
+    height: 24px;
+    padding: 5px;
+    stroke: #fff;
+    color: #fff;
+  }
+
+  &:global(.themed) {
+    color: #fff;
+    border-color: var(--theme-primary);
+  }
+}
+
+:global {
+  .buttons {
+    width: 100%;
+    .button {
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+  }
+}

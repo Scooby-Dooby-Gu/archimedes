@@ -1,0 +1,9 @@
+.cache
+node_modules
+/dist
+/.cache
+/*.log
+wmr/
+**/.DS_Store
+size-plugin.json
+.env

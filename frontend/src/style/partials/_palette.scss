@@ -1,0 +1,94 @@
+
+
+@function palette-diff($palette) {
+  $base: map-get($palette, 'base');
+  $colors: map-get($palette, 'colors');
+  $diffs: ();
+
+  @each $color in $colors {
+    $diffs: append($diffs, color-diff($base, $color));
+  }
+
+  @return $diffs;
+}
+@function color-diff($a, $b) {
+  $sat: saturation($a) - saturation($b);
+  $lig: lightness($a) - lightness($b);
+  $fn-sat: if($sat > 0, 'desaturate', 'saturate');
+  $fn-lig: if($lig > 0, 'darken', 'lighten');
+
+  @return (
+    adjust-hue: -(hue($a) - hue($b)),
+    #{$fn-sat}: abs($sat),
+    #{$fn-lig}: abs($lig)
+  );
+}
+@function create-palette($base-color) {
+  $palette: ();
+
+  @each $diff in $palette-diff {
+    $palette: append($palette, apply-diff($base-color, $diff));
+  }
+
+  @return $palette;
+}
+@function apply-diff($color, $diff) {
+  @each $function, $value in $diff {
+    $color: call(get-function($function), $color, $value);
+  }
+
+  @return $color;
+}
+@function palette($base-color) {
+  $colors: create-palette($base-color);
+  $keys: 'primary' 'secondary' 'background' 'dark';
+  $palette: (hue: -(hue(map-get($base-palette, 'base')) - hue($base-color)),
+            huered: (hue($red) - hue($base-color)));
+
+  @for $i from 1 through min(length($colors), length($keys)) {
+    $palette: map-merge($palette, (nth($keys, $i): nth($colors, $i)));
+  }
+
+  @return $palette;
+}
+
+@function primary($palette) {
+  @if not map-has-key($palette, 'primary') {
+    @warn "`#{inspect($palette)}` doesn't seem to have a key named `primary`.";
+  }
+
+  @return map-get($palette, 'primary');
+}
+
+@function background($palette) {
+  @if not map-has-key($palette, 'background') {
+    @warn "`#{inspect($palette)}` doesn't seem to have a key named `background`.";
+  }
+
+  @return map-get($palette, 'background');
+}
+
+@function secondary($palette) {
+  @if not map-has-key($palette, 'secondary') {
+    @warn "`#{inspect($palette)}` doesn't seem to have a key named `secondary`.";
+  }
+
+  @return map-get($palette, 'secondary');
+}
+
+@function dark($palette) {
+  @if not map-has-key($palette, 'dark') {
+    @warn "`#{inspect($palette)}` doesn't seem to have a key named `dark`.";
+  }
+
+  @return map-get($palette, 'dark');
+}
+@mixin theme($palette) {
+  --theme-primary: #{primary($palette)};
+  --theme-secondary: #{secondary($palette)};
+  --theme-background: #{background($palette)};
+  --theme-background-transparent: #{rgba(background($palette), 0)};
+  --theme-dark: #{dark($palette)};
+  --theme-hue: #{map-get($palette, 'hue')};
+  --theme-accent-color: #fff;
+}

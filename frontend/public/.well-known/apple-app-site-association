@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "785LT86GCK.com.getmedes.frontend",
+                "paths": [ "*" ]
+            }
+        ]
+    }
+}

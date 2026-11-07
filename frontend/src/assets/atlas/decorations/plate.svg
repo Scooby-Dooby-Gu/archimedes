@@ -1,0 +1,15 @@
+<svg width="22" height="22" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill-rule="evenodd" clip-rule="evenodd" stroke-linecap="round" stroke-miterlimit="10">
+  <path fill="none" d="M0 0h21.6v21.6H0z"/>
+  <g clip-path="url(#_clip1)">
+    <path d="M-15.479 23.871v23.412s.187 8.72 10.638 8.72H158.83s10.571 1.308 10.571 11.572v28.711" fill="none" stroke="var(--theme-primary)" stroke-width=".5"/>
+    <g opacity=".5">
+      <path d="M1.89 11.2c.011 2.72 4.034 4.92 8.986 4.914 4.953-.006 8.96-2.215 8.95-4.935-.011-2.72-4.035-4.919-8.988-4.914C5.886 6.271 1.879 8.48 1.89 11.2" fill="var(--theme-primary)" fill-rule="nonzero"/>
+      <path d="M1.882 11.2c.003 2.718 4.028 4.92 8.981 4.914 4.954-.006 8.973-2.217 8.97-4.935-.003-2.718-4.028-4.92-8.981-4.914-4.954.006-8.973 2.217-8.97 4.935z" fill="none" stroke="var(--theme-primary)" stroke-width="3.01"/>
+    </g>
+    <path d="M21.325 10.921c0 1.171-.763 2.237-1.673 3.152-1.736 1.744-5.489 3.044-8.773 3.048h-.021c-5.187 0-10.538-2.868-10.433-6.17-.464 3.622 4.691 6.803 10.434 6.803h.022c3.546-.005 6.853-1.08 8.774-3.01 1.104-1.109 1.698-2.156 1.67-3.823" fill="var(--theme-primary)" fill-rule="nonzero"/>
+    <use xlink:href="#_Image4" x="6" y="11" width="8.836" height="3.927" transform="matrix(.98182 0 0 .98182 0 0)"/>
+  </g>
+  <defs>
+    <image id="_Image4" width="9" height="4" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAECAYAAABcDxXOAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAW0lEQVQImS3NuwrCQBhE4W/XxQuu22xvHsD3f5VU6VKnkSQKCtr8AwMH5sAk6LVlXKJXJOzY8C69tooP7nhgQMaMEVPBEV8cgs8hnVCQk0ivLcVwi7sVr2V9/v5TZQ6QSZD4bgAAAABJRU5ErkJggg=="/>
+  </defs>
+</svg>

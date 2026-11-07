@@ -1,0 +1,8 @@
+@import "/style/partials/index.scss";
+.directions {
+  > li {
+    list-style: decimal;
+    display: list-item;
+    margin-left: 10px;
+  }
+}

@@ -1,0 +1,37 @@
+#!/bin/sh
+
+data=`cat schema/schema.sql schema/views.sql schema/achievements.sql`;
+echo "$data" | psql archimedes-temp;
+
+time=`date +%s`;
+migration=`migra postgresql://localhost/archimedes postgresql://localhost/archimedes-temp --unsafe`
+
+cat << EOF
+  ## Generated migration:
+$migration
+  ## schema/migrations/$time.sql
+EOF
+
+template=$(cat <<EOM
+DO
+\$do\$
+BEGIN 
+  IF NOT (SELECT EXISTS(SELECT 1 FROM information_schema.schemata 
+              WHERE schema_name = 'private'))
+     OR obj_description('private'::regnamespace, 'pg_namespace') is null
+     OR obj_description('private'::regnamespace, 'pg_namespace')::bigint < '$time'::bigint THEN
+    
+    RAISE LOG 'Migrating $time.sql';
+$migration
+
+    COMMENT ON SCHEMA private IS '$time';
+  END IF;
+END;
+\$do\$;
+EOM);
+
+
+if [ ! -z "$migration" ]
+then
+  echo "$template" > "schema/migrations/$time.sql"
+fi

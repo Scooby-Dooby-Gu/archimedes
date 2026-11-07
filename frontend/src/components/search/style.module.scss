@@ -1,0 +1,13 @@
+@import "/style/partials/index.scss";
+.form {
+  input {
+    background: .5rem center no-repeat url(/assets/atlas/index.svg#IIconsSearch-view);
+    background-size: 1.3rem 1.3rem;
+    width: 100%;
+    background-color: rgba(236, 234, 231, 0.53);
+    border-radius: 10px;
+    border: 0;
+    padding: 5px 16px 5px 32px;
+  }
+
+}

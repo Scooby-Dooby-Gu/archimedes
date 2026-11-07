@@ -1,0 +1,117 @@
+@import "/style/partials/index.scss";
+
+.bar {
+  //@include typography-smallest
+  font-size: 12px;
+  line-height: 14px;;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  height: 100%;
+
+  white-space: nowrap;
+
+  &.consultations > div{
+    background-color: #999;
+  }
+
+  &.over {
+    opacity: 0;
+  }
+
+  &.decisions > div {
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.32);
+    &:after {
+      display: block;
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin: 0 auto 0;
+      border-color: $jade transparent;
+      border-style: solid;
+      height: 0px;
+      width: 0px;
+      border-width:  10px 10px 0 10px;
+    }
+  }
+  /*&.stocks {
+    margin-left: 10%;
+  }*/
+
+ > div {
+    height: 30px;
+    margin-top: 10px;
+    border-radius: 0 0 5px 5px;
+    padding: 0 20px;
+    display: inline-flex;
+    flex-grow: 0;;
+    transition: background-color 0.3s, max-width .3s, opacity 0.3s;
+    background-color: $jade;
+    border-radius: 5px;
+    
+    justify-content: center;
+    align-items: center;
+
+    .or {
+      margin-left: 1rem;
+      margin-right: 1rem;
+      font-style: italic;
+    }
+  }
+  svg {
+    margin-left: 0px;
+    margin-top: 2px;
+    &:global(.IIconsChevronRight) {
+      margin-right: -10px;
+    }
+    &:global(.IIconsDown) {
+      margin-right: -10px;
+    }
+    &:global(.IIconsClock) {
+      height: 1rem;
+      width: 1rem;
+      margin-left: 5px;
+      margin-top: -1px;
+    }
+    &:global(.IIconsSpinner) {
+      margin-left: 8px;
+      margin-right: -12px;
+      height: 1rem;
+      width: 1rem;
+    }
+  }
+  &[hidden] {
+    display: block;
+    opacity: 0;
+    pointer-events: none;
+  }
+  &[disabled] {
+    pointer-events: none;
+  }
+}
+
+.wrapper.wrapper {
+  z-index: 2;
+  position: absolute;
+  color: #fff;
+  flex-shrink: 0;
+  left: 0;
+  right: 0;
+  margin-top: -50px;
+  height: 50px;
+  transition: max-width 0.4s, height 0.4s;
+
+  > a {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+  }
+}
+
+
+:global(.footerHidden) .bar > div {
+  opacity: 0;
+}

@@ -1,0 +1,39 @@
+@import "/style/partials/index.scss";
+
+
+
+
+:global(.course.preview) {
+  filter: grayscale(80%);
+  * {
+    cursor: default;
+  }
+  :global(.meta) {
+    opacity: 0.01;
+  }
+  h3, :global(.button) {
+    opacity: 0.6;
+    //pointer-events: none;
+  }
+  :global(.button) {
+    border-style: dashed;
+  }
+}
+
+.progress.progress {
+  position: absolute;
+  bottom: 10px;;
+  opacity: 0.7;
+  left: 20px;
+  right: 20px;
+  width: auto;
+}
+
+[route="courses"] {
+  [index="parent"] {
+    text-decoration: underline;
+  }
+  svg[src*="ChevronLeft"] {
+    display: none;
+  }
+}

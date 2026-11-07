@@ -1,0 +1,53 @@
+@import "/style/partials/index.scss";
+.confetti {
+  opacity: 0.5;
+}
+
+.root {
+  pointer-events: none;
+  padding: 10px 20px;
+  padding-top: calc(10px + var(--safe-area-inset-top));
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  transition: transform 0.3s, opacity 0.3s;
+  flex-shrink: 0;;
+  overflow: hidden;
+  z-index: 200;
+  box-shadow: 0 16px 16px rgba(0,0,0,0.16);
+
+  &[hidden] {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+}
+
+.root > * {
+  z-index: 5;
+}
+
+.root h2 {
+  margin-bottom: 10px;
+}
+
+.root img {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+  float: left;
+  margin-top: 0.5rem;
+}
+
+.root .name {
+  font-weight: bold;
+  //@include typography-larger
+  font-size: 17px;
+  line-height: 1.3;;
+}
+
+.root .summary {
+  color: rgba(255,255,255,0.6);
+}

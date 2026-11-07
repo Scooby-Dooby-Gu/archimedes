@@ -1,0 +1,96 @@
+@import "/style/partials/index.scss";
+.link {
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+    display: inline-block;
+    font-style: italic;
+}
+
+
+.holder {
+    position: static;
+}
+
+.wrapper.wrapper.wrapper.wrapper {
+    position: absolute;
+    background: $teal;
+    box-shadow: 0 16px 32px rgba(0,0,0, 0.3);
+    border-radius: 20px;
+    padding: 10px 30px 10px 10px;
+    z-index: 11;
+    width: 100%;
+    margin-top: 40px;
+    max-width: 500px;
+    display: block;
+    opacity: 1;
+    @media (min-width: 600px) {
+        
+        left: calc(50% - 250px);
+        .tip {
+            display: none;
+        }
+    }
+
+    transition: opacity 0.3s;
+
+    &[hidden] {
+        display: block;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    h3 {
+        color: #333;
+        margin-bottom: 0;
+        margin-top: 10px;
+    }
+
+    svg[src*="Book"] {
+        width: 24px;
+        height: 24px;
+        margin-top: -3px;
+    }
+
+    > div {
+        border-left: 2px dotted #666;
+        padding-left: 15px;
+        margin-left: 11px;
+        margin-top: 5px;
+        margin-bottom: 5px;;
+    }
+    
+    figure:first-of-type {
+        margin-top: 0;
+    }
+
+    .tip {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin-left: 2px;
+
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            border-color: $teal transparent;
+            border-style: solid;
+            height: 0px;
+            width: 0px;
+            margin-left: -10px;
+            margin-top: -13px;
+            border-width: 0 15px 15px 15px;
+        }
+    }
+    
+}
+
+.close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 24px;
+    height: 24px;
+}

@@ -1,0 +1,31 @@
+@import "/style/partials/index.scss";
+
+.top {
+  left: 0;
+  right: 0;
+  margin: -75px auto 0;
+  max-width: 350px;
+  text-align: center;
+  p {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+
+  a {
+    color: $purple !important;
+    text-decoration: underline;
+  }
+
+  > a, > a svg {
+    color: $near-black;
+  }
+
+  background: #fff;
+  border-radius: 5px 5px 20px 20px;
+  padding: 20px;
+}
+.intro {
+  margin-top: 70px;
+  margin-bottom: -20px;
+}

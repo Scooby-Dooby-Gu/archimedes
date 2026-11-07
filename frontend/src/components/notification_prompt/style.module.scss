@@ -1,0 +1,31 @@
+@import "/style/partials/index.scss";
+.wrapper {
+  max-height: 300px;
+  opacity: 1;
+  transition: max-height 0.3s, opacity 0.3s;
+  overflow: hidden;
+  position: relative;
+
+  background: $dark-purple;
+  color: #fff;
+  text-align: center;
+
+  p {
+    margin-bottom: 20px;
+  }
+  padding: 20px;
+  border-radius: 16px;
+  &[hidden] {
+    display: block;
+    max-height: 0;
+    opacity: 0;
+  }
+
+  svg {
+    position: absolute;
+    right: 13px;
+    top: 18px;
+    opacity: 0.5;
+    padding: 3px;
+  }
+}

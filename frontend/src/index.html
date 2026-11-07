@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" class="wrapper">
+	<head>
+		<meta charset="utf-8" />
+    <title>Archimedes - Your investment coach</title>
+		<meta property="og:url" content="https://app.getmedes.com" />
+    <meta property="og:type" content="game" />
+    <meta property="og:title" content="Archimedes - Your investment coach" />
+    <meta property="description" content="Gain the confidence to make investing a bigger part of your life" />
+    <meta property="og:description" content="Gain the confidence to make investing a bigger part of your life" />
+    <meta property="og:image" content="https://app.getmedes.com/opengraph.png" />
+    <meta property="twitter:creator" content="archimedesapp" />
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" sizes="256x256" href="/assets/images/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#F7BB52">
+    <meta name="msapplication-TileColor" content="#3542BA">
+		<meta name="theme-color" content="#3542BA">
+		<link rel="manifest" href="/app-manifest.json" />
+
+	</head><script>
+		window.global = window;
+		if (typeof localStorage == 'undefined')
+			window.localStorage = {
+				setItem: () => {},
+				getItem: () => {},
+				removeItem: () => {}
+			};
+
+
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		console.row = (color, type, action = '', label = '', ...columns) => {
+			var formattedType = ' ' + type.padEnd(7)
+			var string = ''
+			var args = []
+			
+			string += '%c%s%c'
+			args.push(`background: ${color}; color: #fff; border-radius: 2px;`, formattedType, '');
+			
+			string += ' %c%s%c';
+			args.push('font-weight: bold', action, '');
+
+			string += '%s%c%s%c  ';
+			args.push(console.flex(50, formattedType + label + action), 'color: #ccc', label, '');
+
+
+			columns.forEach((column) => {
+				//string += '%c%s%c';
+				string += '%O\t'
+				args.push(column);
+			})
+
+			return [string, ...args]
+		}
+
+		console.labelObject = (object, label) => {
+			const newObject = { ... object} 
+			Object.defineProperty(newObject, Symbol.toStringTag, {
+				value: label,
+				enumerable: false
+			})
+			return newObject;
+		}
+
+		console.flex = (width, value) => {
+			return (new Array(Math.max(0, width - value.length))).join(' ')
+		}
+
+		function track() {
+			ga.apply(ga, arguments);
+			if (arguments[1] === 'event') {
+				if (window.Sentry) Sentry.addBreadcrumb({
+					category: arguments[2],
+					message: JSON.stringify(Array.prototype.slice.call(arguments, 2)),
+					level: Sentry.Severity.Info
+				});
+
+				if (arguments[2] === 'Source') {
+					ga(['_setCampSource', arguments[3]])
+					ga(['_setCampName', arguments[4]])
+				}  else if (arguments[2] == 'Email') {
+					ga(['_setCampSource', 'Email'])
+					ga(['_setCampName', arguments[3]])
+				}
+			}
+			console.log(...console.row('rgb(84, 110, 122)', 'track ', arguments[0], arguments[1], ...Array.prototype.slice.call(arguments, 2)))
+
+			if (window.fetchFromAPI) {
+				if (arguments[1] === 'event') {
+					return fetchFromAPI('/logs', {
+						method: 'post',
+						data: {
+							type: 'event',
+							category: arguments[2],
+							action: arguments[3],
+							label: arguments[4],
+							value: arguments[5],
+							uid: arguments[6],
+						}
+					})
+				} else if (arguments[1] === 'pageview') {
+					return fetchFromAPI('/logs', {
+						method: 'post',
+						data: {
+							type: 'pageview',
+							category: arguments[2].page,
+							action: arguments[2].title,
+						}
+					})
+				}
+			}
+			return Promise.resolve();
+		}
+		</script>
+
+<body style="overflow: hidden;">
+	<script>
+		var wrapperParameter = location.search.match(/wrapper(?:=?([^&]*))?/)
+		if ((!localStorage.wrapper && !wrapperParameter)) {
+			document.body.parentNode.classList.remove('wrapper');
+			localStorage.removeItem('wrapper')
+		} else if (wrapperParameter) {
+			localStorage.wrapper = wrapperParameter[1] || 'android';
+		}
+	</script>
+	<style>
+		html.qa * { 
+			-webkit-transition: none !important;
+			-moz-transition: none !important;
+			transition: none !important;
+			-webkit-animation: none !important;
+			-moz-animation: none !important;
+			animation: none !important;
+		}
+	html, body {
+		height: 100%;
+		width: 100%;
+	}
+	html.wrapper, html.wrapper body, html.wrapper .spinning-loader {
+		height: 100vh;
+	}
+	@keyframes pulse {
+			0% { opacity: 0.4; }
+			85% { opacity: 1; }
+			100% { opacity: 0.4; }
+	}
+
+	.spinning-loader {
+		height: 100%;
+		background-color: #f9f9f9;
+		position: absolute;
+		margin: auto;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		opacity: 1;
+		display: flex;
+		align-content: center;
+		align-items: center;
+		justify-content: center;
+		z-index: 500;
+		transition: opacity .3s ease-in;
+		overflow: hidden;
+	}
+
+	.spinning-loader img {
+		width: 220px;
+		height: 220px;
+		animation: pulse 1.75s ease-out;
+		animation-iteration-count: infinite;
+		transition: transform .3s ease-in;
+		-webkit-transition: -webkit-transform .3s ease-in;
+		border-radius: 20px;
+		overflow: hidden;
+	}
+
+	.spinning-loader.loaded {
+		pointer-events: none;
+		-webkit-pointer-events: none;
+		-moz-pointer-events: none;
+		opacity: 0;
+	}
+	.spinning-loader.loaded img {
+		transform: scale(3);
+		-webkit-transform: scale(3);
+		/*animation-play-state: paused;*/
+	}
+
+	document.body[style*="overflow"] {
+		pointer-events: none;
+		-webkit-pointer-events: none;
+		-moz-pointer-events: none;
+	}
+	</style>
+	<div></div>
+	<section id="loader" class="spinning-loader">
+		<img src="/assets/logo.svg" />
+	</section>
+	<script>
+		if (location.hostname.match(/xxx|localhost|127/) || window.parent !== window) {
+			loader.parentNode.removeChild(loader);
+			document.body.style.overflow = '';
+		}
+		/*
+		if (!('serviceWorker' in navigator) && !document.querySelector('#appcache')) {
+			const iframe = document.createElement('iframe');
+			iframe.id ='appcache';
+			iframe.src = '/assets/offline.htm';
+			iframe.style.position = 'absolute';
+			iframe.style.width = '1px';
+			iframe.style.height = '1px';
+			iframe.style.top = '1px';
+			iframe.style.opacity = '0';
+			document.body.appendChild(iframe);
+		}*/
+		window.Sentry = window.SentryStub = {
+			init: () => {},
+			withScope: (c) => { c() },
+			captureException: () => {},
+			addBreadcrumb: () => {},
+			Severity: { }
+		}
+		Sentry.lazyErrors = [];
+		Sentry.lazyOnError = ({ error, reason }) => {
+			if (error || reason)
+				Sentry.lazyErrors.push(error || reason)
+		};
+		window.addEventListener('error', Sentry.lazyOnError)
+		window.addEventListener('unhandledrejection', Sentry.lazyOnError)
+
+		if (location.search.match('testerror')) throw new Error('Yarik test');
+
+		function reloadApp() {
+			loader.parentNode.removeChild(loader);
+			return
+			if (location.hash == '#refreshed') return;
+			
+			fetch('/', {
+				headers: {
+					'Cache-Control': 'no-cache'
+				}
+			}).then(() => {
+				location.href = '/?' + Math.random() + '#refreshed';
+			})
+		}
+	</script>
+		<script type="module" onerror="reloadApp()" src="/index.jsx"></script>
+		<script
+			src="https://browser.sentry-cdn.com/6.4.1/bundle.min.js"
+			integrity="sha384-THoc7rflwZFKTdZNgv6jLFFDn299Uv3t1SW5B4yGLvLiCRTYP9ys6vXZcMl95TQF"
+			crossorigin="anonymous"
+		></script>
+		<script>
+			try {
+				const env =  window.NODE_ENV ||  'development';
+				Sentry.init({
+					dsn: window.SENTRY_DSN || null,
+					environment: env,
+					beforeSend(event) {
+						if (!event.tags)
+							event.tags = {};
+
+						try {
+							const user = JSON.parse(localStorage.user);
+							if (user) {
+								const {email, id, name}  = user;
+								event.user = {email, id, name};
+								event.tags.email = user.email;
+							}
+						} catch(e) {
+
+						}
+						if (env) {
+							return event;
+						}
+					},
+					integrations(integrations) {
+						return integrations.filter(i => i.name !== 'TryCatch').map((i) => {
+							if (i.name === 'Breadcrumbs') {
+								return new Sentry.Integrations.Breadcrumbs({
+									console: false
+								})
+							} else {
+								return i;
+							}
+						});
+					}
+				});
+				SentryStub.lazyErrors.map((e) => { Sentry.captureException(e) });
+				window.removeEventListener('error', SentryStub.lazyOnError);
+				window.removeEventListener('unhandledrejection', SentryStub.lazyOnError);
+			} catch(e) {
+
+			}
+		</script>
+</body>
+</html>

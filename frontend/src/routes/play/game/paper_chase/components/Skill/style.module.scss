@@ -1,0 +1,156 @@
+@import "/style/partials/index.scss";
+.wrapper {
+  color: #fff;
+  padding: 10px 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  position: relative;
+  &[class*="theme"] {
+    background-image: none;
+  }
+
+  .top {
+    padding-left: 70px;
+    padding-bottom: 15px;
+    
+
+    h2 {
+      //@include typography-normal
+      font-size: 15px;
+      line-height: 1.5;;
+      font-weight: 500;
+    }
+
+    p {
+      margin: 0;
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+    }
+
+    aside {
+      background-color: #fff;
+      a {
+        color: $theme-purple;
+        text-decoration: none;
+      }
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-weight: 500;
+      //@include typography-tiny
+      font-size: 10px;
+      line-height: 14px;;
+    }
+    
+  }
+
+  progress {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .top > svg, .top > img {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+
+  .summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    svg {
+      margin-top: -3px;
+    }
+  }
+
+  .progress {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    :global(.button) {
+      margin-left: 10px;
+    }
+  }
+
+
+  .details {
+    background: rgba(0,0,0,0.2);
+    margin: 0 -10px -10px;
+    border-radius: 0 0 5px 5px;
+    padding: 10px;
+    clear: both;
+    display: flex;
+    flex-wrap: wrap;
+
+    a {
+      @media(min-width: 400px) {
+        margin-left: 35px;
+        &:not(:global(.button)) {
+          padding-left: 35px;
+        }
+      }
+      text-decoration: none;
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+      margin-right: auto;
+    }
+
+    .collapse {
+      opacity: 0.5;
+    }
+
+    > span {
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+      margin-top: 6px;
+    }
+    
+    :global(.button) {
+      margin-left: 8px;
+      margin-right: 0;
+      margin-top: -5px;
+      margin-bottom: -5px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  dl {
+    width: 100%;
+    //@include typography-smallest
+    font-size: 12px;
+    line-height: 14px;;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 5px;
+
+    dt {
+      flex-basis: 70px;
+      border-top: 1px solid rgba(0,0,0,0.15);
+      text-transform: uppercase;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    dd {
+      padding-top: 10px;
+      padding-bottom: 10px;
+      border-top: 1px solid rgba(0,0,0,0.15);
+      flex-basis: calc(100% - 80px);
+      flex-grow: 1;
+    }
+    dt:last-of-type, dd:last-of-type {
+      padding-bottom: 5px;;
+    }
+
+    .next {
+      font-weight: bold;
+    }
+  }
+}

@@ -1,0 +1,51 @@
+@import "/style/partials/index.scss";
+.tabs {
+  display: flex;
+  align-items: flex-start;
+  margin: 0 -10px 10px;
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+:global(.page) .tabs {
+  margin: -10px -20px 10px;
+}
+
+.tabs > li {
+  //@include typography-normal
+  font-size: 15px;
+  line-height: 1.5;;
+  flex-grow: 1;
+  position: relative;
+  text-align: center;
+  padding: 0 .25rem 11px;
+  flex-basis: 1%;
+  font-weight: 500;
+  
+  
+
+
+  .counter {
+    margin-left: .5rem;
+    color: $gray;
+  }
+  border-bottom: 1px solid $light-gray;
+  &:global(.selected) {
+    padding: 0 .25rem 10px;
+    border-bottom: 3px solid $purple;
+  }
+}
+
+.tabs:global(.main) > li {
+  padding-top: 8px;
+  padding-bottom: 16px;
+}
+
+.right {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  color: $gray;
+}

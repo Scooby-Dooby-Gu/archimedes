@@ -1,0 +1,24 @@
+{
+  "name": "@archimedesfinance/specs",
+  "version": "1.0.0",
+  "description": "This is a set of end to end specs that test basics of Mason in a real browser.",
+  "main": "index.js",
+  "dependencies": {
+    "canvas": "^2.6.1",
+    "gifencoder": "^2.0.1",
+    "jasmine": "^3.5.0",
+    "jasmine-reporters": "^2.3.2",
+    "node-fetch": "^2.6.0",
+    "png-file-stream": "^1.2.1",
+    "puppeteer": "^5.2.1",
+    "serve": "^11.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "specs": "./node_modules/.bin/jasmine src/index.js --random=false --filter=$FILTER",
+    "specs:debug": "HEADLESS=false ./node_modules/.bin/jasmine src/index.js --random=false --filter=$FILTER"
+  },
+  "author": "",
+  "license": "ISC"
+}

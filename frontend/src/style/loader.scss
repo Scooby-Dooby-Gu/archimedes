@@ -1,0 +1,126 @@
+@import "/style/partials/index.scss";
+
+document.body[style*="overflow"] {
+  pointer-events: none;
+  -webkit-pointer-events: none;
+  -moz-pointer-events: none;
+}
+
+/* gets stripped on prod build*/
+#loader.loaded {
+  pointer-events: none;
+  -webkit-pointer-events: none;
+  -moz-pointer-events: none;
+  opacity: 0;
+}
+#loader.loaded img {
+  transform: scale(4);
+  //animation-play-state: paused;
+}
+
+
+
+
+
+.placeholder.placeholder.placeholder, img[src*="base64"]:not([src*="image/svg"]) {
+  $color: rgba($light-gray, 0.1);
+  $highlight: rgba($light-gray, 0.7);
+  background: transparent;
+  background-image: linear-gradient(to right, $color 0%, $highlight 20%, $color 40%, $color 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 504px; 
+  -webkit-animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards; 
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: placeholderShimmer;
+  -webkit-animation-timing-function: linear;
+}
+.placeholder {
+  border-radius: 2px;
+  display: inline-block;
+  width: 100%;
+  &.string {
+    width: 8em;
+  }
+  &.number {
+    max-width: 1em;
+  }
+  line-height: 1;
+  
+  &:before {
+    content: '2';
+    color: transparent;
+  }
+
+  &[property="rank"] {
+    max-width: 1em;
+  }
+
+  &[property="name"], &[property="title"] {
+    &:before {
+      content: '2';
+      color: transparent;
+    }
+    max-width: 300px;
+  }
+}
+
+a[href*="█"], .placeholder {
+  pointer-events: none !important;
+}
+
+.placeholders {
+  &, .placeholder {
+    display: block;
+  }
+
+  &.html {
+    .placeholder:nth-child(1), .placeholder:nth-child(10) {
+      width: 130px;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .placeholder:nth-child(4) {
+      width: 40%;
+      margin-bottom: 20px;
+    }
+    .placeholder:nth-child(1) {
+      width: 130px;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .placeholder:nth-child(9) {
+      width: 55%;
+      margin-bottom: 20px;
+    }
+    .placeholder:nth-child(14) {
+      width: 80%;
+    }
+  }
+  .placeholder + .placeholder {
+    margin-top: 10px;;
+  }
+  //max-width: 500px;
+}
+
+
+@-webkit-keyframes placeholderShimmer {
+  0% {
+    background-position: -868px 0;
+  }
+  
+  100% {
+    background-position: 468px 0; 
+  }
+}
+
+
+
+@keyframes spin {
+  0%  {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}   
+}
+
+.IIconsSpinner {
+  animation: spin 1s infinite steps(8);
+}

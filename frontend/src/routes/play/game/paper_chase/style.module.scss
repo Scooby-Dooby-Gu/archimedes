@@ -1,0 +1,254 @@
+@import "/style/partials/index.scss";
+.page.page {
+  position: relative;
+  padding: 0;;
+}
+
+.charts {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.chart {
+  padding: 1rem 0 0 2rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 350px;
+  min-height: 450px;
+  header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .chart_content {
+    margin: auto 0;
+  }
+
+}
+
+
+.green {
+  color: $jade;
+}
+
+.red {
+  color: $red;
+}
+
+
+.description p {
+  //@include typography-smaller
+  font-size: 13px;
+  line-height: 16px;;
+  color: $light-gray;
+}
+
+.timeline {
+  margin: -20px;
+  padding: 20px;
+  position: relative;
+  
+  min-height: calc(100% + 40px);
+  
+}
+
+.controls {
+  width: 100%;
+  
+  :global(.button) {
+    width: 100%;
+    box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.12);
+    svg {
+      margin-top: -6px;
+    }
+  }
+}
+
+.slide {
+  border-radius: 0 0 8px 8px;
+  background-color: #fff;
+  box-shadow: 0 0 32px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px 90px;
+  z-index: 1;
+  flex-grow: 1;
+  left: 0;
+  right: 0;
+  //top: 0;
+  position: absolute;
+  max-width: 100%;
+  min-height: calc(100vh - 308px - 50px);
+  @media (max-width: 783px) {
+    min-height: calc(100vh - 308px - 50px - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  }
+  // ios fix bottom border
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    height: 5px;
+    width: 5px;
+    bottom: -5px;;
+  }
+}
+
+
+
+.outer {
+  flex-grow: 1;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+  overflow-y: overlay;
+}
+
+.anchor {
+  position: relative;
+}
+
+.wrapper {
+  padding: 308px 0 0;
+  padding-top: calc(308px + var(--safe-area-inset-top));
+  position: relative;
+  margin: 0 auto;
+  width: calc(100% - 10px);
+  //min-height: 100%;
+  padding-right: calc(5px + var(--safe-area-inset-right));
+  padding-left: calc(5px + var(--safe-area-inset-left));
+
+  max-width: 800px;
+  //min-height: 100%;
+  //flex-grow: 1;
+
+}
+
+.slide:global(.story) {
+  padding: 10px 0 2px;
+}
+
+.slide:global(.dialog.disabled) {
+  pointer-events: none;
+}
+
+
+.slide:global(.dialog) {
+  box-shadow: none;
+  background: transparent;
+  user-select: none;
+  height: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.slide:global(.dialog.networth),
+.slide:global(.dialog.cashflow),
+.slide:global(.dialog.stock),
+.slide:global(.dialog.leaderboard),
+.slide:global(.dialog.economy),
+.slide:global(.dialog.portfolio) {
+  background: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overflow-y: overlay;
+  > * {
+    flex-shrink: 0;
+  }
+}
+@media (max-width: 783px) {
+  .slide:global(.dialog):not(:global(.start)) {
+    height: calc(100%  + var(--safe-area-inset-bottom));
+    max-height: calc(100%  + var(--safe-area-inset-bottom));
+  }
+}
+
+section:global(#game) {
+  background: #f4f9ff;
+  display: flex;
+  :global(.intro) {
+    background: $background-red;
+    padding: 15px 15px;
+    border: 1px solid rgba(0,0,0,0.1);
+    &:not(:first-child) {
+      margin: 10px 0;
+    }
+    &:first-child {
+      //box-shadow: 0 8px 8px rgba(0,0,0,0.03);
+      margin: -11px -10px 10px;
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    text-align: left;
+  }
+  a[href*="/courses"]:not([class*="event"]):not([class*="button"]):not([class*="plain"]) {
+    position: relative;
+    display: inline-block;
+    color: inherit;
+    background: $background-blue;
+    box-shadow: 0 2px 2px rgba(0,0,0,0.06);
+    text-decoration: none;
+    padding: 0 0.2em 0 1.4em;
+    margin: -.25em 0;
+    border-radius: 100px;
+    &:hover {
+      background: $dark-gray;
+      border-color: $dark-gray;
+      color: #fff;
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      left: .2em;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      position: absolute;
+      height: 1em;
+      width: 1em;
+      color: #fff;
+      margin-right: 0.5em;
+      background: url("/assets/atlas_game/index.svg#IIconsEducation-view");
+    }
+  }
+}
+
+
+:global {
+  /* change the spot color */
+  .sparkline--spot {
+    stroke: blue;
+    fill: blue;
+  }
+
+  /* change the cursor color */
+  .sparkline--cursor {
+    stroke: orange;
+  }
+
+  /* style fill area and line colors using specific class name */
+  .sparkline--fill {
+    fill: transparent;
+  }
+  /*
+  .growing .sparkline--fill {
+    fill: rgba(0, 255, 0, .3);
+  }
+
+  .falling .sparkline--fill {
+    fill: rgba(255, 0, 0, .3);
+  }*/
+
+  
+  .growing .sparkline--line {
+    stroke: $green;
+  }
+  .falling .sparkline--line {
+    stroke: $red;
+  }
+}

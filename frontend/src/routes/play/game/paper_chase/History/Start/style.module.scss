@@ -1,0 +1,111 @@
+@import "/style/partials/index.scss";
+:global(.dialog.start) {
+  padding: 30px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  background: rgb(224,254,247);
+  max-width: none;
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  h2 {
+    //@include typography-largest
+    font-size: 24px;
+    line-height: 32px;;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  p {
+    //@include typography-normal
+    font-size: 15px;
+    line-height: 1.5;;
+    margin: 20px;
+  }
+
+  .text {
+    margin-top: auto;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    margin-bottom: 40px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  @media(max-width: 400px) {
+    p {
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+    }
+  }
+  
+  .image {
+    height: auto;
+    width: 100%;
+    max-height: 140%;
+    min-height: 900px;
+    margin: 0 auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    pointer-events: none;
+    object-position: center top;
+    object-fit: cover;
+    @media(min-height: 700px) {
+      object-position: center bottom;
+    }
+  }
+
+  @media(min-width: 784px) {
+    .text {
+      margin-top: auto;
+      margin-right: calc(50% + (25% - 200px));
+      z-index: 6;
+    }
+    :global(.button) {
+      margin-bottom: auto;
+      margin-right: calc(50% + (25% - 200px));
+      z-index: 6;
+    }
+    .image {
+      margin-right: 0;
+      width: 50%;
+      object-position: top right;
+      object-fit: contain;
+    }
+    &:after {
+      content: '';
+      display: block;
+      left: 50%;
+      margin-left: 0;
+      width: 40px;
+      top: 0;
+      position: absolute;
+      bottom: 0;
+      height: 100%;
+      z-index: 5;
+      background: linear-gradient(to left, rgba(224,254,247, 0), rgba(224,254,247, 1))
+    }
+    &:before {
+      content: '';
+      display: block;
+      margin-left: 0;
+      width: 50%;
+      top: 0;
+      right: 0;
+      left: 50%;
+      position: absolute;
+      height: 40px;
+      margin-top: 108%;
+      z-index: 5;
+      background: linear-gradient(to bottom, rgb(79,77,45), rgba(224,254,247, 1))
+    }
+  }
+}

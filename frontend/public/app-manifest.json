@@ -1,0 +1,22 @@
+{
+  "name": "Medes",
+  "AVOID_INSTALLATION: short_name": "Archimedes",
+  "start_url": "/",
+  "scope": "/",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#fff",
+  "theme_color": "#1a2132",
+  "AVOID_INSTALLATION: icons": [
+    {
+      "src": "/assets/icons/pwa-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/assets/icons/pwa-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

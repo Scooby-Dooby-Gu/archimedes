@@ -1,0 +1,270 @@
+@import "/style/partials/index.scss";
+
+.places {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.race {
+  outline: none;
+}
+
+.tip {
+  margin-top: 5px;
+  &:global(.neutral)  {
+    &:before {
+      border-bottom-color: rgb(247, 246, 236);
+    }
+  }
+  &:global(.good)  {
+    &:before {
+      border-bottom-color: rgb(245, 245, 238);
+    }
+  }
+  &:global(.bad)  {
+    &:before {
+      border-bottom-color: rgb(243, 232, 230);
+    }
+  }
+  &:before {
+    position: absolute;
+    content: '';
+    margin-top: -20px;
+    margin-left: 5px;
+    width: 0; 
+    height: 0; 
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    
+    border-bottom: 10px solid black;
+  }
+}
+
+.wrapper {
+
+  .race {
+    float: right;
+  }
+}
+
+.challenge {
+  padding: 10px 12px 10px 12px;
+  margin: 5px 0 -10px;
+  border: 1px solid darken($background-green, 25%);
+  background: lighten($background-gray, 2%);
+
+  h3 {
+    color: darken($background-green, 45%);
+  }
+}
+.challenge + .challenge {
+  margin-top: 8px;
+}
+.challenge:last-of-type {
+  border-radius: 0 0 5px 5px;
+  border-bottom: 1px solid darken($background-green, 25%);
+}
+
+.summary {
+  margin-right: 10px;
+  display: flex;
+  align-self: stretch;
+
+  > div {
+    width: 100%;
+  }
+
+}
+
+.timer {
+  //@include typography-smallest
+  font-size: 12px;
+  line-height: 14px;;
+  margin-top: 5px;
+  border-radius: 2px;;
+  display: inline-block;
+
+  &.failed {
+    background: $red;
+    color: #fff;
+    font-weight: bold;
+    margin-right: -12px;
+    padding: 0 5px;
+  }
+  &.passed {
+    font-weight: bold;
+    color: #fff;
+    background: $jade;
+    margin-right: -12px;
+    padding: 0 5px;
+  }
+  &.expiring {
+    color: $light-red;
+    font-weight: bold;
+  }
+}
+.icon {
+  width: 3rem;
+  height: 3rem;
+  margin-right: 10px;
+  flex-shrink: 0;;
+}
+
+.top {
+  margin-top: -3px;
+  margin-bottom: 10px;;
+  display: flex;
+  //@include typography-smallest
+  font-size: 12px;
+  line-height: 14px;;
+  color: $gray;
+  align-items: baseline;
+  justify-content: space-between;
+  white-space: nowrap;
+  strong {
+    color: $dark-gray;
+  }
+  > li:nth-child(3) {
+    width: 90px;
+    text-align: right;
+  }
+  > li:nth-child(1) {
+    width: 70px;
+    text-align: left;
+  }
+}
+
+.summary {
+  h3 {
+    //@include typography-larger
+    font-size: 17px;
+    line-height: 1.3;;
+    font-weight: normal;
+    margin-top: -5px;
+  }
+  p {
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    margin-top: 5px;
+    color: $gray;
+  }
+}
+
+.race {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.places > li {
+  display: flex;
+  flex-direction: column;
+
+  :global(.avatar) {
+    margin: 0;
+  }
+
+  .value {
+    color: $gray;
+  }
+
+  &.winner .value{
+    //color: $jade;
+  }
+  &.you .value{
+    color: $purple;
+  }
+
+  &.winner {
+    .tick {
+    //  background: $jade;
+    }
+  }
+  img {
+    width: 39px;
+    height: 39px;
+  }
+  &.you {
+    img {
+      border: 2px solid $purple;
+      margin: 0;
+    }
+    .place {
+      background: $purple;
+    }
+    .tick {
+      background: $purple;
+    }
+  }
+  &:not(.you) img {
+    opacity: 0.8
+  }
+
+}
+
+:global(.compact) {
+  .places > li {
+    &:not(:last-child) {
+      margin-right: -10px;
+    }
+    z-index: 3;
+    + li {
+      z-index: 2;
+      + li {
+        z-index: 1;
+      }
+    }
+    &:first-child:not(:last-child) .value {
+      margin-right: 10px;
+    }
+    &:last-child:not(:first-child) .value {
+      margin-left: 10px;
+    }
+  
+  }
+  &:not(:focus) {
+    .value {
+      display: none;
+    }
+  }
+  .value {
+    margin-bottom: -20px;
+  }
+}
+.place {
+  border-radius: 5rem;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  margin-top: 0px;
+  padding-top: 2px;
+  margin-left: 30px;
+  z-index: 1;
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  font-size: 9px;
+  background: #898a8f;
+  color: #fff;
+}
+
+.value {
+  font-size: 11px;
+  //margin-top: -5px;
+  text-align: center;
+}
+
+
+.up.up {
+  margin-right: -20px;
+  color: $jade;
+}
+.down.down {
+  margin-right: -20px;
+  color: $light-red;
+}
+.stalling {
+  margin-right: -20px;
+  color: $light-red;
+}

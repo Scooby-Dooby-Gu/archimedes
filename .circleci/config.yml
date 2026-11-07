@@ -1,0 +1,446 @@
+version: 2.1
+
+
+commands:
+  configure:
+    description: "Misc configuration"
+    steps:
+      - run: 
+          name: "Add /etc/hosts"
+          command: |
+            echo 127.0.0.1 app.getmedes.xxx | sudo tee -a /etc/hosts
+            echo 127.0.0.1 api.getmedes.xxx | sudo tee -a /etc/hosts
+            echo 127.0.0.1 getmedes.xxx | sudo tee -a /etc/hosts
+      - checkout
+
+
+  
+  install-frontend:
+    description: "Check the code out and install cached dependencies"
+    steps:
+
+      - restore_cache:
+          keys:
+            - v13-frontend-dependencies-{{ checksum "frontend/package.json" }}
+            - v13-frontend-dependencies-
+
+      - run: 
+          name: "Install npm"
+          command: |
+            if [ ! -d frontend/node_modules ]; then
+              cd frontend && npm install;
+            fi;
+
+      - run:
+          name: "Start frontend server"
+          command: |
+            cd frontend && NODE_ENV=qa PORT=8080 npm run serve
+          background: true
+         
+      - save_cache:
+          paths:
+            - frontend/node_modules
+          key: v13-frontend-dependencies-{{ checksum "frontend/package.json" }}
+          background: true
+
+  install-backend:
+    steps:
+      - restore_cache:
+          keys:
+            - v13-backend-dependencies-{{ checksum "backend/package.json" }}
+              
+      - run: 
+          name: "Install npm"
+          command: |
+            if [ ! -d backend/node_modules ]; then
+              cd backend && npm install;
+            fi;
+      - run:
+          name: "Start backend server"
+          command: |
+           cd backend && PGHOST=localhost PGPASSWORD=password PGUSER=ubuntu PGDATABASE=archimedes npm run start:qa
+          background: true
+      - save_cache:
+          paths:
+            - backend/node_modules
+          key: v13-backend-dependencies-{{ checksum "backend/package.json" }}
+          background: true
+
+  install-specs-firefox:
+    steps:
+      - restore_cache:
+          keys:
+            - v13-specs-firefox-dependencies-{{ checksum "specs/package.json" }}
+            - v13-specs-firefox-dependencies-
+              
+      - run: 
+          name: "Install npm"
+          command: |
+            if [ ! -d specs/node_modules ]; then
+              cd specs && PUPPETEER_PRODUCT=firefox npm install;
+            fi;
+      - save_cache:
+          paths:
+            - specs/node_modules
+          key: v13-specs-firefox-dependencies-{{ checksum "specs/package.json" }}
+          background: true
+
+
+  install-specs-chrome:
+    steps:
+      - restore_cache:
+          keys:
+            - v13-specs-chrome-dependencies-{{ checksum "specs/package.json" }}
+            - v13-specs-chrome-dependencies-
+              
+      - run: 
+          name: "Install npm"
+          command: |
+            if [ ! -d specs/node_modules ]; then
+              cd specs && npm install;
+            fi;
+      - save_cache:
+          paths:
+            - specs/node_modules
+          key: v13-specs-chrome-dependencies-{{ checksum "specs/package.json" }}
+          background: true
+  specs-puppeteer:
+    description: "Run spec suite in puppeteer"
+    parameters:
+      browser:
+        description: "Name of a browser to use"
+        default: "chrome" 
+        type: "string"
+      breakpoint:
+        description: "Screen size"
+        default: "desktop" 
+        type: "string"
+    steps:
+      - run:
+          name: "Wait until backend starts and create sample data"
+          shell: /bin/sh
+          command: |
+            wget --post-data "a=1" --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=6 -t 20 http://localhost:9000/install
+            :
+      - run:
+          name: "Wait until frontend starts"
+          shell: /bin/sh
+          command: |
+            wget --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 160 http://localhost:8080
+            :
+      - run:
+          name: "Run basic specs"
+          command: |
+            cd specs && PORT=8080 BROWSER="<< parameters.browser >>" BREAKPOINT="<< parameters.breakpoint >>" ANIMATION=false node_modules/.bin/jasmine src/index.basic.js --random=false;
+            spec_status=$?;
+            echo $spec_status > ../status1
+            exit $spec_status
+          background: true
+      - run:
+          name: "Run courses suite"
+          command: |
+            cd specs && PORT=8080 AUTH_TOKEN=SUPER-SECRET-ADMIN BROWSER="<< parameters.browser >>" BREAKPOINT="<< parameters.breakpoint >>" ANIMATION=false node_modules/.bin/jasmine src/index.courses.js --random=false; 
+            spec_status=$?;
+            echo $spec_status > ../status2
+            exit $spec_status
+          background: true
+      - run:
+          name: "Run companies specs"
+          command: |
+            cd specs && PORT=8080 AUTH_TOKEN=SUPER-SECRET-ADMIN BROWSER="<< parameters.browser >>" BREAKPOINT="<< parameters.breakpoint >>" ANIMATION=false node_modules/.bin/jasmine src/index.companies.js --random=false;
+            spec_status=$?;
+            echo $spec_status > ../status3
+            exit $spec_status
+          background: true
+      - run:
+          name: "Run game suite"
+          command: |
+            cd specs && PORT=8080 AUTH_TOKEN=SUPER-SECRET-ADMIN BROWSER="<< parameters.browser >>" BREAKPOINT="<< parameters.breakpoint >>" ANIMATION=false node_modules/.bin/jasmine src/index.game.js --random=false; 
+            spec_status=$?;
+            echo $spec_status > ../status4
+            exit $spec_status
+          background: true
+      - run:
+          name: "Run smokescreen suite"
+          command: |
+            cd specs && PORT=8080 AUTH_TOKEN=SUPER-SECRET-ADMIN BROWSER="<< parameters.browser >>" BREAKPOINT="<< parameters.breakpoint >>" ANIMATION=false node_modules/.bin/jasmine src/index.smokescreen.js --random=false; 
+            spec_status=$?;
+            echo $spec_status > ../status5
+            exit $spec_status
+          background: true
+      - run:
+          name: "Wait for results"
+          command: |
+            until [ -f status1 ] && [ -f status2 ] && [ -f status3 ] && [ -f status4 ] && [ -f status5 ]; do
+              echo -e ".\c";
+              sleep 1
+            done;
+            if [[ "$(cat status1 status2 status3 status4 status5)" =~ [1-9] ]]; then
+              cat status1 status2 status3 status4 status5;
+              echo "Spec suite failed:";
+              exit 1;
+            fi;
+
+      - store_artifacts:
+          path: specs/screenshots
+          destination: screenshots
+      
+      - store_test_results:
+          path: /tmp/circleci-test-results
+
+      - store_artifacts:
+          path: /home/circleci/.npm/_logs
+          destination: logs
+
+  prepare-release:
+    description: "Generate release"
+    parameters:
+      env:
+        description: "Name of environment"
+        default: "development"
+        type: string
+    steps: 
+      - run:
+          name: "Create sentry release"
+          command: |
+            npm install @sentry/cli
+            export VERSION=$(./node_modules/.bin/sentry-cli releases propose-version)
+            export RELEASE="<< parameters.env >>@$VERSION"
+            #echo "1"
+            #./node_modules/.bin/sentry-cli releases new -p frontend $RELEASE
+            #echo "2"
+            #./node_modules/.bin/sentry-cli releases set-commits --auto $RELEASE
+            #echo "3"
+            #echo $RELEASE | tee -a frontend/.env
+            #echo $RELEASE | tee -a backend/.env
+            #git add .
+            #git commit -m "Add release variables"
+    
+  finalize-release:
+    description: "Generate release"
+    parameters:
+      env:
+        description: "Name of environment"
+        default: "development"
+        type: string
+    steps:
+      - run:
+          name: "Create sentry release"
+          command: |
+            #./node_modules/.bin/sentry-cli releases finalize $RELEASE
+            #./node_modules/.bin/sentry-cli releases deploys $RELEASE new -e << parameters.env >>
+
+
+  deploy-release:
+    description: "Deploy and make sentry release"
+    parameters:
+      app:
+        description: "Name of app"
+        default: "archimedes-frontend"
+        type: string
+      env:
+        description: "Name of environment"
+        default: "development"
+        type: string
+      subdirectory:
+        description: "Name of subdirectory"
+        default: "frontend"
+        type: string
+      branch:
+        description: "Name of branch"
+        default: "master"
+        type: string
+    steps:
+      - run:
+          git push -f https://heroku:$HEROKU_API_KEY@git.heroku.com/<< parameters.app >>.git `git subtree split --prefix << parameters.subdirectory >> << parameters.branch >>`:refs/heads/master
+      - run:
+          name: "Send sentry event"
+          command: |
+            npm install @sentry/cli
+            export VERSION=$(./node_modules/.bin/sentry-cli releases propose-version)
+            export RELEASE="<< parameters.env >>@$VERSION"
+            echo "Proposed version: $VERSION"
+            echo "Release: $RELEASE"
+            ./node_modules/.bin/sentry-cli send-event -m "New release" -t reason:release -t commit:$VERSION -t details:https://sentry.io/organizations/archimedes-finance/releases/$RELEASE -t url:https://<< parameters.app >>.herokuapp.com --fingerprint=$VERSION --env=<< parameters.env >> --level=info --no-environ=true
+jobs:
+  build:
+    working_directory: ~/medes
+    parallelism: 1
+    shell: /bin/bash --login
+    # To see the list of pre-built images that CircleCI provides for most common languages see
+    # https://circleci.com/docs/2.0/circleci-images/
+    docker:
+      - image: circleci/node:13.8.0-browsers
+        environment:
+          PGHOST: localhost
+          PGUSER: ubuntu
+          PGDATABASE: archimedes
+      - image: postgres:latest
+        # some containers require setting environment variables
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: archimedes
+          POSTGRES_PASSWORD: password
+    steps:
+      - configure
+      - install-frontend
+      - install-backend
+      - install-specs-chrome
+      
+  deploy-staging:
+    docker:
+    - image: circleci/node:13.8.0-browsers
+    shell: /bin/bash --login
+    working_directory: ~/medes
+    steps:
+      - configure
+      - prepare-release:
+          env: "production"
+      - deploy-release:
+          app: "archimedes-frontend-staging"
+          branch: "staging"
+          subdirectory: "frontend"
+          env: "staging"
+      - deploy-release:
+          app: "archimedes-backend-staging"
+          branch: "staging"
+          subdirectory: "backend"
+          env: "staging"
+      - finalize-release:
+          env: "production"
+
+
+  deploy-production:
+    docker:
+    - image: circleci/node:13.8.0-browsers
+    shell: /bin/bash --login
+    working_directory: ~/medes
+    steps:
+      - configure
+      - prepare-release:
+          env: "production"
+      - deploy-release:
+          app: "archimedes-frontend"
+          branch: "master"
+          subdirectory: "frontend"
+          env: "production"
+      - deploy-release:
+          app: "archimedes-backend"
+          branch: "master"
+          subdirectory: "backend"
+          env: "production"
+      - finalize-release:
+          env: "production"
+
+  specs-firefox:
+    docker:
+      - image: circleci/node:13.8.0-browsers
+      - image: postgres:latest
+        # some containers require setting environment variables
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: archimedes
+          POSTGRES_PASSWORD: password
+    shell: /bin/bash --login
+    working_directory: ~/medes/
+    steps:
+      - configure
+      - install-frontend
+      - install-backend
+      - install-specs-firefox
+      - specs-puppeteer:
+          browser: 'firefox'
+
+  specs-chrome:
+    docker:
+      - image: circleci/node:13.8.0-browsers
+      - image: postgres:latest
+        # some containers require setting environment variables
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: archimedes
+          POSTGRES_PASSWORD: password
+    shell: /bin/bash --login
+    working_directory: ~/medes/
+    steps:
+      - configure
+      - install-frontend
+      - install-backend
+      - install-specs-chrome
+#      - specs-puppeteer:
+#          browser: 'chrome'
+
+
+  specs-mobile-firefox:
+    docker:
+      - image: circleci/node:13.8.0-browsers
+        environment:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          PG_DATABASE: archimedes
+      - image: postgres:latest
+        # some containers require setting environment variables
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: archimedes
+          POSTGRES_PASSWORD: password
+    shell: /bin/bash --login
+    working_directory: ~/medes/
+    steps:
+      - configure
+      - install-frontend
+      - install-backend
+      - install-specs-firefox
+      - specs-puppeteer:
+          browser: 'firefox'
+          breakpoint: 'mobile'
+
+  specs-mobile-chrome:
+    docker:
+      - image: circleci/node:13.8.0-browsers
+        environment:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          PG_DATABASE: archimedes
+      - image: postgres:latest
+        # some containers require setting environment variables
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: archimedes
+          POSTGRES_PASSWORD: password
+    shell: /bin/bash --login
+    working_directory: ~/medes/
+    steps:
+      - configure
+      - install-frontend
+      - install-backend
+      - install-specs-chrome
+#      - specs-puppeteer:
+#          browser: 'chrome'
+#          breakpoint: 'mobile'
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      #- specs-firefox
+      - specs-chrome
+      #- specs-mobile-firefox
+      - specs-mobile-chrome
+      - deploy-staging:
+          requires:
+            - specs-chrome
+            #- specs-firefox
+            #- specs-mobile-firefox
+            - specs-mobile-chrome
+          filters:
+            branches:
+              only: staging
+      - deploy-production:
+          requires:
+            - specs-chrome
+            #- specs-firefox
+            #- specs-mobile-firefox
+            - specs-mobile-chrome
+          filters:
+            branches:
+              only: master

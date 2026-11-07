@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.getmedes.app.twa",
+    "sha256_cert_fingerprints": [
+      "BF:33:AD:AF:F9:90:CA:7F:DC:3B:98:3C:93:B5:39:68:79:12:4F:A5:FD:E4:E4:34:B6:B1:0B:D1:21:8B:AD:83"
+    ]
+  }
+}]

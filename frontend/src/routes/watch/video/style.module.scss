@@ -1,0 +1,375 @@
+@import "/style/partials/index.scss";
+.page.page {
+  padding-bottom: 250px;
+  border-top: 0;
+  position: relative;
+  @media (min-width: 784px) {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto; 
+  }
+}
+.ask {
+  margin: 0 auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 20px 10px;
+  background: $background-red;
+
+  h2 {
+    //@include typography-larger
+    font-size: 17px;
+    line-height: 1.3;;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+  p {
+    color: $gray;
+    //@include typography-normal
+    font-size: 15px;
+    line-height: 1.5;;
+  }
+  
+  box-shadow: 0 -8px 16px rgba(0,0,0,0.08);
+
+  textarea {
+    padding-right: 30px !important;
+  }
+
+  .submit {
+    margin-top: 10px;
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    text-align: center;
+    padding: 0;
+    svg {
+      height: 45px;
+      width: 45px;
+      margin-top: -8px;
+      margin-right: 2px !important;;
+    }
+    transition: 0.3s opacity;
+    &[disabled] {
+      opacity: 0;
+    }
+  }
+}
+
+.badge.play {
+  svg {
+    background: $green;
+  }
+}
+
+.actions {
+  display: flex;
+  position: absolute;
+  left: 40px;
+  right: 10px;
+  top: -35px;
+  > :global(.button) {
+    flex-grow: 1;
+    height: 30px;
+    line-height: 30px;
+    padding: 0;
+    margin: 0;
+    + * {
+      margin-left: 10px;
+    }
+  }
+  
+}
+
+.ask  p {
+  text-align: center;
+}
+.buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  
+  :global(.button) {
+    flex-basis: 50%;
+    max-width: 300px;
+    margin: 0 5px;
+  }
+}
+
+.bigtitle {
+  a {
+    //@include typography-large
+    font-size: 22px;
+    line-height: 28px;;
+    text-decoration: none;
+    color: $near-black;
+  }
+}
+
+.title {
+  font-weight: 500;
+  //@include typography-larger
+  font-size: 17px;
+  line-height: 1.3;;
+  margin-bottom: 10px;
+  padding-top: 8px;
+}
+
+.experts {
+  color: $gray;
+  clear: both;
+  display: flex;
+  margin: 0 -10px 0px;
+  padding: 0px 10px 0px;
+  order: -1;
+  border-radius: 22px 22px 0 0;
+
+  .user {
+    flex-grow: 1;
+    align-self: center;
+  }
+  .bio {
+    color: #666;
+    &, a {
+      color: #666;
+    }
+    padding: 10px;
+    > :nth-child(1) {
+      display: inline;
+      color: #333;
+      font-weight: bold;
+    }
+    > :nth-child(2) {
+      &:before {
+        content: ', ';
+        display: inline;;
+      }
+      display: inline;
+    }
+  }
+
+  li {
+    padding-top: 10px;
+    width: 160px;
+    flex-grow: 1;
+    text-align: center;
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row-reverse;
+    //@include typography-smaller
+    font-size: 14px;
+    line-height: 18px;;
+    text-align: left;
+    :global(.avatar) {
+      width: 65px;
+      height: 65px;
+      margin-right: 0;
+      margin-top: 0;
+      border-radius: 20px 20px 0 0;
+      margin-left: 5px;
+      margin-bottom: 20px;;
+    }
+  } 
+}
+
+
+[route="video"] {
+  .experts {
+    margin-bottom: 0;
+    
+    .bio {
+      padding-left: 0;
+    }
+  }
+}
+
+.video {
+  padding: 10px 0 10px;
+  margin-bottom: 10px;
+  //position: relative;
+  :global(.chapter.article) {
+    padding: 0;
+    
+  }
+}
+
+.meta {
+  position: relative;
+}
+
+.calendar {
+  //@include typography-normal
+  font-size: 15px;
+  line-height: 1.5;;
+  background: $background-green;
+  box-shadow: 0 1px 0px rgba(0, 0, 0, 0.12);
+  display: inline-block;
+  margin-left: 5px;
+  border-radius: 15px;
+  padding: 5px 10px;
+  width: 65px;
+  white-space: nowrap;
+  float: right;
+  margin-top: 20px;
+}
+
+
+.experts ~ .calendar {
+  position: absolute;
+  right: 0;
+  top: 55px;
+  border-radius: 0 0 15px 15px;
+}
+.question {
+  background: $background-gray;
+  border-radius: 10px;
+  margin: 10px 0 0;
+  overflow: hidden;
+  padding: 10px;
+
+  &.expanded {
+    background: linear-gradient($background-gray, #fff 50px );
+  }
+
+  :global(.chapter) {
+    margin-top: 0;
+  }
+
+  .timestamp a{
+    color: #999;
+  }
+
+  form {
+    background-color: #fff;
+    padding: 5px 10px 1px;
+    border-radius: 10px;
+    margin-top: 10px;
+    position: relative;
+  }
+
+  h2 {
+    //@include typography-normal
+    font-size: 15px;
+    line-height: 1.5;;
+    font-weight: 500;;
+  }
+}
+
+.toggle {
+  margin: -10px 0 -10px -10px;
+}
+
+.timestamp {
+  text-decoration: underline;
+  //@include typography-normal
+  font-size: 15px;
+  line-height: 1.5;;
+}
+
+.more.more {
+  svg {
+    order: 2;
+    margin-top: -6px;
+    margin-left: 5px;
+    height: 26px;
+    width: 26px;
+  }
+  &:hover {
+    color: $near-black;
+  }
+  box-shadow: none;
+  border: 0;
+  width: calc(100% + 20px);
+  margin: 0 -10px;
+  border-radius: 0;
+  background: linear-gradient($background-gray, #fff);
+  text-align: center;
+  color: $dark-gray;
+  
+}
+
+.logo.logo {
+  width: 10rem;
+  height: 2rem;
+  display: block;
+  margin: 0 auto;
+}
+
+.cover {
+  display: block;
+  position: relative;
+  max-width: 600px;
+}
+
+.header h1 {
+  padding: 0 20px;
+}
+
+.cover {
+  border-radius: 15px;
+  @media (max-width: 784px) {
+    border-radius: 30px 30px 15px 15px;
+  }
+  height: calc(250px + var(--safe-area-inset-top));
+  margin: -10px -10px 20px;
+  overflow: hidden;
+}
+
+.badge {
+  position: sticky;
+  top: calc(-214px);
+  z-index: 200;
+  margin: 0 auto -32px;
+  transform: translateY(calc(218px + var(--safe-area-inset-top)));
+  background: url("/assets/images/ui/notch_bottom.png");
+  transition: transform 0.3s;
+  background-size: 100%;
+  width: 64px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  padding: 0 5px;
+  svg {
+    height: 30px;
+    width: 30px;
+    vertical-align: 0px;
+    background: $lightest-gray;
+    color: #fff;
+    z-index: 1;
+    padding: 0.1rem;
+    border-radius: 1rem;
+    margin-top: 6px;
+
+
+    &:global(.checked) {
+      background: $green;
+    }
+    &:global(.undetermined) {
+      background: $yellow;
+    }
+  }
+}
+
+
+.cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: #fff !important;
+}
+.share {
+  color: $light-gray;
+  float: right;
+  width: 32px;
+  height: 32px;
+  margin-right: -10px;
+  position: relative;
+  margin-top: 8px;
+  z-index: 3;
+}

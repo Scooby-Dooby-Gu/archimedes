@@ -1,0 +1,393 @@
+@import "/style/partials/index.scss";
+
+.page.page.page {
+  padding-top: 0;
+  border-top: 0;
+}
+.header {
+  width: calc(100% + 20px);
+  max-width: 780px;
+  background: #fff;
+  color: #333;
+  position: relative;
+  margin: 10px -10px 0;
+  align-self: center;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-items: space-between;
+  > h1 {
+    max-width: 620px;
+    width: 100%;
+    margin: 32px auto 0;
+    padding: 0 10px;
+    @include typography-largest;
+    font-weight: 600;
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+  }
+}
+
+
+.meta {
+  overflow: hidden;
+  margin: 5px -10px 40px;
+  color: $dark-gray;
+
+  .user {
+    width: calc(100% - 80px);
+    margin-bottom: 5px;;
+    + * {
+      margin-top: 0;
+    }
+    color: $gray;
+  }
+  :global(.user.user.user) {
+    display: inline;
+  }
+  > [class*="picture"] {
+    :global(.avatar) {
+      height: 60px;
+      width: 60px;
+      margin-top: -3px;
+      margin-bottom: -3px;
+      display: block;;
+    }
+    float: left;
+  }
+  border-radius: 10px;
+  background: $background-red;
+  padding: 15px 10px 15px;
+
+  > :last-child {
+    margin-bottom: 0;;
+  }
+
+}
+
+.date {
+  float: right;
+  //@include typography-normal
+  font-size: 15px;
+  line-height: 1.5;;
+
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.calendar {
+  float: right;
+  background-color: $background-red;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.header .logo {
+ position: relative;
+ width: 100%;
+ margin-top: -4rem;
+ display: block;
+ 
+}
+
+.logo :global(.ILogosArchimedes) {
+  width: 180px;
+  position: absolute;
+  z-index: 3;
+  top: 10px;
+  color: #fff;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+
+.footer {
+  text-align: center;
+  margin: 40px -20px 20px;
+  padding: 20px;
+  border-top: 1px solid $ghostly-gray; 
+  color: $gray;
+  > * {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  > p {
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    margin-bottom: 20px;
+  }
+
+  + .footer {
+    margin-top: -20px;
+  }
+
+  &.signup {
+    p {
+      //@include typography-normal
+      font-size: 15px;
+      line-height: 1.5;;
+      + p {
+        //@include typography-smaller
+        font-size: 13px;
+        line-height: 16px;;
+      }
+    }
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+  
+
+  &.discussion {
+    background: $ghostly-gray;
+    margin-bottom: -102px;
+    padding-bottom: 120px;
+    .reply {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+      text-align: left;
+      margin-top: 20px;
+      background: #fff;
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      width: calc(100%);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      padding-bottom: 40px;
+    }
+
+    .score {
+      position: absolute;
+      left: 15px;
+      bottom: 5px;
+      font-size: 15px;
+      display: inline-flex;
+      align-items: center;
+      svg {
+        margin-right: 5px;
+        width: 20px;
+      }
+    }
+
+    time {
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+      margin-top: 13px;
+      display: inline-block;
+    }
+  }
+}
+.form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  flex-basis: 100%;
+  flex-grow: 1;
+
+  > div {
+    width: 100%;
+  }
+}
+
+.dialog {
+
+  .content {
+    max-width: 300px;
+  }
+}
+
+.description {
+  font-style: italic;
+  font-family: "New York Small", -apple-system-ui-serif;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.badge {
+  position: sticky;
+  top: calc(-234px);
+  z-index: 200;
+  margin: 0 auto -32px;
+  transform: translateY(calc(238px + var(--safe-area-inset-top)));
+  background: url("/assets/images/ui/notch_bottom.png");
+  transition: opacity 0.3s;
+  background-size: 100%;
+  width: 64px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  padding: 0 5px;
+  svg {
+    height: 30px;
+    width: 30px;
+    vertical-align: 0px;
+    background: $lightest-gray;
+    color: #fff;
+    z-index: 1;
+    padding: 0.1rem;
+    border-radius: 1rem;
+    margin-top: 6px;
+
+
+    &:global(.checked) {
+      background: $green;
+    }
+    &:global(.undetermined) {
+      background: $yellow;
+    }
+  }
+}
+
+:global(#app.headerHidden), :global(#app.headerHiddenForced) {
+  .badge {
+    opacity: 0;
+  }
+}
+
+.warning {
+  background: $background-red;
+  border-radius: 10px;
+  text-align: center;
+  padding: 10px 5px 15px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+  strong {
+    display: block;;
+  }
+
+  :global(.button) {
+    margin-top: 10px;
+  }
+
+}
+
+.counter {
+  margin-bottom: 10px;
+  color: $near-black
+}
+
+.icon {
+  width: 4rem;
+}
+
+.cover {
+  display: block;
+  position: relative;
+}
+
+.cover img {
+  display: block;
+  height: calc(250px + var(--safe-area-inset-top));
+  object-fit: cover;
+  object-position: center;
+  background-color: #fff !important;
+  border-radius: 15px;
+  @media (max-width: 784px) {
+    border-radius: 30px 30px 15px 15px;
+  }
+  overflow: hidden;
+  width: 100%;
+}
+
+@media (min-width: 1200px) {
+  .header {
+    margin-top: 0;
+  }
+  .cover img {
+    height: calc(438px + var(--safe-area-inset-top));
+    border-radius: 0 0 15px 15px;
+  }
+  .badge {
+    top: calc(-414px);
+    transform: translateY(calc(416px + var(--safe-area-inset-top)));
+  }
+}
+.public .header {
+  margin-top: 0;
+}
+.public .cover img {
+  height: calc(450px + var(--safe-area-inset-top));
+  border-radius: 0 0 15px 15px;
+}
+
+
+.completed {
+  color: #fff;
+  time {
+    color: #fff;
+  }
+}
+.read {
+  position: relative;
+
+  :global(.content), :global(.chapter), .description {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto; 
+  }
+
+  :global(.what-is) {
+    position: absolute;
+    opacity: 0.1;
+    font-size: 1px;
+  }
+
+}
+
+
+.share {
+  color: $light-gray;
+  float: right;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  z-index: 3;
+  margin-top: -2px;
+}
+
+.next {
+  display: flex;
+  margin: 40px auto 0;
+  max-width: 590px;
+  width: 100%;
+  justify-content: stretch;
+  flex-direction: row;
+}
+
+.next :global(.button) {
+  flex-basis: 30%;
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 48px;
+  margin: 0 5px 0 -5px;
+  justify-content: flex-start;
+
+  + :global(.button) {
+    justify-content: space-between;
+    padding: 0 15px;
+    margin: 0 -5px 0 5px;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+
+    &[src*="Chevron"] {
+      margin-top: -8px;
+    }
+  }
+}

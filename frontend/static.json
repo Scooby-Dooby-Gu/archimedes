@@ -1,0 +1,42 @@
+{
+  "root": "dist/",
+  "https_only": true,
+  "routes": {
+    "/marketing.html": "marketing.html",
+    "/**": "index.html"
+  },
+  "proxies": {
+  	"/api/": {
+  	  "origin": "${API_URL}"
+    },
+  	"/sitemap.xml": {
+  	  "origin": "${API_URL}/sitemap.xml"
+    },
+  	"/sitemap.html": {
+  	  "origin": "${API_URL}/sitemap.html"
+    }
+  },
+  "headers": { 
+    "/**": {
+      "Access-Control-Allow-Origin": "*"
+    },
+    "/assets/**": { 
+      "Cache-Control": "max-age=31536000",
+      "Access-Control-Allow-Origin": "*"
+    },
+    "/fonts/**": { 
+      "Access-Control-Allow-Origin": "*",
+      "Cache-Control": "max-age=31536000" 
+    },
+    "/**/*.glb.gz": {
+      "Content-Type": "application/javascript",
+      "Content-Encoding": "gzip",
+      "Cache-Control": "max-age=31536000, must-revalidate" 
+    },
+    "/**/**.glb.gz": {
+      "Content-Type": "model/gltf-binary",
+      "Content-Encoding": "gzip",
+      "Cache-Control": "max-age=31536000, must-revalidate" 
+    }
+  }
+}

@@ -1,0 +1,131 @@
+@import "/style/partials/index.scss";
+.close {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  display: block;
+  z-index: 10001;
+  pointer-events: all;
+}
+
+.wrapper {
+  transition: .3s opacity;
+  opacity: 1;
+  pointer-events: none;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1000000;
+  &[hidden] {
+    opacity: 0;
+    display: block;
+
+    .cover {
+      box-shadow: none
+    }
+
+    * {
+      pointer-events: none;
+    }
+  }
+  &.none.none {
+    display: none;
+  }
+}
+
+.message {
+  background: #fff;
+  position: absolute;
+  top: 0;
+  color: #000;
+  display: block;
+  pointer-events: none;
+  padding: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.32);
+  border-radius: 4px;
+  font: 14px Helvetica;
+  margin-top: 15px;
+  z-index: 10001;
+  width: 240px;
+
+  &:after {
+    display: block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: -10px auto 0;
+    border-color: #fff transparent;
+    border-style: solid;
+    height: 0px;
+    width: 0px;
+    border-width: 0 10px 10px 10px;
+  }
+
+  &.top {
+    margin-top: -10px;//-25px;
+    &:after {
+      top: calc(100% + 9px);
+      border-width: 10px 10px 0 10px;
+      margin: 0 auto -20px;
+    }
+    &.left {
+      transform: translateY(-100%) translateX(0%);
+    }
+    &.right {
+      transform: translateY(-100%) translateX(-100%);
+    }
+    &:not(.left):not(.right){
+      transform: translateY(-100%) translateX(-50%);
+    }
+  }
+
+  &.left {
+    transform: translateX(0%);
+    max-width: 300px;
+    &:after {
+      margin: -9px auto 0 2px;
+    }
+    border-radius: 5px 5px 5px 3px;
+  }
+  &.right {
+    transform: translateX(-100%);
+    width: 100%;
+    max-width: 230px;
+    &:after {
+      margin: -9px 1px 0 auto;
+    }
+    border-radius: 5px 3px 5px 5px;
+  }
+  &:not(.left):not(.right) {
+    transform: translateX(-50%);
+    &:after {
+      margin: -10px auto 0;
+    }
+  }
+}
+
+.blockedPointerEvents {
+  pointer-events: none;
+}
+.unblockedPointerEvents {
+  pointer-events: all !important;
+}
+
+.cover {
+  display: block;
+  position: absolute;
+  box-shadow: 0 0 0 2000px rgba(0,0,0,0.3);
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10000;
+}

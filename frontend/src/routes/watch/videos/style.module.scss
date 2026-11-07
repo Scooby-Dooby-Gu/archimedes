@@ -1,0 +1,171 @@
+
+@import "/style/partials/index.scss";
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0 0;
+  
+
+  :global(.button) {
+    flex-grow: 1;
+    box-shadow: none;
+    background:rgba($purple,0.1);
+    color: $dark-gray;
+    border: 2px solid rgba(0,0,0,0.2);
+
+    &:first-child:not(:only-child) {
+      margin-right: 10px;
+    }
+    border-radius: 16px;
+    margin-top: 5px;
+
+    svg {
+      height: 26px;
+      width: 26px;
+    }
+  }
+}
+
+.logo.logo {
+  width: 10rem;
+  height: 2rem;
+  display: block;
+  margin: 0 auto;
+  svg {
+    width: 100%;
+  }
+}
+
+.page.page {
+  background: #fafafa;
+  border-top: 0;
+}
+
+.header {
+  pointer-events: none;;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left:  20px;
+  padding-right:  20px;
+  box-shadow:  0 8px 8px rgba(0,0,0,0.08);
+  text-align: center;
+  margin: -20px -20px 20px;
+
+  //@include typography-smaller
+  font-size: 15px;
+  line-height: 16px;;
+
+  .logo {
+    margin-bottom: 10px;
+  }
+  
+  svg {
+    position: relative;
+    z-index: 3;
+    pointer-events: all;;
+    display: block;
+    width: 240px;
+    margin: 0 auto 10px;
+  }
+}
+
+.footer {
+  p {
+    color: $gray;
+    //@include typography-normal
+    font-size: 15px;
+    line-height: 1.5;;
+  }
+
+  padding: 10px 20px 10px;
+  background: $background-red;
+  margin: -20px;
+  p {
+    text-align: center;
+  }
+  .buttons {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    
+    :global(.button) {
+      flex-basis: 50%;
+      max-width: 300px;
+      margin: 0 5px;
+    }
+  }
+}
+
+.video {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.16);
+  background: #fff;;
+  padding: 0 10px 10px;
+  border-radius: 20px;
+  margin: 0 -10px 50px;
+  position: relative;
+
+  &:global(.active) {
+    box-shadow: 0 0px 0 8px rgba(0,0,0,0.1);
+    background-color: $background-blue;
+
+    :global(.button) {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+  }
+
+  figure:global(.media) {
+    margin: -10px;
+    border: 0 !important;
+    background: none;
+  }
+
+  [class*="question"] {
+    :global(.timestamp) {
+      color: #999;
+      display: none;
+    }
+    margin: 0 -10px 0;
+    svg {
+      display: none;
+    }
+    &:first-child {
+      margin-top: -10px;
+      border-top: 1px solid #ddd;
+    }
+    border-radius: 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  /*
+  .cover {
+    position: absolute;
+    pointer-events: none;
+    left: 0;
+    right: 0;
+    width: 100%;
+    border-radius: 20px;
+    max-height: 150px;
+    &:after {
+      position: absolute;
+      display: block;
+      content: '';
+      height: 100%;
+      width: 100%;
+      top: 0;
+      background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0))
+    }
+    overflow: hidden;
+    top: 0;;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }*/
+}

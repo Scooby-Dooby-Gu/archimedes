@@ -1,0 +1,766 @@
+@import "/style/partials/index.scss";
+
+.page {
+  background: rgb(15,15,15);
+
+  color: var(--theme-primary);
+  padding-bottom: 50px;
+  padding-top: 20px;
+
+  
+}
+
+.path {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.pipe {
+  pointer-events: none;
+  margin-left: 22px;
+  margin-top: -93px;
+  margin-bottom: -40px;
+  width: calc(100% - 40px);
+  position: relative;
+  left: 0;
+  top: 0px;
+}
+
+@mixin dashed-line {
+  .ready.ready & {
+    top: 0;
+    bottom: 0;
+  }
+  content: '';
+  display: block;
+  position: absolute;
+  top: 32px;
+  bottom: 12px;
+  left: 20px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--theme-primary) 25%, rgba(255,255,255,0) 0%);
+  background-position: right;
+  background-size: 1px 4px;
+  background-repeat: repeat-y;
+}
+
+
+.path {
+  display: flex;
+  flex-direction: column;
+  > section:first-child {
+    flex-grow: 1;
+  }
+  flex-grow: 1;
+  &.questioning {
+    .tasks, .goal .title, .goal .tagline, .goal .icon, .goal:before {
+      transition: opacity 0.5s;
+      opacity: 0;
+    }
+    
+    .completion .dialog {
+      pointer-events: all;
+    }
+    &.focused {
+      .tasks {
+        visibility: hidden;
+      }
+    }
+  }
+  &.ready {
+    pointer-events: none;
+  }
+  &.questioning, &.ready, &.completing {
+    .reward:after {
+      animation-play-state: paused !important;
+    }
+    .promo:before {
+      animation-play-state: paused !important;
+    }
+  }
+}
+
+.bonus {
+  color: var(--theme-primary);
+  text-transform: none;
+  @include typography-smaller;
+  font-weight: normal;
+  margin-left: 20px;
+  padding-left: 39px;
+  padding-top: 15px;
+  padding-bottom: 50px;
+  pointer-events: none;
+  &:after {
+    height: 1px;
+    left: 29px;
+    right: 32px;
+    top: 55px;
+    content: '';
+    display: block;
+    position: absolute;
+    background: linear-gradient(to right, var(--theme-primary) 25%, rgba(255,255,255,0) 0%);
+    background-position: left;
+    background-size: 4px 1px;
+    background-repeat: repeat-x;
+  }
+
+  .forkLeft {
+    position: absolute;
+    top: -125px;
+    width: 300px;
+    height: 300px;
+    left: -4px;
+
+  }
+  .forkRight {
+    position: absolute;
+    top: 0;
+    top: -125px;
+    width: 300px;
+    height: 300px;
+    right: 6px;
+  }
+}
+
+.reward.task {
+  z-index: 0;
+  border-radius: 5px;
+  padding: 0 40px 50px 0;
+  margin-top: 5px;
+  position: relative;
+
+
+  :global(.button) {
+    text-decoration: none;
+    color: #fff;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    margin-left: 60px;
+    margin-top: 10px;
+    svg {
+      margin-top: -8px;
+    }
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+
+    &[disabled] {
+      pointer-events: none;
+    }
+  }
+
+
+  &.unlocked{
+    .tagline:nth-child(3n+2), .icon, .title {
+      animation: 1.5s 0s breathe infinite linear alternate-reverse ;
+    }
+  }
+  * {
+    position: relative;
+    z-index: 1;
+  }
+  &:before {
+    z-index: 1;
+  }
+  &:after {
+    transform: scale(1.01);
+    position: absolute;
+    content: '';
+    top: -50px;
+    right: -20px;
+    bottom: -10px;
+    left: 0px;
+    background:  no-repeat center top url('/assets/images/liquid/4.png');
+    background-size: cover;
+    border-radius: 0px;
+    filter: hue-rotate(calc(var(--theme-hue))) saturate(30%);
+    box-shadow: inset 0 0 30px 40px rgba(13,13,13,1);;
+    animation: 8s 4s linear background-scroll alternate infinite;
+  }
+  &:before {
+    top: 37px;
+  }
+    
+  .tagline {
+    margin-left: 60px;
+    margin-top: 5.2px;
+    color: var(--theme-primary);
+    @include typography-smaller;
+    filter: brightness(150%);
+
+    ~ .tagline {
+      color: #fff;
+    }
+  }
+
+  .title {
+    margin-left: 60px;
+    filter: brightness(150%);
+    color: var(--theme-primary);
+    @include typography-larger;
+  }
+
+  .icon .mini {
+    width: 40px;
+    height: 40px;
+    margin-top: 1px;
+
+
+    &[src*="Love"] {
+      width: 30px;
+    }
+  }
+}
+
+.goal {
+  clear: both;
+  padding-bottom: 40px;
+  padding-top: 30px;
+  min-height: 150px;
+
+  position: relative;
+  z-index: 20;
+  &:before {
+    @include dashed-line;
+      
+    .ready.ready & {
+      top: 20px;
+    }
+  }
+  
+  .hole {
+    float: left;
+    margin-top: -7px;
+    margin-left: 1px;
+    width: 33px;
+    height: 37px;
+    position: relative;
+
+    [class*="top"] {
+      z-index: 1;
+    }
+    &.hidden {
+      > :not(.ball) {
+
+        transition: transform 0.3s 0.4s, opacity 0.3s 0.4s !important;
+        transform: translateY(-20px) scale(1.5);
+        opacity: 0;
+  
+      }
+    }
+    .ball {
+      transition: opacity 0.4s;
+      position: absolute;
+      width: 80px;
+      top: -22px;
+      left: -21px;
+      height: 80px;
+      z-index: 2;
+      opacity: 0;
+      &.appeared {
+        opacity: 1;
+      }
+    }
+  }
+
+  .tagline {
+    margin-left: 60px;
+    margin-top: 5px;
+    color: var(--theme-primary);
+    @include typography-smaller;
+  }
+
+  .title {
+    margin-left: 60px;
+    color: #fff;
+    @include typography-larger;
+  }
+
+  &.complete {
+    .title {
+      color: var(--theme-primary);
+    }
+  }
+
+  .link {
+    color: inherit;
+    text-decoration: none;;
+  }
+
+  &.selected {
+    transform: translateX(20px);
+    h2 {
+      text-decoration: underline;
+    }
+  }
+
+}
+
+
+.hole {
+  [class*="opening"] {
+    transition: transform 1s;
+  }
+  &.open {
+    [class*="opening"] {
+      transform: scale(2) !important;
+    }
+  }
+}
+
+.youtube {
+  transition: opacity 1s;
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0;
+
+  &.ready {
+
+  }
+  &.playing {
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    pointer-events: all;
+  }
+  &.paused {
+    transition: opacity .7s;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.task {
+
+  &:global(.loading) {
+    
+    animation: pulse 1.5s ease-out infinite;
+  }
+
+  z-index: 1;
+  min-height: 100px;
+  position: relative;
+  :global(.handle) {
+    position: absolute;
+    top: -60px;
+  }
+  &.rejected {
+    @include theme($palette-red);
+    .title {
+      transition: color 0.3s;
+      color: $red;
+    }
+    .plate {
+      transition: opacity 0.4s;
+      opacity: 0;
+    }
+    .icon .mini {
+      color: $red;
+      transition: transform 1s, opacity 0.6s 0.4s;
+      transform: translateY(60px) translateX(50px) rotateZ(700deg) scale(3);
+      opacity: 0;
+    }
+  }
+  &.skipped {
+    @include theme($palette-orange);
+    .title {
+      transition: color 0.3s;
+      color: $theme-yellow;
+    }
+    .icon {
+      transition: opacity 1s;
+      opacity: 0;
+    }
+    .icon .mini {
+      color: $theme-yellow;
+    }
+  }
+  &.accepted.accepted {
+    .icon {
+      transition: transform .4s, opacity 0.4s 0.2s;
+      transform: translateX(20px) translateY(-2px) scale(.7);
+    };
+  }
+
+  .next {
+    color: var(--theme-primary);
+    font-weight: normal;
+    font-style: italic;
+    em {
+      animation: 1.5s 0s breathe infinite linear alternate-reverse ;
+    }
+  }
+
+  .icon {
+    float: left;
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    margin-top: -5px;
+
+
+    .checkmark {
+      position: absolute;
+      top: 5px;
+    }
+
+    .plate {
+      width: 40px;
+      height: 40px;
+    }
+
+    .mini {
+      position: absolute;
+      width: 25px;
+      top: -5px;
+      left: 0;
+      right: 1px;
+      margin: 0 auto;
+
+      &[name="lesson"] {
+        width: 20px;
+      }
+    }
+  }
+  &.completing {
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform: translate3d(0,0,0px);
+    .icon {
+      .checkmark {
+        animation: completion 5s 1.5s both;
+      }
+      .mini, .plate:not(.checkmark) {
+        animation: delay-hide 1s 1.5s both;
+      }
+    }
+    .title {
+      animation: make-current 3.8s 2.5s reverse both;
+    }
+  }
+  &:before {
+    @include dashed-line;
+  }
+  &.complete {
+    &:before {
+      top: 38px;
+      background: var(--theme-primary);
+    }
+  }
+  &.selected {
+    filter: brightness(150%);
+  }
+  .tagline {
+    margin-left: 60px;
+    color: var(--theme-primary);
+    font-weight: normal;
+    margin-top: 5px;
+    @include typography-smaller;
+  }
+
+  .edit {
+    margin-left: 60px;
+    color: #fff;
+    font-weight: 200;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+    @include typography-smaller;
+  }
+
+  .title {
+    color: var(--theme-accent-color);
+    margin-left: 60px;
+    font-weight: bold;
+    @include typography-larger;
+    
+  }
+
+  &.complete {
+    .title {
+      color: var(--theme-primary);
+    }
+  }
+
+  .link {
+    color: inherit;
+    font-weight: bold;
+    text-decoration: none;;
+  }
+
+  aside a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+}
+
+.bonus {
+  position: relative;
+  &:before {
+    @include dashed-line;
+    margin-left: -20px;
+    top: -10px;
+    bottom: 0;
+  }
+  display: block;
+}
+.task.supplementary {
+  margin-right: 0px;  
+  &:after {
+    @include dashed-line;
+    margin-left: -20px;
+    top: 0;
+    bottom: 0;
+  }
+  &:last-child:before {
+    bottom: 0;
+  }
+  margin-left: 20px;
+  &:before {
+    @include dashed-line;
+    left: auto;
+    right: 10px;
+  }
+  .icon {
+    float: right;
+    margin-right: -10px;  
+  }
+  .title, .tagline {
+    margin-left: 39px;
+    margin-right: 39px;
+  }
+  .edit {
+    margin-left: 39px;
+  }
+  &.accepted.accepted {
+    .icon {
+      transition: transform .4s, opacity 0.4s 0.2s;
+      transform: scale(.5);
+    }
+  }
+}
+
+.completion {
+  margin-top: 20px;
+  position: relative;
+  border-radius: 20px;
+  height: 40px;
+  
+  transition: background-color 1.6s;
+
+  overflow: hidden;
+  .dialog {
+    transition: background-color 1.6s, opacity 1s;
+    background-size: cover;
+    z-index: 1;
+    border-radius: 20px;
+    top: 0;
+    right: 0;
+    left: 0;
+    position: absolute;
+    pointer-events: none;
+    height: calc(100vh - 3.5rem);
+    transform: translateY(0%);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+
+  }
+  .button {
+    padding: 10px 0;
+    margin-left: 0;
+    @include typography-smaller;
+    transition: opacity 1s;
+  }
+
+  &.expanded {
+    overflow: visible;
+    .dialog {
+      opacity: 1;
+    }
+    > button {
+      opacity: 0;
+    }
+  }
+
+  .afterword {
+    transition: opacity 1s 1s;
+    opacity: 0;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+
+    :global(.article) {
+      transition: transform 2s 1s, opacity 0.8s 1.3s;
+      transform: translateY(100px) scale(0.7) rotateZ(5deg);
+      opacity: 0;
+      color: var(--theme-accent-color);
+    }
+
+    p {
+      color: var(--theme-accent-color);
+      padding: 0 20px;
+    }
+
+    .confirmation {
+      padding-left: 40px;
+      text-align: left;
+      margin: 40px 0;
+      width: 100%;
+    }
+  }
+  &.displayed {
+    overflow: visible;
+    .afterword {
+      opacity: 1;
+      :global(.article) {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.liquid.liquid [class*="mask"] {
+  z-index: 4;
+  top: -130px;  
+}
+.liquid > * {
+  margin-top: 30px;
+  z-index: 3;
+}
+
+
+@keyframes make-current {
+  0% {
+    color: var(--theme-primary);
+  }
+  30% {
+  //  transform: scale(1.2);
+  }
+  100% {
+    color: #fff;
+  }
+}
+
+@keyframes background-scroll {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100%;
+  }
+}
+@keyframes delay-hide {
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes completion {
+  0% {
+    opacity: 0;
+    transform: translateY(1px) rotateX(410deg) scale(1.1)
+  }
+  10% {
+    opacity: 1;
+  }
+  30% {
+    color: #fff;
+    transform: translateY(1px) rotateX(410deg) scale(1.1)
+  }
+  70% {
+    transform: rotateX(0) scale(2)
+  }
+
+  100% {
+    transform: scale(1)
+  }
+}
+
+@keyframes breathe {
+  0% {
+    color: inherit;
+  }
+
+  100% {
+    color: #fff;
+  }
+}
+
+.supplementary .promo {
+  padding: 40px;
+}
+.supplementary .promo.simplified {
+  padding: 10px 40px;
+}
+
+.promo {
+  padding: 40px 20px;
+  &.simplified {
+    padding: 10px 60px;
+    align-items: flex-start;
+    &:before {
+      display: none !important;
+    }
+  }
+
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  &:before {
+    transform: scale(1.01);
+    position: absolute;
+    content: '';
+    top: -40px;
+    right: -20px;
+    bottom: -20px;
+    left: -20px;
+    pointer-events: none;
+    background:  no-repeat center top url('/assets/images/liquid/1.png');
+    background-size: cover;
+    border-radius: 100px 100px;
+    filter: hue-rotate(calc(var(--theme-hue))) saturate(10%);
+    box-shadow: inset 0 0 30px 40px rgba(13,13,13,1);;
+    animation: 8s 4s linear background-scroll alternate infinite;
+    z-index: -1;
+  }
+  img {
+    display: block;
+    margin-top: -20px;
+    margin-bottom: 10px;
+    max-width: 100%;
+    height: auto;
+  }
+  text-decoration: none;
+
+  :global(.button) {
+    text-decoration: none;
+    color: #fff;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    svg {
+      margin-top: -8px;
+    }
+  }
+}
+
+
+@keyframes pulse {
+  0% { opacity: 0.4  !important; }
+  85% { opacity: 1  !important; }
+  100% { opacity: 0.4  !important; }
+}

@@ -1,0 +1,196 @@
+@import "/style/partials/index.scss";
+.dashboard {
+  margin: 10px -5px;
+  display: flex;
+  > li {
+    flex-basis: 50%;
+    margin: 0 5px;
+    border-radius: 8px;
+    box-shadow: 0 16px 16px 0 rgba(0, 0, 0, 0.04);
+    position: relative;
+    background: #fff;
+
+    svg {
+      position: absolute;
+      right: 5px; 
+      top: 27px;
+      color: $light-gray;
+    }
+
+    > a {
+      display: block;
+      padding: 10px 15px 0;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    h2 {
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+      white-space: nowrap;
+    }
+
+    .big {
+      font-size: 28px;
+      line-height: 32px;
+    }
+  }
+
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    white-space: nowrap;
+    color: $gray;
+    padding: 5px 15px;
+    margin: 5px -15px 0;
+    align-items: baseline;
+    border-top: 1px solid $ghostly-gray;
+
+    dt {
+      flex-grow: 1;
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+      line-height: 20px;
+      text-transform: uppercase;
+      flex-basis: 50%;
+    }
+
+    dd {
+      font-weight: bold;
+      flex-basis: 1%;;
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+      line-height: 20px;
+    }
+  }
+}
+
+.chart {
+  height: 300px;
+  margin: 20px 0 30px -10px;
+  overflow: hidden;
+}
+.header {
+  //@include typography-smaller
+  font-size: 13px;
+  line-height: 16px;;
+  text-transform: uppercase;
+  color: $light-gray;
+  font-weight: bold;
+  padding: 10px 20px 5px 20px;
+  margin: 0 -10px;
+  background: #fff;
+  border-bottom: 1px solid $lightest-gray;
+}
+.group {
+  margin-top: 20px;
+  ~ .group {
+    margin-top: 40px;
+  }
+  position: relative;
+  h2 {
+    //@include typography-smaller
+    font-size: 13px;
+    line-height: 16px;;
+    text-transform: uppercase;
+    color: $light-gray;
+    font-weight: bold;
+    position: sticky;
+    z-index: 3;
+    top: -5px;
+    padding: 10px 20px 5px 20px;
+    margin: 0 -10px;
+    background: #fff;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.06);
+    border-bottom: 1px solid $lightest-gray;
+  }
+}
+
+:global(.apexcharts-title-text) {
+  text-transform: uppercase;
+  fill: $light-gray !important;
+  font-weight: bold;
+}
+
+
+.group {
+
+  h3 a {
+    color: inherit;
+    font: inherit;
+    text-decoration: inherit;
+  }
+
+  .ticker {
+    padding: 10px 20px;
+    margin: 0 -10px;
+    background: #fff;
+    border-bottom: 1px solid $lightest-gray;
+    overflow: hidden;
+  
+    aside {
+      text-align: right;
+      width: 60px;
+  
+      strong {
+        //@include typography-smaller
+        font-size: 13px;
+        line-height: 16px;;
+        display: block;
+      }
+    }
+  
+    > svg {
+      position: absolute;
+      right: 70px;
+    }
+  
+    > p {
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+      background: rgba(255,255,255,.6);
+      position: relative;
+      margin-right: 60px;
+    }
+  
+    h3 {
+      //@include typography-normal
+      font-size: 15px;
+      line-height: 1.5;;
+      position: relative;
+      display: table;
+      z-index: 2;
+      background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 90%, rgba(255,255,255,0) 100%);
+      margin-right: 120px;
+    }
+  
+    abbr {
+      display: block;;
+      color: $light-gray;
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+  }
+  
+  
+}
+
+.news {
+  background: $jade;
+  padding: 0px 5px;
+  font-size: 10px;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 1px;;
+  border-radius: 3px;
+  font-weight: bold;
+  float: right;
+  margin-top: 5px;
+}

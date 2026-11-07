@@ -1,0 +1,246 @@
+@import "/style/partials/index.scss";
+.event {
+  margin: 0;
+  padding: 10px;
+  font-size: 0.9rem;
+  background-color: #f5f4f2;
+  border-radius: 4px;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  + .event {
+    margin-top: 5px;
+  }
+
+  :global(.fiction) {
+    margin-top: 5px;
+  }
+
+  &.challenge {
+    display: flex;
+    appearance: none;
+    > summary {
+      order: 1;
+    }
+    .details {
+      padding: 10px 10px 10px 37px;
+      margin: 10px -10px -10px;
+      border: 1px solid darken($background-green, 25%);
+      background: lighten($background-gray, 2%);
+      border-radius: 0 0 5px 5px; 
+      position: relative;
+
+      h3, svg, .years {
+        color: darken($background-green, 45%);
+      }
+
+      &:before {
+        display: block;
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        top: 0;
+        width: 0; 
+        height: 0; 
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-top: 10px solid darken($background-green, 25%);
+      }
+      &:after {
+        display: block;
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        top: -1px;
+        width: 0; 
+        height: 0; 
+        border-left: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-top: 10px solid #f5f4f2;
+      }
+      svg {
+        float: left;
+        margin-left: -27px;
+      }
+      
+      .summary {
+        margin-top: 5px;
+        //@include typography-smallest
+        font-size: 12px;
+        line-height: 14px;;
+        line-height: 1rem;
+        color: $gray;
+      }
+    }
+    .years {
+      margin-top: 2px;
+      //@include typography-smallest
+      font-size: 12px;
+      line-height: 14px;;
+      float: right;
+    }
+  }
+
+  &.consequence, &.opinion {
+    padding: 10px;
+    &:global(.neutral)  {
+      background: rgb(247, 246, 236);
+    }
+    &:global(.good)  {
+      background: rgb(245, 245, 238);
+    }
+    &:global(.great)  {
+      background: rgb(245, 245, 238);
+
+      :global(.meta) {
+        //@include typography-large
+        font-size: 22px;
+        line-height: 28px;;
+      }
+      :global(h3) {
+        //@include typography-large
+        font-size: 22px;
+        line-height: 28px;;
+      }
+    }
+    &:global(.bad)  {
+      background: rgb(243, 232, 230);
+    }
+    ~.consequence {
+      margin-top: 10px;
+    }
+  }
+  &.lesson, &.passed {
+    background: $background-blue;
+    position: relative;
+
+    padding-right: 35px;
+
+    :global(.button) {
+      margin-bottom: -.8rem;
+      padding: 13px;
+    }
+    
+    :global(.fiction) {
+      margin-left: -5px;
+    }
+
+    :global(.IIconsCheckmark) {
+      background: #ccc;
+      border-radius: 20px;
+      color: #fff;
+      padding: 3px;
+      margin-left: 2px;
+    }
+    :global(.IIconsPages) {
+      margin-left: 5px;
+      margin-right: 3px;
+      margin-top: 0px;
+    }
+
+    :global(.IIconsChevronRight) {
+      position: absolute;
+      right: 10px;
+      height: 2rem;
+      width: 2rem;
+      top: 0;
+      bottom: 0;
+      color: $light-gray;
+      margin: auto;
+    }
+  }  
+  &.passed {
+    :global(.IIconsCheckmark) {
+      background: $green;
+    }
+  }
+
+  .summary {
+    display: flex;
+    :global(.three-lines) {
+      padding-left: 0;
+    }
+
+    :global(.button) {
+      margin-top: -2px;
+      margin-right: -5px;
+      align-self: baseline;
+      //@include typography-smaller
+      font-size: 13px;
+      line-height: 16px;;
+    }
+  }
+  :global(.three-lines) {
+    padding-left: 32px;
+  }
+
+  &.caused {
+    margin-left: 20px;
+    margin-top: -5px;
+  }
+}
+
+a.event {
+  border-radius: 30px;
+}
+
+details.event {
+  summary {
+    outline: none;
+    &::-webkit-details-marker {
+      display: none;
+    }
+    + * {
+      margin-top: 5px;
+    }
+  }
+  &:not([open]) summary {
+    cursor: pointer;
+  }
+  &[open] :global(.three-lines) {
+    > div > * {
+      overflow: visible;
+      max-height: 100%;
+      height: auto;
+      -webkit-line-clamp: inherit;
+    }
+  }
+}
+
+.event svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-right: 7px;
+  margin-top: -2px
+}
+
+.event .content {
+  flex-grow: 1;;
+}
+
+.event h3 {
+  //@include typography-smaller
+  font-size: 13px;
+  line-height: 16px;;
+}
+
+.event aside {
+  color: #999
+}
+
+.event.opinion {
+  :global(.fiction) {
+    margin-top: 0;
+  }
+
+  svg {
+    color: $gray;
+  }
+}
+
+

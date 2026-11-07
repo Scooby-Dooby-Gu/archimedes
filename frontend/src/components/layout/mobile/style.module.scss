@@ -1,0 +1,25 @@
+@import "/style/partials/index.scss";
+.header {
+
+}
+
+.main {
+  flex-shrink: 1;
+  flex-grow: 1;
+  display: flex;
+}
+
+.footer {
+  margin-top: auto;
+  transition: transform 0.3s;
+  position: absolute;
+  bottom: 0;
+}
+
+
+:global(#app):global(.footerHidden), :global(#app):global(.footerHiddenForced), :global(#app):global(.onboarding) {
+  .footer {
+    z-index: 5;
+    transform: translateY(calc(100% + 12px));
+  }
+}
