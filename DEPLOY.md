@@ -127,7 +127,7 @@ pages need the frontend to be live.
    | `APP_URL` | `https://app.archimedes.gufamily.org` |
    | `SITE_URL` | `https://archimedes.gufamily.org` |
    | `DATABASE_URL` / `DATABASE_URL_UNPOOLED` | set by the Neon integration |
-   | `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_FROM_NAME` | email (see "Email" below) |
+   | `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_FROM_NAME`, `EMAIL_REPLY_TO` | email (see "Email" below) |
    | `CONTACT_EMAIL` | where waitlist and demo-request form submissions are emailed |
    | `CRON_SECRET` | optional, 16+ random characters; lets scheduled jobs call the reminder/notification routes |
    | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | optional, Google sign-in |
@@ -163,8 +163,9 @@ so there's nothing to set up inside Resend besides the domain.
    `RESEND_API_KEY` on the backend project.
 4. Set `EMAIL_FROM` to an address on the verified domain, e.g.
    `hello@archimedes.gufamily.org`, and `EMAIL_FROM_NAME` to `Archimedes`.
-   Replies go to the same address, so either set up forwarding for it or use
-   an address you read.
+   `archimedes.gufamily.org` has no inbox, so replies go to `EMAIL_REPLY_TO`
+   if set, otherwise to `CONTACT_EMAIL`, so they reach an address you read
+   instead of bouncing.
 
 Without `RESEND_API_KEY` nothing is sent: each email, including its link, is
 printed to the backend log instead. That's how local development works. On

@@ -4,12 +4,13 @@
 //   sendEmails('limboReminder', [{ email, name, data }, ...])
 //
 // Settings: RESEND_API_KEY, EMAIL_FROM (an address on a domain verified in
-// Resend), EMAIL_FROM_NAME. Without RESEND_API_KEY nothing is sent: each email
+// Resend), EMAIL_FROM_NAME, and optionally EMAIL_REPLY_TO (a real inbox for
+// replies). Without RESEND_API_KEY nothing is sent: each email
 // is printed to the server log instead (handy for local sign-up testing).
 //
 // These functions never throw or reject: callers often don't await them, and
 // a failed email must not take a request (or the server) down with it.
-import { emailFrom } from './urls.js';
+import { emailFrom, emailReplyTo } from './urls.js';
 import { renderEmail } from './email-templates.js';
 
 const API = () => (process.env.RESEND_API_URL || 'https://api.resend.com').replace(/\/+$/, '');
@@ -22,8 +23,7 @@ const fromHeader = () => {
 
 function buildMessage(template, data, email) {
   const { subject, html, text } = renderEmail(template, data || {});
-  const { email: replyTo } = emailFrom();
-  return { from: fromHeader(), to: [email], reply_to: replyTo, subject, html, text };
+  return { from: fromHeader(), to: [email], reply_to: emailReplyTo(), subject, html, text };
 }
 
 function logInsteadOfSending(message) {
