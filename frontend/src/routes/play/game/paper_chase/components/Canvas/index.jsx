@@ -969,10 +969,7 @@ export default function Canvas({state, params: { section, itemId, scene }, input
     
 
     console.time('Load')
-    // Load a glTF resource
-    loader.load(
-      import.meta.env.NODE_ENV == 'production' || import.meta.env.NODE_ENV == 'staging' ? '/assets/models/index.glb.gz' : '/assets/models/index.glb',
-      function ( Assets ) {
+    const onAssetsLoaded = function ( Assets ) {
         console.timeEnd('Load')
 
         const world = initializeScenes(Assets, rendered)
@@ -992,8 +989,26 @@ export default function Canvas({state, params: { section, itemId, scene }, input
           setStatus('ready');
         }, 30)
 
-      }
-    );
+    };
+
+    // Load the glTF world. In production we download the gzipped file (3.9 MB
+    // instead of 8.7 MB) and decompress it in the browser, so it works on any
+    // host without special Content-Encoding headers.
+    const compressed = import.meta.env.NODE_ENV == 'production' || import.meta.env.NODE_ENV == 'staging';
+    if (compressed && typeof DecompressionStream !== 'undefined') {
+      fetch('/assets/models/index.glb.gz')
+        .then((response) => {
+          if (!response.ok) throw new Error('Could not download game assets: ' + response.status);
+          return new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+        })
+        .then((buffer) => loader.parse(buffer, '/assets/models/', onAssetsLoaded, (e) => console.error(e)))
+        .catch((e) => {
+          console.error(e);
+          loader.load('/assets/models/index.glb', onAssetsLoaded);
+        });
+    } else {
+      loader.load('/assets/models/index.glb', onAssetsLoaded);
+    }
   }, [scripts.success])
 
   useEffect(() => {

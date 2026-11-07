@@ -18,6 +18,12 @@ Sentry.init({
   user: ['email', 'id', 'name']
 });
 
+const LOG_SQL = process.env.NODE_ENV === 'development' || process.env.LOG_SQL === 'true';
+
+// Marketing pages are identical for every visitor: let browsers revalidate and
+// let the CDN serve them for a few minutes.
+const STATIC_PAGE_CACHE = 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400';
+
 export async function beforeMiddleware (app) {
 
   app.use(Sentry.Handlers.requestHandler());
@@ -57,6 +63,9 @@ export async function beforeMiddleware (app) {
         await req.locals.release(req)
         //await delay( Math.random() * 200 + 2300);
         if (result !== res && result !== req) {
+          if (typeof result === "string" && req.method === 'GET' && !req.locals.user && /^\s*<!DOCTYPE html/i.test(result)) {
+            res.setHeader('Cache-Control', STATIC_PAGE_CACHE);
+          }
           return res.send(typeof result === "string" ? result : app.locals.sanitizeResponse(result))
         } else {
           return res.end()
@@ -85,9 +94,11 @@ export async function beforeMiddleware (app) {
       });
     }
 
-    if (req.accepts('html')) {
-      res.setHeader('Cache-Control', 'max-age=31536000');
-    }
+    // API responses are per-user: never cache them. (This used to send a
+    // one-year max-age to anything that accepted HTML, which includes fetch()
+    // calls with Accept: */*.) Marketing pages opt into caching in the async
+    // wrapper below.
+    res.setHeader('Cache-Control', 'no-store');
 
     req.locals.startTime = Date.now();
     // acquire pg connection from the pool
@@ -102,20 +113,24 @@ export async function beforeMiddleware (app) {
 
       const time = new Date;
       try {
-        const formattedValues = (values || []).map((v) => {
-          return typeof v == 'string' && v.length > 100 ? v.substring(0, 100) + '...' : v;
-        });
         if (name) {
           var results = await req.locals.client.query({text: query, values, name})
-          console.info('[' + (new Date - time) + 'ms ' + name + ']', formattedValues);
         } else {
           var results = await req.locals.client.query(query, values)
-          console.info('[' + (new Date - time) + 'ms]', query, query.substring(0, 100) + '...', formattedValues);
+        }
+        if (LOG_SQL) {
+          // Development only: parameter values include password hashes,
+          // API keys and tokens, so they must never reach production logs.
+          const formattedValues = (values || []).map((v) => {
+            return typeof v == 'string' && v.length > 100 ? v.substring(0, 100) + '...' : v;
+          });
+          if (name) console.info('[' + (new Date - time) + 'ms ' + name + ']', formattedValues);
+          else console.info('[' + (new Date - time) + 'ms]', query, query.substring(0, 100) + '...', formattedValues);
         }
       } catch(e) {
-        console.log(e, 'error')
+        console.log('Query failed' + (name ? ' (' + name + ')' : '') + ':', e.message)
         if (e.toString().indexOf('current transaction is aborted') == -1) {
-          console.log(query)
+          if (LOG_SQL) console.log(query)
           throw e;
         }
         var results = {rows: []}

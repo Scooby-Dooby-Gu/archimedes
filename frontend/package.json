@@ -5,9 +5,9 @@
 		"start:production": "npm run build; npm run -s serve",
 		"start:staging": "npm run build; npm run -s serve",
 		"start:development": "./node_modules/.bin/vite",
-		"build:app": "./node_modules/.bin/vite --base ${APP_URL:-./} --config vite.config.mjs build; sed -i -E \"s^window.NODE_ENV^\\\"$NODE_ENV\\\"^;s^window.SENTRY_DSN^\\\"$SENTRY_DSN\\\"^;s^type=\\\"module\\\"^type=\\\"module\\\" onerror=\\\"reloadApp()\\\"^\" dist/index.html;",
-		"build:marketing": "./node_modules/.bin/vite --base ${APP_URL:-./}   --config vite.marketing.config.mjs build; sed -i -E \"s^window.NODE_ENV^\\\"$NODE_ENV\\\"^;s^window.SENTRY_DSN^\\\"$SENTRY_DSN\\\"^\" dist/marketing.html;",
-		"build": "npm run build:app; npm run build:marketing",
+		"build:app": "./node_modules/.bin/vite --base ${APP_URL:-./} --config vite.config.mjs build && sed -i -E \"s^window.NODE_ENV^\\\"$NODE_ENV\\\"^;s^window.SENTRY_DSN^\\\"$SENTRY_DSN\\\"^;s^type=\\\"module\\\"^type=\\\"module\\\" onerror=\\\"reloadApp()\\\"^\" dist/index.html;",
+		"build:marketing": "./node_modules/.bin/vite --base ${APP_URL:-./}   --config vite.marketing.config.mjs build && sed -i -E \"s^window.NODE_ENV^\\\"$NODE_ENV\\\"^;s^window.SENTRY_DSN^\\\"$SENTRY_DSN\\\"^\" dist/marketing.html;",
+		"build": "npm run build:app && npm run build:marketing",
 		"serve": "./node_modules/.bin/vite serve"
 	},
 	"eslintConfig": {
@@ -24,6 +24,7 @@
 		"@use-gesture/react": "^10.1.3",
 		"@wmrjs/service-worker": "^0.3.0",
 		"deep-equal": "^2.0.3",
+		"dotenv": "^8.6.0",
 		"fast-deep-equal": "^3.1.1",
 		"htm": "^3.0.4",
 		"immutability-helper": "^3.0.1",

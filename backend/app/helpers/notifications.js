@@ -1,22 +1,41 @@
+import fs from 'fs';
 import webpush from 'web-push';
 import apnModule from 'apn';
 
-webpush.setVapidDetails(
-  'mailto:simon@getmedes.com',
-  process.env.VAPID_PUBLIC_KEY,
-  process.env.VAPID_PRIVATE_KEY
-);
+// Both push providers are optional: when their credentials are missing the
+// app still starts, and notifications for that platform are skipped.
+const webPushEnabled = Boolean(process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY);
+if (webPushEnabled) {
+  webpush.setVapidDetails(
+    process.env.VAPID_SUBJECT || 'mailto:help@getmedes.com',
+    process.env.VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+  );
+}
 
-const apn = new apnModule.Provider({
+// Apple push: APN_KEY holds the .p8 key contents (use "\n" for newlines in
+// env dashboards). Locally, the old key file is used if it is present.
+const LEGACY_APN_KEY_FILE = './app/secret/apn_development/AuthKey_L955HC3RRR.p8';
+function apnKey() {
+  if (process.env.APN_KEY) return process.env.APN_KEY.replace(/\\n/g, '\n');
+  if (fs.existsSync(LEGACY_APN_KEY_FILE)) return fs.readFileSync(LEGACY_APN_KEY_FILE);
+  return null;
+}
+const key = apnKey();
+const apn = key ? new apnModule.Provider({
   token: {
-    key: "./app/secret/apn_development/AuthKey_L955HC3RRR.p8",
-    keyId: "L955HC3RRR",
-    teamId: "785LT86GCK"
+    key,
+    keyId: process.env.APN_KEY_ID || "L955HC3RRR",
+    teamId: process.env.APN_TEAM_ID || "785LT86GCK"
   },
-  production: true//process.env.NODE_ENV !== 'development'
-});
+  production: true
+}) : null;
 
 export { webpush, apn }
+
+function pushEnabledFor(platform) {
+  return platform === 'ios' ? Boolean(apn) : webPushEnabled;
+}
 
 export async function sendNotification(req, userId, content, throttle) {
   console.log("Attempting notification", userId, content);
@@ -47,7 +66,7 @@ export async function sendNotification(req, userId, content, throttle) {
     }
   }
 
-  return Promise.all(devices.map((device) => {
+  return Promise.all(devices.filter((device) => pushEnabledFor(device.platform)).map((device) => {
     console.log('Sending notification: ' + device.platform + ' of user ' + userId)
     return sendSingleNotification(device.platform, device.token, content)
     .then((e) => {
@@ -85,8 +104,8 @@ export async function sendSingleNotification(platform, token, { title, body, ...
     return result
   } else {
     const subscription = JSON.parse(token);
-    const badge = 'https://staging.getmedes.com/assets/icons/pwa-monochrome-96x96.png'
-    const icon = 'https://staging.getmedes.com/assets/icons/pwa-monochrome-96x96.png'
+    const badge = `${process.env.APP_URL}/assets/icons/pwa-monochrome-96x96.png`
+    const icon = `${process.env.APP_URL}/assets/icons/pwa-monochrome-96x96.png`
     return await webpush.sendNotification(subscription, JSON.stringify({ title, body, data, icon, badge }));
   }
 }

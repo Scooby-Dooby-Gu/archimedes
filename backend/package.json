@@ -10,7 +10,10 @@
     "start:staging": "NODE_ENV=staging  node_modules/.bin/pm2 start --no-daemon  --wait-ready --listen-timeout 3000 --env=staging --node-args=\"-r dotenv-safe/config --expose-gc\" app/index.js -i 4 -f --name=\"Archimedes\"",
     "start:development": "nodemon --expose-gc -r dotenv-safe/config app/index.js dotenv_config_allowEmptyValues=true",
     "start:once": "node --expose-gc -r dotenv-safe/config app/index.js dotenv_config_allowEmptyValues=true",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:setup": "node scripts/db.js setup",
+    "db:migrate": "node scripts/db.js migrate",
+    "vercel-build": "node scripts/db.js vercel-build"
   },
   "repository": {
     "type": "git",
@@ -29,6 +32,7 @@
     "aws-sdk": "^2.580.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^8.6.0",
     "dotenv-safe": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
