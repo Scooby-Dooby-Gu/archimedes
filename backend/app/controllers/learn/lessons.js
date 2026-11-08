@@ -19,7 +19,7 @@ function enrichDefinitionMicrodata(html = '') {
 
 export default (app, req) => {
 
-  app.postAsync('/courses/:courseId/lessons/:lessonId?', app.locals.userOnly, app.locals.upload.single('lesson[image]'), async (req, res) => {
+  app.postAsync('/courses/:courseId/lessons/:lessonId?', app.locals.writerOnly, app.locals.upload.single('lesson[image]'), async (req, res) => {
     const image = req.file
     const lesson = await req.locals.selectOne(
       app.locals.UPSERT('lessons', ['course_id', 'previous_lesson_id', 'name', 'description', 'image', 'image_sizes', 'duration', 'difficulty', 'content_html', 'glossary_terms','questions', 'author_id', 'slugs', 'published_at'], undefined, ['image', 'image_sizes']),
@@ -52,7 +52,7 @@ export default (app, req) => {
   })
 
 
-  app.deleteAsync('/courses/:courseId/lessons/:lessonId', app.locals.userOnly, async (req, res) => {
+  app.deleteAsync('/courses/:courseId/lessons/:lessonId', app.locals.writerOnly, async (req, res) => {
     const query = "DELETE FROM lessons WHERE id = $1 RETURNING *";
     const lesson = await req.locals.selectOne(
       query,
@@ -62,7 +62,7 @@ export default (app, req) => {
     return { topic: lesson }
   });
 
-  app.postAsync('/courses/:courseId/lessons/:lessonId/move', app.locals.userOnly, async (req, res) => {
+  app.postAsync('/courses/:courseId/lessons/:lessonId/move', app.locals.writerOnly, async (req, res) => {
     return req.locals.query(
       app.locals.MOVE('lessons', 'id', ['course_id']),
       [req.params.courseId, req.params.lessonId, req.body.order],
@@ -147,19 +147,33 @@ export default (app, req) => {
     }
   })
 
-  app.getAsync('/embeds', async (req, res) => {
+  // Link previews. Anyone can read a cached preview; fetching a new one makes
+  // the server load the URL, so that needs a signed-in user, and overriding a
+  // preview's text or image is for writers.
+  app.getAsync('/embeds', app.locals.rateLimit('embeds', 120, 10 * 60), async (req, res) => {
     return fetchEmbed(req, req.query.url);
   })
 
-  app.putAsync('/embeds', async (req, res) => {
+  app.putAsync('/embeds', app.locals.writerOnly, async (req, res) => {
     return fetchEmbed(req, req.query.url, true, req.body.embed)
   });
 
   async function fetchEmbed (req, url, refresh, overrides) {
+    if (typeof url !== 'string' || !url || url.length > 2048) {
+      throw new app.locals.BadRequest('Provide a url');
+    }
     const query = "SELECT * FROM embeds WHERE url=$1";
     var embed = await req.locals.selectOne(query, [url], 'find-embed-by-url');
     var error;
+    if (!embed && !(req.locals.user && req.locals.user.verifiedAt)) {
+      return { url, error: 'Sign in to load this preview' };
+    }
     if (!embed || refresh) {
+      try {
+        await app.locals.assertPublicUrl(url);
+      } catch (e) {
+        return { url, error: e.message };
+      }
       try {
         var data = await app.locals.extractOpenGraphFromUrl(url);
       } catch(e) {

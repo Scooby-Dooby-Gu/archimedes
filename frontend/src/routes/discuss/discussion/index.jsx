@@ -109,7 +109,7 @@ export default function Discussion({boardId, topicId, discussionId, page = 1, su
       </aside>
       <User user={discussion.user} class="gray" />
       <div class={style.post}>
-        <p>{formatters.markdown(discussion.description)}</p>
+        <p>{formatters.userMarkdown(discussion.description)}</p>
         {discussion.image && !discussion.image.isPlaceholder && <Img onClick={() => setExpanded((e) => !e)} crossorigin={(discussion.image || '').match(/archimedes.*s3/) && 'anonymous'} srcset={discussion.imageSizes} src={discussion.image} class={expanded ? style.expanded : style.collapsed} />}
       </div>
     </div>
@@ -170,7 +170,7 @@ export default function Discussion({boardId, topicId, discussionId, page = 1, su
               }}>{target.user.name}</a>{index == reply.targets.length - 1 ? '' : index == reply.targets.length - 2 ? ' and ' : ', '}</>
             })}
           </p>}
-          {formatters.markdown(reply.body)}
+          {formatters.userMarkdown(reply.body)}
           {!replies.isPlaceholder && <a class={style.reply_link} href="#" onClick={(e) => {
             replyTo(reply);
             e.preventDefault();

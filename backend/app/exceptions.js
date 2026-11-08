@@ -67,3 +67,24 @@ export class BadRequest extends Error {
     status = 400
     message = 'Bad request'
 }
+// Signed in, but not allowed to touch this record (someone else's post or
+// account). 403 rather than 401 so the app doesn't treat it as signed out.
+export class Forbidden extends Error {
+    constructor(message) {
+        super()
+        if (message) 
+            this.message = message
+    }
+    status = 403
+    message = "You don't have permission to do that"
+}
+
+export class TooManyRequests extends Error {
+    constructor(message) {
+        super()
+        if (message) 
+            this.message = message
+    }
+    status = 429
+    message = 'Too many attempts. Please wait a few minutes and try again.'
+}

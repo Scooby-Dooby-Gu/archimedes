@@ -1,6 +1,6 @@
 export default (app, req) => {
   
-  app.postAsync('/password_reset_requests/', async (req, res) => {
+  app.postAsync('/password_reset_requests/', app.locals.rateLimit('password-reset-email', 5, 3600), async (req, res) => {
     const user = await req.locals.selectOne(
       "SELECT id, salt, email, name, avatar FROM private.users WHERE email = $1",
       [req.body.passwordResetRequest.email.toLowerCase()],
@@ -27,7 +27,7 @@ export default (app, req) => {
   });
 
 
-  app.getAsync('/password_reset_requests/:token', async (req, res) => {
+  app.getAsync('/password_reset_requests/:token', app.locals.rateLimit('password-reset-token', 20, 900), async (req, res) => {
     const passwordResetRequest = await req.locals.selectOne(
       "SELECT id, user_id, created_at FROM password_reset_requests WHERE token = $1",
       [req.params.token],

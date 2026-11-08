@@ -183,8 +183,19 @@ export async function beforeMiddleware (app) {
     next();
   })
 
-  // enable cors
-  app.use(cors())
+  // CORS: browsers may only call the API from the app and the marketing site
+  // (plus localhost outside production, and any extra CORS_ORIGINS, comma
+  // separated). Requests without an Origin header (curl, server-to-server,
+  // same-origin pages) aren't affected.
+  const allowedOrigins = new Set(
+    [process.env.APP_URL, process.env.SITE_URL, ...(process.env.CORS_ORIGINS || '').split(',')]
+      .map((u) => (u || '').trim().replace(/\/+$/, ''))
+      .filter(Boolean)
+  );
+  const isDevOrigin = (origin) => process.env.NODE_ENV !== 'production' && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+  app.use(cors({
+    origin: (origin, callback) => callback(null, !origin || allowedOrigins.size === 0 || allowedOrigins.has(origin) || isDevOrigin(origin)),
+  }))
 
   // allow _method query param instead of real method to avoid OPTIONS request 
   app.use(function (req, res, next) {

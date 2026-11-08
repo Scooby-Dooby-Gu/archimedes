@@ -953,7 +953,10 @@ export default (app) => {
   app.postAsync('/logs', async (req, res) => {
     return await req.locals.query(
       `INSERT INTO logs(type, category, action, label, value, user_id) VALUES($1, $2, $3, $4, $5, $6)`,
-      [req.body.type, req.body.category, req.body.action, req.body.label, req.body.value, req.body.uid || (req.locals.user ? req.locals.user.id : null) || null],
+      // Events are attributed to the signed-in user only (the body's uid used
+      // to be trusted, so anyone could log events as anyone).
+      [req.body.type, req.body.category, req.body.action, req.body.label, req.body.value].map((v) => v == null ? null : String(v).slice(0, 255))
+        .concat(req.locals.user ? req.locals.user.id : null),
       'insert-logs'
     )
   })

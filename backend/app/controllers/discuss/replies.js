@@ -1,5 +1,5 @@
 export default (app, req) => {
-  app.postAsync('/boards/:boardId/topics/:topicId/discussions/:discussionId/replies', app.locals.userOnly, async (req, res) => {
+  app.postAsync('/boards/:boardId/topics/:topicId/discussions/:discussionId/replies', app.locals.userOnly, app.locals.rateLimit('replies', 60, 3600), async (req, res) => {
     const query = app.locals.SELECT("discussions", {
       attributes: ['id', 'name', 'user_id', 'description', 'image', 'created_at'],
 
@@ -91,11 +91,12 @@ export default (app, req) => {
     return reply
   });
 
-  app.deleteAsync('/boards/:boardId/topics/:topicId/discussions/:discussionId/replies/:replyId', async (req, res) => {
-    const query = "DELETE FROM replies WHERE id = $1 RETURNING *";
+  // Authors can delete their own replies; moderators can delete any.
+  app.deleteAsync('/boards/:boardId/topics/:topicId/discussions/:discussionId/replies/:replyId', app.locals.userOnly, async (req, res) => {
+    const query = "DELETE FROM replies WHERE id = $1 AND ($2 OR user_id = $3) RETURNING *";
     const reply = await req.locals.selectOne(
       query,
-      [req.params.replyId],
+      [req.params.replyId, app.locals.isModerator(req.locals.user), req.locals.user.id],
       'delete-reply'
     );
     return { reply: reply }

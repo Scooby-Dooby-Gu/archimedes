@@ -88,7 +88,7 @@ export default (app, req) => {
     }
   });
 
-  app.deleteAsync('/boards/:boardId/topics/:topicId', async (req, res) => {
+  app.deleteAsync('/boards/:boardId/topics/:topicId', app.locals.moderatorOnly, async (req, res) => {
     const query = "DELETE FROM topics WHERE id = $1 RETURNING *";
     const result = await req.locals.selectOne(
       query,
@@ -98,7 +98,7 @@ export default (app, req) => {
     return { topic: result }
   });
 
-  app.postAsync('/boards/:boardId/topics/:topicId/move', async (req, res) => {
+  app.postAsync('/boards/:boardId/topics/:topicId/move', app.locals.moderatorOnly, async (req, res) => {
     await req.locals.query(`
       UPDATE topics t
       SET "order" = CASE
@@ -118,7 +118,7 @@ export default (app, req) => {
     return {};
   });
 
-  app.postAsync('/boards/:boardId/topics/:topicId?', app.locals.userOnly, app.locals.upload.fields([
+  app.postAsync('/boards/:boardId/topics/:topicId?', app.locals.moderatorOnly, app.locals.upload.fields([
     {name: 'topic[icon]', maxCount: 1},
     {name: 'topic[cover]', maxCount: 1}
   ]), async (req, res) => {

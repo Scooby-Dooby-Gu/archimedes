@@ -679,6 +679,15 @@ CREATE TABLE public.logs(
 );
 CREATE INDEX IF NOT EXISTS log_lookup ON logs(type, category, created_at DESC);
 
+-- Request counters for rate limiting sign-in, sign-up, password resets and
+-- the public forms (see app/helpers/rate-limit.js).
+DROP TABLE IF EXISTS private.rate_limits CASCADE;
+CREATE TABLE private.rate_limits(
+  key VARCHAR(255) PRIMARY KEY,
+  window_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  count INTEGER NOT NULL DEFAULT 0
+);
+
 
 CREATE OR REPLACE FUNCTION update_discussion_search_vector()
   RETURNS trigger AS

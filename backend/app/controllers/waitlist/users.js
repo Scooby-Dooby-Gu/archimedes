@@ -17,7 +17,7 @@ export default (app, req) => {
     }, () => {});
   }
 
-  app.postAsync('/waitlist/users', async (req, res) => {
+  app.postAsync('/waitlist/users', app.locals.rateLimit('waitlist', 5, 3600), async (req, res) => {
     const { email } = req.body;
     if (looksLikeEmail(email)) {
       notify('New waitlist sign up', [`Email: ${email}`]);
@@ -25,7 +25,7 @@ export default (app, req) => {
     res.redirect(app.locals.siteUrl() + '/success');
   })
 
-  app.postAsync('/sales/demo-request', async (req, res) => {
+  app.postAsync('/sales/demo-request', app.locals.rateLimit('demo-request', 5, 3600), async (req, res) => {
     const { firstName, lastName, company, phoneNumber, email } = req.body;
     if (looksLikeEmail(email)) {
       notify('New demo request', [

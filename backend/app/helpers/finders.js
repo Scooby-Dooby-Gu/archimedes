@@ -113,7 +113,8 @@ export async function userOnly (req, res, next) {
 export async function managerOnly (req, res, next) {
   if (!req.locals.user || !req.locals.user.verifiedAt) {
     next(new req.locals.app.locals.Unauthorized)
-  } else if (req.locals.user.role !== 'admin' && req.locals.company && !req.locals.company.managerIds.includes(req.locals.user.id)) {
+  } else if (req.locals.user.role !== 'admin' && (!req.locals.company || !req.locals.company.managerIds.includes(req.locals.user.id))) {
+    // Without a company in the URL this creates one, which only admins may do.
     next(new req.locals.app.locals.UnauthorizedManager)
   } else {
     next();
@@ -151,10 +152,34 @@ export async function selfOnly (req, res, next) {
   }
 }
 
+// Roles that may edit learning content (courses, lessons, videos, ambitions).
+export function isWriter(user) {
+  return !!user && ['writer', 'moderator', 'admin'].includes(user.role);
+}
+// Roles that may moderate the forum (edit or delete anyone's posts, manage topics).
+export function isModerator(user) {
+  return !!user && ['moderator', 'admin'].includes(user.role);
+}
+// True when the signed-in user is the given user, or an admin.
+export function isSelfOrAdmin(req, userId) {
+  const user = req.locals.user;
+  return !!user && (user.role === 'admin' || String(user.id) === String(userId));
+}
+
+export async function moderatorOnly (req, res, next) {
+  if (!req.locals.user || !req.locals.user.verifiedAt) {
+    next(new req.locals.app.locals.Unauthorized)
+  } else if (!isModerator(req.locals.user)) {
+    next(new req.locals.app.locals.UnauthorizedAdmin)
+  } else {
+    next();
+  }
+}
+
 export async function writerOnly (req, res, next) {
   if (!req.locals.user || !req.locals.user.verifiedAt) {
     next(new req.locals.app.locals.Unauthorized)
-  } else if (req.locals.user.role === 'user') {
+  } else if (!isWriter(req.locals.user)) {
     next(new req.locals.app.locals.UnauthorizedWriter)
   } else {
     next();

@@ -27,7 +27,7 @@ export default (app, req) => {
     limit: '$2'
   })
 
-  app.postAsync('/videos/:videoId?', app.locals.userOnly, app.locals.upload.single('video[image]'), async (req, res) => {
+  app.postAsync('/videos/:videoId?', app.locals.writerOnly, app.locals.upload.single('video[image]'), async (req, res) => {
     const video = await req.locals.selectOne(
       app.locals.UPSERT('videos', ['expert_ids', 'scheduled_at', 'published_at', 'name', 'content_html', 'summary_html', 'footer_html', 'slugs', 'image', 'image_sizes'], undefined, ['image', 'image_sizes']),
       [JSON.stringify(app.locals.underscoreObject({
@@ -56,10 +56,29 @@ export default (app, req) => {
   });
 
   app.postAsync('/videos/:videoId/questions/:questionId?', app.locals.userOnly, async (req, res) => {
+    // Anyone can ask; only the asker or a writer can edit a question, and only
+    // writers can answer it (transcription, timestamp, "important").
+    const isWriter = app.locals.isWriter(req.locals.user);
+    if (req.params.questionId) {
+      const existing = await req.locals.selectOne(
+        'SELECT author_id FROM questions WHERE id = $1',
+        [req.params.questionId],
+        'find-question-author'
+      );
+      if (!existing) throw new app.locals.NotFound('Question is not found');
+      if (!isWriter && existing.authorId !== req.locals.user.id) throw new app.locals.Forbidden;
+    }
+    if (!isWriter) {
+      for (const key of ['transcriptionHtml', 'transcription_html', 'seconds', 'isImportant', 'is_important']) {
+        delete req.body.question[key];
+      }
+    }
 
 
     const question = await req.locals.selectOne(
-      app.locals.UPSERT('questions', [ 'video_id', 'content', 'slugs', 'seconds', 'transcription_html', 'author_id', 'is_important'], undefined, [], ['author_id']),
+      app.locals.UPSERT('questions', [ 'video_id', 'content', 'slugs', 'seconds', 'transcription_html', 'author_id', 'is_important'], undefined, [],
+        // A non-writer editing their question keeps the writer's answer intact.
+        isWriter ? ['author_id'] : ['author_id', 'transcription_html', 'seconds', 'is_important']),
       [JSON.stringify(app.locals.underscoreObject({
         ...req.body.question,
         id: req.params.questionId || null,

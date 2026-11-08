@@ -34,8 +34,9 @@ export async function befriendAndNotify(req, sourceId, targetId) {
 
 export default (app, req) => {
   app.deleteAsync('/friendships/:id', app.locals.userOnly, async (req, res) => {
-    const query = `DELETE FROM friendships WHERE id=$1 RETURNING *`
-    const friendship = await req.locals.selectOne(query, [req.params.id]);
+    // Only one of the two friends (or an admin) can end a friendship.
+    const query = `DELETE FROM friendships WHERE id=$1 AND ($2 OR $3 IN (source_id, target_id)) RETURNING *`
+    const friendship = await req.locals.selectOne(query, [req.params.id, req.locals.user.role === 'admin', req.locals.user.id]);
     if (friendship) {
       const query2 = `DELETE FROM friendships WHERE target_id=$1 and source_id=$2 RETURNING *`
       await req.locals.query(query2, [friendship.sourceId, friendship.targetId]);
@@ -81,11 +82,15 @@ export default (app, req) => {
     }, email)
   }
 
-  app.postAsync('/friendships/', app.locals.possiblyUnverifiedUserOnly, async (req, res) => {
+  app.postAsync('/friendships/', app.locals.possiblyUnverifiedUserOnly, app.locals.rateLimit('friend-invites', 20, 3600), async (req, res) => {
     if (req.body.emails) {
-      var emails = req.body.emails.toLowerCase()
+      // Each invite sends an email, so cap how many one request can send.
+      var emails = String(req.body.emails).toLowerCase()
         .split(/\s*?[,;\r\n\s]\s*?/)
         .filter((email) => email.includes('@'))
+      if (emails.length > 10) {
+        throw new app.locals.BadRequest('You can invite up to 10 people at a time.');
+      }
       // check if we've got user with that email
       if (emails.length) {
         const query = app.locals.SELECT("users", {
@@ -93,13 +98,13 @@ export default (app, req) => {
           attributes: ['id', 'name', 'email', 'verified_at']
         }) + ' WHERE email = ANY ($1)';
         const users = await req.locals.select(query, [emails]);
-        await Promise.all(users.map((user) => befriendAndNotify(req, req.query.source_id, user.id)))
+        await Promise.all(users.map((user) => befriendAndNotify(req, req.locals.user.id, user.id)))
         emails = emails.filter((email) => users.every((user) => user.email != email));
         console.log(users, emails)
       }
       if (emails.length) {
         await Promise.all(emails.map((email) => {
-          return invite(req, email, req.body.role)
+          return invite(req, email, req.locals.user.role === 'admin' ? req.body.role : null)
         }))
         return 'Your invitation to ' + emails.join(', ') + ' has been sent!'
       }

@@ -95,7 +95,7 @@ async function passwordMatches(req, user, password) {
 export default (app) => {
 
 
-  app.postAsync('/signin', async (req, res) => {
+  app.postAsync('/signin', app.locals.rateLimit('signin', 10, 900), async (req, res) => {
     const query = app.locals.SELECT("users", {
       schema: 'private',
       attributes: ['id', 'name', 'email', 'avatar', 'salt', 'hashed_password', 'api_key', 'role', 'verified_at', 'external'],
@@ -121,7 +121,7 @@ export default (app) => {
   })
 
 
-  app.postAsync('/signin/external', async (req, res) => {
+  app.postAsync('/signin/external', app.locals.rateLimit('signin-external', 30, 900), async (req, res) => {
     // Identity must come from a verified provider credential, never from the
     // request body: otherwise anyone could sign in as any email address.
     const source = req.body.user?.external?.source;
@@ -192,7 +192,7 @@ export default (app) => {
 
   })
 
-  app.postAsync('/verifications/repeat', async (req, res) => {
+  app.postAsync('/verifications/repeat', app.locals.rateLimit('verification-email', 5, 3600), async (req, res) => {
     const query = app.locals.SELECT("users", {
       schema: 'private',
       attributes: ['id', 'email', 'verification_token'],
@@ -212,7 +212,7 @@ export default (app) => {
   })
 
 
-  app.postAsync('/verifications/:token', async (req, res) => {
+  app.postAsync('/verifications/:token', app.locals.rateLimit('verify', 20, 900), async (req, res) => {
     const query = app.locals.SELECT("users", {
       schema: 'private',
       attributes: ['id', 'name', 'email', 'avatar', 'salt', 'hashed_password', 'api_key', 'role', 'verified_at'],
@@ -258,7 +258,7 @@ export default (app) => {
     });
   }
 
-  app.postAsync('/signup', upload.none(), async (req, res) => {
+  app.postAsync('/signup', app.locals.rateLimit('signup', 5, 3600), upload.none(), async (req, res) => {
     const email = req.body.user.email.toLowerCase();
 
     const query = app.locals.SELECT("users", {
@@ -357,7 +357,7 @@ export default (app) => {
     return device;
   })
 
-  app.putAsync('/users/:userId/password', async (req, res) => {
+  app.putAsync('/users/:userId/password', app.locals.rateLimit('password', 10, 900), async (req, res) => {
     if (!req.locals.user || req.locals.user.id != req.params.userId) {
       if (!req.query.token) {
         throw new app.locals.BadRequest('Token was not provided')

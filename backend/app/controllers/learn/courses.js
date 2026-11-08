@@ -51,7 +51,7 @@ export default (app, req) => {
   });
 
 
-  app.deleteAsync('/courses/:courseId', app.locals.userOnly, async (req, res) => {
+  app.deleteAsync('/courses/:courseId', app.locals.writerOnly, async (req, res) => {
     const query = "DELETE FROM courses WHERE id = $1 RETURNING *";
     const course = await req.locals.selectOne(
       query,
@@ -61,7 +61,7 @@ export default (app, req) => {
     return { course }
   });
 
-  app.postAsync('/courses/:courseId/move', app.locals.userOnly, async (req, res) => {
+  app.postAsync('/courses/:courseId/move', app.locals.writerOnly, async (req, res) => {
     await req.locals.query(
       app.locals.MOVE('courses', 'id'),
       [req.params.courseId, req.body.order],

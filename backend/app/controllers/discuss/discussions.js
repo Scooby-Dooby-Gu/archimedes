@@ -44,11 +44,12 @@ export default (app, req) => {
     
   })
 
-  app.deleteAsync('/boards/:boardId/topics/:topicId/discussions/:discussionId', async (req, res) => {
-    const query = "DELETE FROM discussions WHERE id = $1 RETURNING *";
+  // Authors can delete their own discussions; moderators can delete any.
+  app.deleteAsync('/boards/:boardId/topics/:topicId/discussions/:discussionId', app.locals.userOnly, async (req, res) => {
+    const query = "DELETE FROM discussions WHERE id = $1 AND ($2 OR user_id = $3) RETURNING *";
     const discussion = await req.locals.selectOne(
       query,
-      [req.params.discussionId],
+      [req.params.discussionId, app.locals.isModerator(req.locals.user), req.locals.user.id],
       'delete-discussion'
     );
     return { discussion: discussion }
@@ -124,11 +125,32 @@ export default (app, req) => {
   });
 
 
-  app.postAsync('/boards/:boardId/topics/:topicId/discussions/:discussionId?', app.locals.userOnly, app.locals.upload.single('discussion[image]'), async (req, res) => {
+  app.postAsync('/boards/:boardId/topics/:topicId/discussions/:discussionId?', app.locals.userOnly, app.locals.rateLimit('discussions', 20, 3600), app.locals.upload.single('discussion[image]'), async (req, res) => {
     const image = req.file
-    const keepAttributes = ['user_id'].concat(
-      req.body.discussion.closedAt ? ['closed_at'] : [],
-      req.body.discussion.pinnedAt ? ['pinned_at'] : []
+    const isModerator = app.locals.isModerator(req.locals.user);
+    // Editing an existing discussion: only its author or a moderator.
+    if (req.params.discussionId) {
+      const existing = await req.locals.selectOne(
+        'SELECT user_id FROM discussions WHERE id = $1',
+        [req.params.discussionId],
+        'find-discussion-owner'
+      );
+      if (!existing) throw new app.locals.NotFound('Discussion is not found');
+      if (!isModerator && existing.userId !== req.locals.user.id) throw new app.locals.Forbidden;
+    }
+    // Pinning, closing and linking a lesson's feedback thread are for moderators/writers.
+    if (!isModerator) {
+      delete req.body.discussion.closedAt;
+      delete req.body.discussion.pinnedAt;
+    }
+    if (!app.locals.isWriter(req.locals.user)) {
+      delete req.body.discussion.lessonId;
+      delete req.body.discussion.lesson_id;
+    }
+    // Only moderators can change closed/pinned; for everyone else they stay as they are.
+    const keepAttributes = ['user_id', 'lesson_id'].concat(
+      !isModerator || req.body.discussion.closedAt ? ['closed_at'] : [],
+      !isModerator || req.body.discussion.pinnedAt ? ['pinned_at'] : []
     )
     var discussion = await req.locals.selectOne(
       app.locals.UPSERT('discussions', ['user_id', 'topic_id', 'name', 'description', 'image', 'image_sizes', 'closed_at', 'pinned_at', 'lesson_id'], undefined, ['image'], keepAttributes),

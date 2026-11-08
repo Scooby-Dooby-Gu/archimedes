@@ -121,7 +121,7 @@ export default (app, req) => {
     }
   })
 
-  app.postAsync('/ambitions/:ambitionId?', app.locals.userOnly, app.locals.upload.single('ambition[image]'), async (req, res) => {
+  app.postAsync('/ambitions/:ambitionId?', app.locals.writerOnly, app.locals.upload.single('ambition[image]'), async (req, res) => {
 
     const ambition = await req.locals.selectOne(
       app.locals.UPSERT('ambitions', ['name', 'color', 'tagline', 'description', 'previous_ambition_id', 'question', 'slugs', 'type', 'author_id', 'image', 'image_sizes'], undefined, ['image', 'image_sizes']),
@@ -148,7 +148,7 @@ export default (app, req) => {
     return { ambition }
   });
 
-  app.postAsync('/ambitions/:ambitionId/assignments/:assignmentId?', app.locals.userOnly, app.locals.upload.single('assignment[goal][image]'), async (req, res) => {
+  app.postAsync('/ambitions/:ambitionId/assignments/:assignmentId?', app.locals.writerOnly, app.locals.upload.single('assignment[goal][image]'), async (req, res) => {
     if (!req.body.assignment.goal) {
       var assignment = await assignGoalToAmbition(req, req.body.assignment.goalId, req.params.ambitionId);
 
@@ -182,7 +182,7 @@ export default (app, req) => {
     return { goal, assignment }
   });
 
-  app.postAsync('/ambitions/:ambitionId/goals/:goalId/tasks/:taskId?', app.locals.upload.single('task[promoImage]'), async (req, res) => {
+  app.postAsync('/ambitions/:ambitionId/goals/:goalId/tasks/:taskId?', app.locals.writerOnly, app.locals.upload.single('task[promoImage]'), async (req, res) => {
     const task = await req.locals.selectOne(
       app.locals.UPSERT('tasks', [ 'name', 'visibility', 'type', 'url', 'description', 'lesson_id', 'video_id', 'goal_id', 'promo_url', 'promo_cta', 'promo_image', 'promo_image_sizes'], undefined, ['promo_image', 'promo_image_sizes']),
       [JSON.stringify(app.locals.underscoreObject({
@@ -207,14 +207,14 @@ export default (app, req) => {
     return { task }
   });
 
-  app.postAsync('/ambitions/:ambitionId/move', app.locals.userOnly, async (req, res) => {
+  app.postAsync('/ambitions/:ambitionId/move', app.locals.writerOnly, async (req, res) => {
     return req.locals.query(
       app.locals.MOVE('ambitions', 'id', [], {'type': 'asc'}),
       [req.params.ambitionId, req.body.order],
       'move-ambition');
   });
 
-  app.postAsync('/ambitions/:ambitionId/goals/:goalId/move', app.locals.userOnly, async (req, res) => {
+  app.postAsync('/ambitions/:ambitionId/goals/:goalId/move', app.locals.writerOnly, async (req, res) => {
     console.log(app.locals.MOVE('goal_ambitions', ['goal_id'], ['ambition_id'], {}))
     return req.locals.query(
       app.locals.MOVE('goal_ambitions', ['goal_id'], ['ambition_id']),
@@ -222,7 +222,7 @@ export default (app, req) => {
       'move-assignment');
   });
 
-  app.postAsync('/ambitions/:ambitionId/goals/:goalId/tasks/:taskId/move', app.locals.userOnly, async (req, res) => {
+  app.postAsync('/ambitions/:ambitionId/goals/:goalId/tasks/:taskId/move', app.locals.writerOnly, async (req, res) => {
     return req.locals.query(
       app.locals.MOVE('tasks', 'id', ['goal_id'], {'visibility': 'asc'}),
       [req.params.goalId, req.params.taskId, req.body.order]);
@@ -276,7 +276,7 @@ export default (app, req) => {
   });
 
 
-  app.deleteAsync('/ambitions/:ambitionId', async (req, res) => {
+  app.deleteAsync('/ambitions/:ambitionId', app.locals.writerOnly, async (req, res) => {
     const ambition = await req.locals.selectOne(
       "DELETE FROM ambitions WHERE id = $1 RETURNING *",
       [req.params.ambitionId],
@@ -307,7 +307,7 @@ export default (app, req) => {
     return { assignment }
   });
 
-  app.deleteAsync('/ambitions/:ambitionId/goals/:goalId/tasks/:taskId', async (req, res) => {
+  app.deleteAsync('/ambitions/:ambitionId/goals/:goalId/tasks/:taskId', app.locals.writerOnly, async (req, res) => {
     const task = await req.locals.selectOne(
       "DELETE FROM tasks WHERE id = $1 RETURNING *",
       [req.params.taskId],

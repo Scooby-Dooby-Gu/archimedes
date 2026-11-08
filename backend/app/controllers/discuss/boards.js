@@ -1,5 +1,5 @@
 export default (app, req) => {
-  app.postAsync('/boards/:boardId?', app.locals.upload.single('board[image]'), async (req, res) => {
+  app.postAsync('/boards/:boardId?', app.locals.adminOnly, app.locals.upload.single('board[image]'), async (req, res) => {
     const results = await req.locals.query(
       app.locals.UPSERT('boards', ['name', 'description']),
       [JSON.stringify({

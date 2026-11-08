@@ -252,7 +252,7 @@ export default (app, req) => {
     return { game };
   });
 
-  app.deleteAsync('/games/:gameId/sessions/:userId', app.locals.userOnly, async (req, res) => {
+  app.deleteAsync('/games/:gameId/sessions/:userId', app.locals.selfOnly, async (req, res) => {
     return req.locals.query(`
     UPDATE game_sessions 
     SET is_finished = true

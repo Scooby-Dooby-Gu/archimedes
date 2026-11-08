@@ -14,7 +14,8 @@
     "db:setup": "node scripts/db.js setup",
     "db:migrate": "node scripts/db.js migrate",
     "vercel-build": "node scripts/db.js vercel-build",
-    "import:content": "node scripts/import-content.js"
+    "import:content": "node scripts/import-content.js",
+    "feedback-threads": "node scripts/create-feedback-threads.js"
   },
   "repository": {
     "type": "git",

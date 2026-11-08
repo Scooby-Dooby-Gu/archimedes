@@ -34,7 +34,7 @@ export default function ({boardId, topicId, discussionId, page = 1, success}) {
   const content = useMemo(() => <>
     <div class="summary">
       <Img src={topic.cover} class="cover" />
-      <p>{formatters.markdown(topic.description)}</p>
+      <p>{formatters.userMarkdown(topic.description)}</p>
     </div>
 
     {topic.discussions.length === 0 && <div class="empty-state">

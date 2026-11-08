@@ -178,12 +178,13 @@ Please let us know! We're here to help.`
             <LocalizedDateTime date={reply.createdAt} />
           </aside>,
           <User user={reply.user} />,
-          formatters.markdown(reply.body)
+          formatters.userMarkdown(reply.body)
         ])}
       </a>}
     </footer>}
-    {!discussion && <footer key="questions2" class={style.footer}>
-      <p>Admin: This lesson does not have assigned feedback thread yet</p>
+    {/* Only admins/moderators can fix a missing feedback thread, so only they see this. */}
+    {user && canManage && !discussion && <footer key="questions2" class={style.footer}>
+      <p>Admin: this lesson doesn't have a feedback thread yet.</p>
       <Button.Link href={`/boards/3/topics/0/discussions/new?name=${encodeURIComponent("Feedback for " + lesson.name)}&lessonId=${lesson.id}&description=${encodeURIComponent(feedbackPrompt)}`} class="wide" icon="Discussion">Start feedback page</Button.Link>
     </footer>}
     {!user && <footer class={`${style.footer} ${style.signup}`}>

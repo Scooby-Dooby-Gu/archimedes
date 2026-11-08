@@ -66,6 +66,15 @@ export default (app, req) => {
       throw new Error('Can not find the user')
     }
 
+    // Contact details and settings are only for the user themself (or an admin).
+    if (!app.locals.isSelfOrAdmin(req, user.id)) {
+      delete user.email;
+      delete user.phoneNumber;
+      delete user.bornAt;
+      delete user.settings;
+      if (Array.isArray(user.friends)) user.friends.forEach((friend) => { if (friend) delete friend.email; });
+    }
+
     return { user }
   });
 
@@ -82,6 +91,7 @@ export default (app, req) => {
   })
 
   app.getAsync('/users/:userId/invites', app.locals.possiblyUnverifiedUserOnly, async (req, res) => {
+    if (!app.locals.isSelfOrAdmin(req, req.params.userId)) throw new app.locals.Forbidden;
     const query = app.locals.SELECT("invites", {
       attributes: ['id', 'email', 'accepted_at', 'created_at', 'updated_at'],
 
@@ -142,7 +152,7 @@ export default (app, req) => {
     return { achivements }
   })
 
-  app.deleteAsync('/users/:userId', app.locals.userOnly, async (req, res) => {
+  app.deleteAsync('/users/:userId', app.locals.selfOnly, async (req, res) => {
     const query = "DELETE FROM users WHERE id = $1 RETURNING *";
     const user = await req.locals.selectOne(
       query,
@@ -152,7 +162,7 @@ export default (app, req) => {
     return { user: user }
   });
 
-  app.deleteAsync('/users/:userId/submissions', app.locals.userOnly, async (req, res) => {
+  app.deleteAsync('/users/:userId/submissions', app.locals.selfOnly, async (req, res) => {
     const user = await req.locals.selectOne(
       "DELETE FROM submissions WHERE user_id = $1 RETURNING *",
       [req.params.userId],
@@ -172,7 +182,8 @@ export default (app, req) => {
     return { user: user }
   });
 
-  app.getAsync('/users/:id/signin', app.locals.userOnly, async (req, res) => {
+  // Admin tool ("Sign in as this user"): returns the user's API key.
+  app.getAsync('/users/:id/signin', app.locals.adminOnly, async (req, res) => {
     const query = app.locals.SELECT("users", {
       schema: 'private',
       attributes: ['id', 'name', 'email', 'avatar', 'apiKey', 'avatarSizes', 'role', 'phoneNumber', 'settings', 'bornAt', 'companyId', 'related_user_ids', 'bio_html'],
@@ -194,6 +205,7 @@ export default (app, req) => {
   })
 
   app.patchAsync('/users/:id/settings', app.locals.userOnly, async (req, res) => {
+    if (!app.locals.isSelfOrAdmin(req, req.params.id)) throw new app.locals.Forbidden;
     var user = await req.locals.selectOne(
       `UPDATE private.users SET settings=$1 WHERE id=$2 RETURNING settings`,
       [JSON.stringify({
@@ -206,16 +218,23 @@ export default (app, req) => {
     return user.settings
   })
 
+  // Bios are raw HTML shown on profiles, so only staff may set them.
+  const withoutStaffFields = (req, user) => {
+    if (!app.locals.isWriter(req.locals.user)) delete user.bio_html;
+    return user;
+  };
+
   app.patchAsync('/users/:id', app.locals.userOnly, app.locals.upload.single('user[avatar]'), async (req, res) => {
+    if (!app.locals.isSelfOrAdmin(req, req.params.id)) throw new app.locals.Forbidden;
     var user = await req.locals.selectOne(
       app.locals.UPSERT('private.users', ['name', 'email', 'born_at', 'phone_number', 'settings', 'role', 'bio_html'], undefined, ['avatar', 'avatar_sizes', 'role', 'bio_html']),
-      [JSON.stringify(app.locals.underscoreObject({
+      [JSON.stringify(withoutStaffFields(req, app.locals.underscoreObject({
         ...req.body.user,
         id: req.params.id,
         bornAt: req.body.user.bornAt || null,
         settings: req.body.user.settings || {},
-        role: req.locals.user.role === 'admin' ? req.body.user.role : undefined
-      }))],
+        role: req.locals.user.role === 'admin' ? req.body.user.role : undefined,
+      })))],
       'patch-user'
     );
     
@@ -232,7 +251,7 @@ export default (app, req) => {
     return { user }
   })
 
-  app.getAsync('/invites/:token',  async (req, res) => {
+  app.getAsync('/invites/:token', app.locals.rateLimit('invite-token', 30, 900), async (req, res) => {
     var query = app.locals.SELECT("invites", {
       attributes: ['id', 'email', 'user_id', 'created_at', 'accepted_at', 'company_id'],
 
@@ -271,7 +290,7 @@ export default (app, req) => {
   });
 
 
-  app.postAsync('/invites/:token',  async (req, res) => {
+  app.postAsync('/invites/:token', app.locals.rateLimit('invite-accept', 20, 900), async (req, res) => {
     return acceptInvitation(req, req.locals.user, req.params.token);    
   });
 }

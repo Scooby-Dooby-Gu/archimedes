@@ -69,13 +69,41 @@ export function interval(duration) {
   return ret;
 }
 
+function renderMarkdown(text) {
+  return slimdown(text.replace(/([^\s\n])[\t ]*\n[\t\ ]*([^\s\n_*])/g, '$1 $2')).replace(/(?![^<]*>|[^<>]*<\/(?!(?:p|pre|h1|li|ul|ol)>))((https?:)\/\/[a-z0-9&#=.\/\-?_]+)/gi, '<a href="$1">$1</a>')
+}
+
+// For trusted text written by staff or bundled with the app (goal and game
+// descriptions), which may contain HTML on purpose.
 export function markdown(text) {
   if (text && text.isPlaceholder) {
     return text;
   }
-  return text && <div class="markdown" dangerouslySetInnerHTML={{ __html: 
-    slimdown(text.replace(/([^\s\n])[\t ]*\n[\t\ ]*([^\s\n_*])/g, '$1 $2')).replace(/(?![^<]*>|[^<>]*<\/(?!(?:p|pre|h1|li|ul|ol)>))((https?:)\/\/[a-z0-9&#=.\/\-?_]+)/gi, '<a href="$1">$1</a>')
-  }} />
+  return text && <div class="markdown" dangerouslySetInnerHTML={{ __html: renderMarkdown(text) }} />
+}
+
+// Turn user-written markdown into safe HTML: any HTML in the text is shown as
+// text, quotes can't break out of the link/image attributes the markdown
+// renderer writes, and links/images may only use http(s), mailto or relative URLs.
+export function safeMarkdownHtml(text) {
+  const escaped = String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+  return renderMarkdown(escaped).replace(/\b(href|src)=(['"])(.*?)\2/gi, (match, attr, quote, url) => {
+    const decoded = url.replace(/&amp;/g, '&').trim();
+    const allowed = /^(https?:|mailto:|\/|#|\?)/i.test(decoded) || !/^[a-z][a-z0-9+.-]*:/i.test(decoded);
+    return allowed ? match : `${attr}=${quote}#${quote}`;
+  });
+}
+
+// For anything users write: forum posts, replies, board/topic descriptions.
+export function userMarkdown(text) {
+  if (text && text.isPlaceholder) {
+    return text;
+  }
+  return text && <div class="markdown" dangerouslySetInnerHTML={{ __html: safeMarkdownHtml(text) }} />
 }
 
 export function and(bits, joiner = 'and') {

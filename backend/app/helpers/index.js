@@ -14,3 +14,4 @@ export * from './embed.js';
 export * from './sanitize.js';
 export * from './apple.js';
 export * from './urls.js';
+export * from './rate-limit.js';

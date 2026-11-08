@@ -68,7 +68,7 @@ export default function ({query, boardId, topicId, success}) {
   //<Button.Link href={`/boards/${board.id}/topics/new`}>New topic</Button.Link>
 
   const content = useMemo(() => <>
-    {formatters.markdown(board.description)}
+    {formatters.userMarkdown(board.description)}
     <br />
     <Grid 
       type="list"
