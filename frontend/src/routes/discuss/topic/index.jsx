@@ -1,3 +1,4 @@
+import { assistanceState } from '/lib/states.js';
 import { Button, Avatar, Icon, Page, Paginator, Grid, Img } from '/components/index.jsx';
 import { usePrecache, useFetchedData, useStickyQueryValue, usePagination, useMemo, useStore } from '/lib/hooks/index.jsx'
 import * as formatters from '/lib/formatters';
@@ -59,11 +60,11 @@ export default function ({boardId, topicId, discussionId, page = 1, success}) {
         discussion.user.name,
         '',
         discussion.replyCount + ' replies',
-        discussion.assistanceRequestedAt && !discussion.assistanceProvidedAt ? 
-          <Icon.Question class="forward icon" /> : 
-        discussion.assistanceProvidedAt ? 
-          <Icon.Checkmark class="forward icon" /> :
-          <Icon.ChevronRight class="forward icon" />,
+        {
+          requested: <Icon.Question class="forward icon" />,
+          resolved: <Icon.Checkmark class="forward icon" />,
+          none: <Icon.ChevronRight class="forward icon" />,
+        }[assistanceState(discussion)],
         <h3 class="normal">{discussion.name}</h3>,
         {
           class: [

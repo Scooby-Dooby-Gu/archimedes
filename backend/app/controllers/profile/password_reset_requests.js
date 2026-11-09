@@ -1,3 +1,5 @@
+import { passwordReset, PASSWORD_RESET_MESSAGES } from '../../states/index.js';
+
 export default (app, req) => {
   
   app.postAsync('/password_reset_requests/', app.locals.rateLimit('password-reset-email', 5, 3600), async (req, res) => {
@@ -29,13 +31,15 @@ export default (app, req) => {
 
   app.getAsync('/password_reset_requests/:token', app.locals.rateLimit('password-reset-token', 20, 900), async (req, res) => {
     const passwordResetRequest = await req.locals.selectOne(
-      "SELECT id, user_id, created_at FROM password_reset_requests WHERE token = $1",
+      "SELECT id, user_id, created_at, used_at FROM password_reset_requests WHERE token = $1",
       [req.params.token],
       'find_password_reset_request_by_token'
     )
-    if (passwordResetRequest.createdAt < (new Date - 1000 * 60 * 60 * 24 * 1)) {
-      throw new app.locals.BadRequest('Password reset request is expired. Please submit another.')
+    // Lets the reset page say up front whether the link still works.
+    const state = passwordReset.stateOf(passwordResetRequest);
+    if (state !== 'pending') {
+      throw new app.locals.BadRequest(PASSWORD_RESET_MESSAGES[state]);
     }
-    return passwordResetRequest;
+    return { ...passwordResetRequest, state };
   })
 }

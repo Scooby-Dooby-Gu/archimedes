@@ -1,3 +1,4 @@
+import { assistanceState } from '/lib/states.js';
 import { Img, Page, Button, FormField, Avatar, Form, User, LocalizedDate, LocalizedDateTime, Paginator, Icon, NotificationPrompt } from '/components/index.jsx';
 import { useCallback, useStore, useFetchedData, useAsyncForm, useAsyncLink, usePagination, useStickyQueryValue, useMemo, useState, useEffect } from '/lib/hooks/index.jsx'
 
@@ -102,6 +103,8 @@ export default function Discussion({boardId, topicId, discussionId, page = 1, su
 
   const [expanded, setExpanded] = useState(false);
 
+  const assistance = assistanceState(discussion);
+
   const content = useMemo(() => <>
     <div class={style.top}>
       <aside class={style.date}>
@@ -115,18 +118,18 @@ export default function Discussion({boardId, topicId, discussionId, page = 1, su
     </div>
 
     {(company || canManage) && false && <div class={style.request}>
-      {!discussion.assistanceRequestedAt && <>
+      {assistance === 'none' && <>
         <p>Need an expert from Archimedes to help with your question?</p>
         <Button class="grey" disabled={assistanceRequest.loading} loading={assistanceRequest.loading} icon="Education" onClick={() => requestAssistance({state: 'request'})}>Request assistance</Button>
       </>}
-      {discussion.assistanceRequestedAt && !discussion.assistanceProvidedAt && <>
+      {assistance === 'requested' && <>
         <p>The request for assistance was submitted on <LocalizedDateTime date={discussion.assistanceRequestedAt} /></p>
         <Button class="primary" disabled={assistanceRequest.loading} loading={assistanceRequest.loading} icon="Checkmark" onClick={() => requestAssistance({state: 'resolve'})}>Resolve</Button>
         &nbsp;
         <Button class="secondary" disabled={assistanceRequest.loading} loading={assistanceRequest.loading} icon="Close" onClick={() => requestAssistance({state: 'cancel'})}>Cancel request</Button>
       </>}
-      {discussion.assistanceRequestedAt && discussion.assistanceProvidedAt && <>
-        <p>The request for assistance was resolved on <LocalizedDateTime date={discussion.assistanceRequestedAt} />.</p>
+      {assistance === 'resolved' && <>
+        <p>The request for assistance was resolved on <LocalizedDateTime date={discussion.assistanceProvidedAt} />.</p>
         <Button class="grey" disabled={assistanceRequest.loading} loading={assistanceRequest.loading} icon="Education" onClick={() => requestAssistance({state: 'reset'})}>Request more assistance</Button>
       </>}
     </div>}

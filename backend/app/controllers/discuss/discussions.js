@@ -1,3 +1,5 @@
+import { assistance, ASSISTANCE_COLUMNS } from '../../states/index.js';
+
 import tsquery from '../../../lib/sql/tsquery.js';
 
 export default (app, req) => {
@@ -182,19 +184,30 @@ export default (app, req) => {
   })
 
 
+  // Fires an assistance event ({state: 'request' | 'cancel' | 'resolve' | 'reset'})
+  // on a discussion; see app/states/assistance.js for the allowed moves.
   app.putAsync('/boards/:boardId/topics/:topicId/discussions/:discussionId/assistance', app.locals.userOnly, async (req, res) => {
-    
-    if (req.body.state === 'request') {
-      await req.locals.query("UPDATE discussions SET assistance_requested_at=NOW() WHERE id=$1", [req.params.discussionId]);
-    } else if (req.body.state === 'cancel') {
-      await req.locals.query("UPDATE discussions SET assistance_requested_at=NULL WHERE id=$1", [req.params.discussionId]);
-    } else if (req.body.state === 'resolve') {
-      await req.locals.query("UPDATE discussions SET assistance_provided_at=NOW() WHERE id=$1", [req.params.discussionId]);      
-    } else if (req.body.state === 'reset') {
-      await req.locals.query("UPDATE discussions SET assistance_provided_at=null,assistance_requested_at=NOW() WHERE id=$1", [req.params.discussionId]);      
+    const event = req.body.state;
+    const discussion = await req.locals.selectOne(
+      "SELECT id, name, topic_id, user_id, assistance_requested_at, assistance_provided_at FROM discussions WHERE id=$1 FOR UPDATE",
+      [req.params.discussionId],
+      'find-discussion-assistance'
+    );
+    if (!discussion) throw new app.locals.NotFound('Discussion is not found');
+    if (discussion.userId !== req.locals.user.id && !app.locals.isModerator(req.locals.user)) {
+      throw new app.locals.Forbidden;
     }
-    if (req.body.state === 'request' || req.body.state === 'reset') {
-      const discussion = await req.locals.selectOne("SELECT name, topic_id from discussions where id=$1", [req.params.discussionId]);
+    if (!assistance.states.some((s) => assistance.events(s).includes(event))) {
+      throw new app.locals.BadRequest(`Unknown assistance event "${event}"`);
+    }
+    const from = assistance.stateOf(discussion);
+    const to = assistance.next(from, event); // 409 if the move isn't allowed from here
+    const columns = ASSISTANCE_COLUMNS[to];
+    await req.locals.query(
+      `UPDATE discussions SET ${Object.entries(columns).map(([column, value]) => `${column}=${value === null ? 'NULL' : value}`).join(', ')} WHERE id=$1`,
+      [discussion.id]
+    );
+    if (to === 'requested') {
       const experts = (await req.locals.select(`SELECT id FROM private.users where role = 'admin'`));
       await Promise.all(experts.map((user) => {
         return req.locals.app.locals.sendNotification(req, user.id, {
@@ -204,6 +217,6 @@ export default (app, req) => {
         })
       }))
     }
-    return req.body;
+    return { ...req.body, assistanceState: to };
   })
 }

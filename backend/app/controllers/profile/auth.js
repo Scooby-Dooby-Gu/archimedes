@@ -3,6 +3,7 @@ import request from 'request';
 import { befriend } from './friendships.js';
 import { findCompanyById } from '../../helpers/finders.js';
 import { addCompanyManager } from '../admin/companies.js';
+import { passwordReset, PASSWORD_RESET_MESSAGES } from '../../states/index.js';
 
 var upload = multer()
 
@@ -366,14 +367,9 @@ export default (app) => {
         'SELECT * from password_reset_requests WHERE token=$1', 
         [req.query.token]
       );
-      if (!passwordResetRequest) {
-        throw new app.locals.BadRequest('Password request was not found')
-      }
-      if (passwordResetRequest.usedAt) {
-        throw new app.locals.BadRequest('This password reset link was already used. Please submit another.')
-      }
-      if (passwordResetRequest.createdAt < ((new Date) - 1000 * 60 * 60 * 24 * 1)) {
-        throw new app.locals.BadRequest('Password reset request is expired. Please submit another.')
+      const resetState = passwordReset.stateOf(passwordResetRequest);
+      if (resetState !== 'pending') {
+        throw new app.locals.BadRequest(PASSWORD_RESET_MESSAGES[resetState]);
       }
       if (passwordResetRequest.userId != req.params.userId) {
         throw new app.locals.BadRequest('Password reset request was made for another user')

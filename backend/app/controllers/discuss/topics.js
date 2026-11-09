@@ -40,6 +40,7 @@ export default (app, req) => {
         } 
       }
     } else if (req.params.topicId == 'requests') {
+      // Discussions whose assistance state isn't 'none' (app/states/assistance.js).
       const query = app.locals.SELECT("discussions", {
         ...discussionQuery,
         sort: {

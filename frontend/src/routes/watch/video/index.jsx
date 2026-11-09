@@ -1,3 +1,4 @@
+import { videoState } from '/lib/states.js';
 import { Button, FormField, Icon, Page, Img } from '/components/index.jsx';
 import { useAsyncForm, useEffect, useFetchedData, useFormData, useMemo, useStore } from '/lib/hooks/index.jsx';
 import VideoComponent from './video';
@@ -45,7 +46,7 @@ export default function Video({ success, videoId, goalId, ambitionId  }) {
     reloadVideo();
     //route(`/videos/${response.data.video.id}?success=question`);
   });
-  const showForm = user && (canManage || !video.publishedAt) && !video.isPlaceholder;
+  const showForm = user && (canManage || videoState(video) === 'upcoming') && !video.isPlaceholder;
   const [questionData, updateFormData, formRef] = useFormData(defaultQuestionFormData, undefined, [showForm]);
 
   const content = useMemo(() => <>
@@ -79,10 +80,10 @@ export default function Video({ success, videoId, goalId, ambitionId  }) {
       </h1>
       {content}
       {!user && <div class={style.ask}>
-        {video.publishedAt && <p>
+        {videoState(video) === 'published' && <p>
           Join Archimedes for free access to expert content, lessons, and a game that help you become a better investor.
         </p>}
-        {!video.publishedAt && <p>
+        {videoState(video) === 'upcoming' && <p>
           Join for free to suggest topics and ask questions.
         </p>}
         <div class={style.buttons}>
@@ -92,7 +93,7 @@ export default function Video({ success, videoId, goalId, ambitionId  }) {
       </div>}
 
       {showForm && <form class={style.ask} onSubmit={onSubmit} ref={formRef} action={`/videos/${video.id}/questions`} method="post">
-        {!video.publishedAt && <h2>Experts are here to help - what do you want to know?</h2>}
+        {videoState(video) === 'upcoming' && <h2>Experts are here to help - what do you want to know?</h2>}
         <FormField type="textarea" name="question[content]" placeholder="Your question in under 140 characters"></FormField>
         <Button.Submit class={`${style.submit} wide primary`} disabled={!questionData.question.content || request.loading} loading={request.loading}></Button.Submit>
       </form>}

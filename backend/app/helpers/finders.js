@@ -1,3 +1,4 @@
+import { isActive } from '../states/index.js';
 
 export function findUserQuery(req, extras) {
   return req.locals.app.locals.SELECT("users", {
@@ -103,7 +104,7 @@ export async function possiblyUnverifiedUserOnly (req, res, next) {
 }
 
 export async function userOnly (req, res, next) {
-  if (!req.locals.user || !req.locals.user.verifiedAt) {
+  if (!isActive(req.locals.user)) {
     next(new req.locals.app.locals.Unauthorized)
   } else {
     next();
@@ -111,7 +112,7 @@ export async function userOnly (req, res, next) {
 }
 
 export async function managerOnly (req, res, next) {
-  if (!req.locals.user || !req.locals.user.verifiedAt) {
+  if (!isActive(req.locals.user)) {
     next(new req.locals.app.locals.Unauthorized)
   } else if (req.locals.user.role !== 'admin' && (!req.locals.company || !req.locals.company.managerIds.includes(req.locals.user.id))) {
     // Without a company in the URL this creates one, which only admins may do.
@@ -121,7 +122,7 @@ export async function managerOnly (req, res, next) {
   }
 }
 export async function memberOnly (req, res, next) {
-  if (!req.locals.user || !req.locals.user.verifiedAt) {
+  if (!isActive(req.locals.user)) {
     next(new req.locals.app.locals.Unauthorized)
   } else if (req.locals.user.role !== 'admin' 
         && req.locals.user.companyId != req.params.companyId 
@@ -133,7 +134,7 @@ export async function memberOnly (req, res, next) {
 }
 
 export async function adminOnly (req, res, next) {
-  if (!req.locals.user || !req.locals.user.verifiedAt) {
+  if (!isActive(req.locals.user)) {
     next(new req.locals.app.locals.Unauthorized)
   } else if (req.locals.user.role !== 'admin') {
     next(new req.locals.app.locals.UnauthorizedAdmin)
@@ -143,7 +144,7 @@ export async function adminOnly (req, res, next) {
 }
 
 export async function selfOnly (req, res, next) {
-  if (!req.locals.user || !req.locals.user.verifiedAt) {
+  if (!isActive(req.locals.user)) {
     next(new req.locals.app.locals.Unauthorized)
   } else if (req.locals.user.role !== 'admin' && req.params.userId != req.locals.user.id) {
     next(new req.locals.app.locals.UnauthorizedAdmin)
@@ -167,7 +168,7 @@ export function isSelfOrAdmin(req, userId) {
 }
 
 export async function moderatorOnly (req, res, next) {
-  if (!req.locals.user || !req.locals.user.verifiedAt) {
+  if (!isActive(req.locals.user)) {
     next(new req.locals.app.locals.Unauthorized)
   } else if (!isModerator(req.locals.user)) {
     next(new req.locals.app.locals.UnauthorizedAdmin)
@@ -177,7 +178,7 @@ export async function moderatorOnly (req, res, next) {
 }
 
 export async function writerOnly (req, res, next) {
-  if (!req.locals.user || !req.locals.user.verifiedAt) {
+  if (!isActive(req.locals.user)) {
     next(new req.locals.app.locals.Unauthorized)
   } else if (!isWriter(req.locals.user)) {
     next(new req.locals.app.locals.UnauthorizedWriter)

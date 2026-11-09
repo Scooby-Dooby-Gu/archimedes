@@ -1,3 +1,4 @@
+import { videoState } from '/lib/states.js';
 import { Paginator, Icon, Img, Button, Page } from '/components/index.jsx';
 import { useStickyQueryValue, useEffect, usePagination, useCallback, useFetchedData, useMemo, useStore } from '/lib/hooks/index.jsx';
 import style from './style.module.scss';
@@ -58,10 +59,10 @@ export default function Videos({ success, page = 1, videoId }) {
         {/*video.image && <div class={style.cover}><Img crossorigin={(video.image || '').match(/archimedes.*s3/) && 'anonymous'} src={video.image} srcset={video.imageSizes}/></div>*/}
         <Video onlyThumbnail={true} video={video} glossary={glossary} maxQuestions={3} isQuestionListStatic={true} hideContent={true} submissions={submissions} >
           <div class={style.actions}>
-            {!video.publishedAt && <Button.Link href={`/videos/${video.slugs[0]}/?action=ask`} icon="ChevronRight" class="icon-right">
+            {videoState(video) === 'upcoming' && <Button.Link href={`/videos/${video.slugs[0]}/?action=ask`} icon="ChevronRight" class="icon-right">
               Suggest topic or ask question
             </Button.Link>}
-            {video.publishedAt && <Button.Link href={`/videos/${video.slugs[0]}/`} icon="ChevronRight" class="icon-right transparent round">
+            {videoState(video) === 'published' && <Button.Link href={`/videos/${video.slugs[0]}/`} icon="ChevronRight" class="icon-right transparent round">
               Watch the video
             </Button.Link>}
           </div>

@@ -5,7 +5,10 @@ import { useStore, useAsyncForm, useMemo, useState, useFetchedData } from "/lib/
 export default function ChangePassword({userId, token, layout}) {
   const {auth: { user }} = useStore();
 
-  const [foundUser] = useFetchedData(`/users/${userId}`);
+  // A reset link (?token=...) works once and for 24 hours (backend/app/states/password-reset.js).
+  // Check it up front so nobody types a new password into a dead link.
+  const [, resetLinkRequest] = useFetchedData(token ? `/password_reset_requests/${token}` : null);
+  const resetLinkProblem = token && resetLinkRequest.error ? (resetLinkRequest.error.message || String(resetLinkRequest.error)) : null;
 
   const [formSubmission, onSubmit] = useAsyncForm((response) => {
     dispatch({type: 'login', user: response.data.user, redirect: '/?welcome'});
@@ -36,11 +39,15 @@ export default function ChangePassword({userId, token, layout}) {
       <p>Type in your new password</p>
     </div>
     <br />
-    <Form action={`/users/${userId}/password?token=${token}`} method="PUT" onInput={onInput} onSubmit={onSubmit}>
+    {resetLinkProblem && <>
+      <p class="error">{resetLinkProblem}</p>
+      <Button.Link class="primary" href="/reset_password">Get a new reset link</Button.Link>
+    </>}
+    {!resetLinkProblem && <Form action={`/users/${userId}/password?token=${token}`} method="PUT" onInput={onInput} onSubmit={onSubmit}>
       <FormField name="user[password]" type="password" label="New password" required />
       <FormField name="user[passwordConfirmation]" type="password" label="Re-enter new password" required />
       <br />
       {layout === 'minimal' && <Button.Submit class="primary" loading={formSubmission.loading} disabled={formSubmission.loading || !isValid}>Change password</Button.Submit>}
-    </Form>
+    </Form>}
   </Page>
 }

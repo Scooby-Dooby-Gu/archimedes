@@ -1,3 +1,4 @@
+import { accountState } from '../lib/states.js';
 
 
 import {  useStore, useEffect, useMemo } from '/lib/hooks/index.jsx';
@@ -88,8 +89,9 @@ export default function App() {
   
   const user = auth.user;
 
-  const isUser = user && user.verifiedAt && user;
-  const isOnboarding = user && !user.verifiedAt;
+  const account = accountState(user);
+  const isUser = account === 'active' && user;
+  const isOnboarding = account === 'unverified';
   const isAdmin = isUser && user.role === 'admin';
   const isManager = isUser && user.role === 'manager' // company && company.managerIds && company.managerIds.includes(user.id);
   const isGuest = !user;
